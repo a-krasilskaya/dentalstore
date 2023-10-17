@@ -1,0 +1,108 @@
+{% load static %}
+{% load django_bootstrap5 %}
+
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex,nofollow">
+    <title>{% block title %}Dentalstore{% endblock %}</title>
+    <link rel="stylesheet icon" href="{% static '/app/images/favicon.ico' %}">
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="{% static '/app/css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static '/app/css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static '/app/css/style.css' %}">
+    {% bootstrap_javascript %}
+</head>
+<body>
+    <div class="page-wrapper d-flex min-vh-100 flex-column overflow-hidden">
+    <header class="p-2 border-bottom header sticky-top">
+        <div class="container">
+      <div class="d-flex flex-wrap align-items-end justify-content-center justify-content-lg-start">
+        <div class="header-logo col-2">
+        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
+            <img class="logo-img" src="{% static '/app/images/svglogo.svg' %}">
+        </a>
+        </div>
+        <div class="nav col-7">
+        <ul class="d-flex justify-content-evenly align-items-end col-lg-auto me-lg-auto mb-2 mb-md-0">
+          <li><a href="{% url 'home' %}" class="nav-link px-2 link-secondary">Главная</a></li>
+          <li><a href="{% url 'catalog' %}" class="nav-link px-2 link-body-emphasis">Каталог</a></li>
+          <li><a href="{% url 'delivery' %}" class="nav-link px-2 link-body-emphasis">Доставка и оплата</a></li>
+          <li><a href="{% url 'contacts' %}" class="nav-link px-2 link-body-emphasis">Контакты</a></li>
+        </ul>
+        </div>
+      <div class="cart col-1 d-flex justify-content-center">
+          {% with total_items=cart|length %}
+          <a href="{% url 'cart:cart_detail' %}">
+              <img class="pb-2" src="{% static '/app/images/shopping-cart.png' %}" alt='Корзина'>
+              {% if cart|length > 0 %}
+              {{ total_items }}
+              {% endif %}
+          </a>
+          {% endwith %}
+      </div>
+        <div class="col-2 header-contacts text-center">
+            <div class="link-phone">
+                <a href="tel:+79999683506">+7 (999) 968-35-06</a>
+            </div>
+            <div class="link-messangers d-flex justify-content-center">
+                <a  href="https://t.me/+79999683506" class="telegram-link"><img class="link-messangers-item p-2" src="{% static '/app/images/telegram.png' %}" alt="Написать в Telegram"></a>
+                <a href="https://wa.me/+79999683506" class="whatsapp-link"><img class="link-messangers-item p-2" src="{% static '/app/images/whatsapp.png' %}" alt="Написать в Whatsapp"></a>
+            </div>
+        </div>
+        </div>
+      </div>
+    </header>
+    {% block content %}
+    {% endblock %}
+
+
+<footer class="footer">
+<div class="container">
+<div class="row justify-content-center">
+<div class="col-md-12 text-center">
+<h2 class="footer-heading my-5 "><a href="/" class="d-flex align-items-center justify-content-center mb-lg-0 link-body-emphasis text-decoration-none">
+                    <img class="logo-img" src="{% static '/app/images/svglogo.svg' %}">
+                </a>
+</h2>
+<div class="footer-menu d-flex w-100">
+<ul class="d-flex w-30 flex-column align-items-start col-lg-auto me-lg-auto mb-2 mb-md-0">
+    <li><a href="{% url 'home' %}" class="nav-link px-2 link-secondary">Главная</a></li>
+    <li><a href="{% url 'catalog' %}" class="nav-link px-2 link-body-emphasis">Каталог</a></li>
+    <li><a href="{% url 'delivery' %}" class="nav-link px-2 link-body-emphasis">Доставка и оплата</a></li>
+    <li><a href="{% url 'contacts' %}" class="nav-link px-2 link-body-emphasis">Контакты</a></li>
+</ul>
+<ul class="footer-social d-flex flex-column w-30 align-items-start col-lg-auto me-lg-auto mb-2 mb-md-0">
+    <li><div class="footer-link-phone"><a href="tel:+79999683506" class="link-body-emphasis nav-link px-2 ">+7 (999) 968-35-06</a></div></li>
+    <li><a  href="https://t.me/+79999683506" class="telegram-link nav-link px-2  link-body-emphasis">Telegram</a></li>
+    <li><a href="https://wa.me/+79999683506" class="whatsapp-link nav-link px-2  link-body-emphasis">Whatsapp</a></li>
+</ul>
+<ul class="footer-social d-flex flex-column w-50 align-items-start col-lg-auto me-lg-auto mb-2 mb-md-0">
+    <li><h6 class="h6">Мы находимся по адресу:</h6></li>
+    <li><div class="font-weight-normal">МО, г. Реутов, Юбилейный проспект дом 66</div></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row mt-5">
+<div class="col-md-12 text-center">
+<p class="copyright">
+© Copyright  2023
+</p>
+</div>
+</div>
+</div>
+</footer>
+    </div>
+<script src="{% static 'static_jquery/js/jquery.js' %}"></script>
+<script src="{% static '/app/js/owl.carousel.min.js' %}"></script>
+<script src="{% static '/app/js/main.js' %}"></script>
+
+
+
+</body>
+</html>

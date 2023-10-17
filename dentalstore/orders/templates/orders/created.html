@@ -1,0 +1,24 @@
+{% extends 'app/index.html' %}
+{% load static  %}
+
+{% block title %}
+    Спасибо за заказ!
+{% endblock %}
+ 
+{% block content %}
+    <div class="container order-created">
+        <div class="row">
+            <div class="col-12"></div>
+            <h1 class="h1-title py-5">Спасибо за заказ!</h1>
+            <p class="employee-respons">Наш сотрудник свяжется в Вами в ближайшее время</p>
+            <p>Номер вашего заказа -
+                <strong>{{ order.id }}</strong>.</p>
+            <div class="row py-5">
+                <div class="col-3">
+                    <a href="/" class="button btn return-store d-block">Вернуться на главную</a>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

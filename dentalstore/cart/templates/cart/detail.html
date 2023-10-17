@@ -1,0 +1,102 @@
+{% extends 'app/index.html' %}
+{% load static  %}
+{% load mptt_tags %}
+{% block title %}Корзина{% endblock %}
+
+{% block content %}
+<div class="container cart-detail">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="h1 h1-title py-5">Корзина</h1>
+            <div class="cart-detail-wrapper">
+            <div class="cart-detail-title row fw-bold">
+                <div class="col-2 border p-2 text-center">
+                    <h6 class="h6 m-0 py-2">Изображение</h6>
+                </div>
+                <div class="col-3 border p-2 text-center">
+                    <h6 class="h6 m-0 py-2">Наименование товара</h6>
+                </div>
+                <div class="col-2 border p-2 text-center">
+                    <h6 class="h6 m-0 py-2">Цена за единицу товара</h6>
+                </div>
+                <div class="col-2 border p-2 text-center">
+                    <h6 class="h6 m-0 py-2">Обновить количество</h6>
+                </div>
+                <div class="col-1 border p-2 text-center">
+                    <h6 class="h6 m-0 py-2">Удалить</h6>
+                </div>
+                <div class="col-2 border p-2 text-center">
+                    <h6 class="h6 m-0 py-2">Общая стоимость</h6>
+                </div>
+            </div>
+            <div class="cart-detail-products row">
+            {% for item in cart %}
+            {% with product=item.product %}
+                <div class="col-2 border">
+                    {% for img in images %}
+                        {% if img.product_id == product.id and img.main_image %}
+                        <div class="wrapper-cart-img p-1">
+                            <img src="/media/{{ img.image }}" alt="{{ img.alt }}" class="img-fluid">
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="col-3 border">
+                    <p class="py-2">{{ product.title }}</p>
+                </div>
+                <div class="col-2 border">
+                    <p class="py-2">{{ item.price }} {{ product.currency.currency_sign }}</p>
+                </div>
+                <div class="col-2 border">
+                    <div class="update-quantity py-2">
+                        <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                            <div class="form-wrapper d-flex align-items-center justify-content-evenly">
+                        {{ item.update_quantity_form.quantity }}
+                        {{ item.update_quantity_form.update }}
+                        <div class=btn-wrapper">
+                            <button class="btn btn-purple-dark btn-sm" type="submit">Обновить</button>
+                        </div>
+                            </div>
+                        {% csrf_token %}
+                        </form>
+                    </div>
+                </div>
+                <div class="col-1 border">
+                    <div class="remove-product py-2 text-center">
+                        <a href="{% url 'cart:cart_remove' product.id %}">
+                            <img src="{% static '/app/images/delete-symbol.png' %}" alt="Удалить">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-2 border">
+                    <div class="total-price py-2">
+                        {{cart.get_total_price}} {{ product.currency.currency_sign }}
+                    </div>
+                </div>
+            {% endwith %}
+            {% endfor %}
+            </div>
+            <div class="total-price-wrapper fw-bold">
+            <div class="row">
+                <div class="col-2 border">
+                    <h6 class="h6 py-2">Всего:</h6>
+                </div>
+                <div class="col-8 border"></div>
+                <div class="col-2 border py-2">
+                    <h6 class="h6">{{cart.get_total_price}} {{ product.currency.currency_sign }}</h6>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    <div class="row py-5">
+        <div class="col-2">
+            <a href="{% url 'orders:order_create' %}" class="button btn btn-purple-dark">Оформить заказ</a>
+        </div>
+        <div class="col-2">
+            <a href="/catalog" class="button btn return-store d-block">Вернуться в магазин</a>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

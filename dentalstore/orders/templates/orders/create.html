@@ -1,0 +1,47 @@
+{% extends 'app/index.html' %}
+{% load static  %}
+ 
+{% block title %}
+    Заказать
+{% endblock %}
+ 
+{% block content %}
+<div class="container order-create">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="h1 h1-title py-5">Оформление заказа</h1>
+        </div>
+    </div>
+    <div class="row mb-5">
+        <div class="col-6 ">
+            <div class="row">
+                <div class="col-10 p-5 wrapper-order-form rounded">
+                    <form action="." method="post" class="order-form">
+                        {{ form.as_p }}
+                        <div class="privacy-policy pb-5"><a href="{% url 'privacy_policy' %}">Ознакомиться с условиями обработки персональных данных</a></div>
+                        <div class=btn-wrapper">
+                            <button class="btn btn-purple-dark" type="submit">Отправить</button>
+                        </div>
+                        {% csrf_token %}
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="order-info">
+                <h3 class="h3 h3-title pb-2">Ваш заказ:</h3>
+                <ul>
+                    {% for item in cart %}
+                    <div class="row">
+                        <div class="col-7 border">{{ item.product.title }}</div>
+                        <div class="col-1 border">{{ item.quantity }} {{ item.product.unit_measure }}</div>
+                        <div class="col-3 border">{{ item.total_price }} {{ item.product.currency.currency_sign }}</div>
+                    </div>
+                    {% endfor %}
+                </ul>
+                <p class="pb-3">Общая сумма заказа: {{ cart.get_total_price }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

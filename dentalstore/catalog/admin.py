@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 from mptt.admin import MPTTModelAdmin  # для древовидной структуры категорий
-from catalog.models import Product, ProductCategory, Gallery, Manufacturer, Currency
+from catalog.models import Product, ProductCategory, Gallery, Manufacturer, Currency, TagProduct
 
 
 # Register your models here.
@@ -20,16 +20,23 @@ class ProductImagesAdmin(admin.ModelAdmin):
         verbose_name_plural = 'Изображения'
 
 
-admin.site.register(Manufacturer)
-admin.site.register(Currency)
+class TagProductAdmin(admin.ModelAdmin):
+    prepopulated_fields = {"slug": ("tag", )}
 
-# class ProductAdminInline(admin.TabularInline):
-#     model = ProductImages
-#     extra = 0
+admin.site.register(TagProduct, TagProductAdmin)
+
+
+class ManufacturerAdmin(admin.ModelAdmin):
+    prepopulated_fields = {"slug": ("name", )}
+
+admin.site.register(Manufacturer, ManufacturerAdmin)
+
+admin.site.register(Currency)
 
 
 class ProductCategoryAdmin(MPTTModelAdmin):
-    prepopulated_fields = {'slug': ('title',)}
+    prepopulated_fields = {'slug': ('title',), }
+    # filter_horizontal = ['tags', ]
 
 
 class GalleryInline(admin.TabularInline):
@@ -52,13 +59,12 @@ admin.site.register(ProductCategory, ProductCategoryAdmin)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['title', 'price', 'sale_price', 'quantity', 'publish', 'created', 'updated']
     inlines = [GalleryInline, ]
+    filter_horizontal = ['tags', ]
     list_filter = ['publish', 'created']
     list_editable = ['quantity', 'publish']
     prepopulated_fields = {'slug': ('title',)}
 
 
-
-    # inlines = [ProductAdminInline]
 
     class Meta:
         verbose_name = 'Товар'

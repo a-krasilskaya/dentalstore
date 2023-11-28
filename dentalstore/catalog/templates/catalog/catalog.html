@@ -3,20 +3,31 @@
 {% load mptt_tags %}
 {% block title %}Каталог{% endblock %}
 
+{% block breadcrumb %}
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Главная</a></li>
+        {% for node in ancestors %}
+        <li class="breadcrumb-item"><a href="{{node.get_absolute_url}}">{{node.name}}</a></li>
+            {% endfor %}
+        <li class="breadcrumb-item active" aria-current="page">{{ object }}</li>
+        </ul>
+    </nav>
+{% endblock %}
 
 {% block content %}
-
 <div class="container category-product-list">
     <h1 class="h1 h1-title text-center my-4">Каталог</h1>
     <ul>
         {% recursetree object_list %}
-        {% if node.is_root_node %}
+        {% if node.level == 0 %}
         <h2 class="h2-title mt-4 mb-5">{{node.title}}</h2>
         {% endif %}
-            <li class="{% if node.is_leaf_node %}col-xl-3 col-md-6 col-sm-12 mb-5{% endif %}">
-                <div class="card-wrapper {% if node.is_leaf_node %}card{% endif %}">
+
+        <li class="{% if node.level == 1 %}col-xl-3 col-md-6 col-sm-12 mb-5 {% endif %}">
+            {% if node.level == 1 %}
+             <div class="card-wrapper card">
             <a href="{{node.slug}}">
-                {% if node.is_leaf_node %}
                 <div class="card-img img-wrapper p-3">
                     <img src="/media/{{ node.image }}" alt="{{node.alt}}"  class="img-fluid">
                 </div>
@@ -24,20 +35,20 @@
           lh-sm">
                     {{node.title}}
                 </div>
-                {% endif %}
             </a>
                 </div>
-                <div>{{children.get_absolute_url}}</div>
-            {% if not node.is_leaf_node %}
+            {% endif %}
+
                 <ul class="row p-0 children">
                     {{ children }}
                 </ul>
-            {% endif %}
-            </li>
+
+        </li>
+
+
         {% endrecursetree %}
     </ul>
 
 </div>
-
 
 {% endblock %}

@@ -9,10 +9,41 @@
             <h1 class="h1 px-3 h1-title my-5">{{title}}</h1>
         </div>
     </div>
+    <div class="row d-flex">
+    <div class="sidebar col-xl-3 col-md-2">
+<!--        <ul class="subcategories-menu">-->
+
+<!--            {% for i in cat_family %}-->
+<!--                {% if i.level > 0 %}-->
+<!--                    <li class="link{% if i == title %}active{% endif %}"><a href="../{{ i.slug }}">{{ i }}</a></li>-->
+<!--                {% endif %}-->
+<!--            {% endfor %}-->
+
+<!--            {% for i in cat_siblings %}-->
+<!--                {% if i.level > 1 %}-->
+<!--                    <li><a href="../{{ i.slug }}">{{ i }}</a></li>-->
+<!--                {% endif %}-->
+<!--            {% endfor %}-->
+<!--        </ul>-->
+        <div class="tags_filter">
+            <ul>
+                {% for i in product_tags %}
+                <li><a href="{{ i.tags__slug }}">{{ i.tags__tag }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <h6>Цена</h6>
+        <form action="" method="get">
+            {{ form.as_p }}
+            <input type="submit" value="Поиск">
+        </form>
+    </div>
+        <div class="col-xl-9 col-md-10">
     <ul class="row">
-        {% for product in object_list%}
-        <li class="col-xl-3 col-md-6 col-sm-12 mb-5">
-            <a href="{{ product.slug }}">
+        {% for product in object_list %}
+        <li class="col-xl-4 col-md-6 col-sm-12 mb-5">
+            <a href="{% if tag.slug in request.path %}../{% endif %}products/{{ product.slug }}">
                 <div class="card">
                     <div class="card-img img-wrapper overflow-hidden">
                         {% for img in images %}
@@ -21,8 +52,9 @@
                         {% endif %}
                         {% endfor %}
                     </div>
-                    <div class="card-body fs-5 p-2 lh-sm d-flex flex-column bd-highlight">
+                    <div class="card-body fs-5 p-2 lh-sm d-flex flex-column bd-highlight border-top">
                         <h5 class="h5 card-product-category-item-title">{{ product.title }}</h5>
+                        <h6 class="h6 card-product-category-item-title">{{product.manufacturer.name}}, {{ product.manufacturer_countries }}</h6>
                         {% if product.sale_price %}
                         <p class="card-product-category-item-sale-price fw-bolder">{{ product.sale_price}}<span class="product-currency"> {{ product.currency.currency_sign }}</span></p>
                         <p class="card-product-category-item-price text-decoration-line-throug">{{ product.price }}<span class="product-currency"> {{ product.currency.currency_sign }}</span></p>
@@ -30,16 +62,29 @@
                         <p class="card-product-category-item-price fw-bolder">{{ product.price }}<span class="product-currency"> {{ product.currency.currency_sign }}</span></p>
                         {% endif %}
                         {% if product.quantity > 0 %}
-                        <p class="availability">В наличии</p>
+<!--                        <p class="availability">В наличии</p>-->
                         {% else %}
-                        <p class="availability">Под заказ</p>
+<!--                        <p class="availability">Под заказ</p>-->
                         {% endif %}
                         <p class="card-product-category-item-sku mb-0">Артикул: {{ product.sku }}</p>
+                        <div class="add-to-cart product-list-off">
+                            <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                                <div class="form-wrapper d-flex align-items-center mt-2">
+                                {{ cart_product_form }}
+                                {% csrf_token %}
+                                <div class=btn-wrapper">
+                                    <button class="btn btn-purple-dark" type="submit">В корзину</button>
+                                </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </a>
         </li>
         {% endfor %}
     </ul>
+            </div>
+        </div>
 </div>
 {% endblock %}

@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.urls import reverse  # для древовидной структуры категорий
 from mptt.models import MPTTModel, TreeForeignKey  # для древовидной структуры категорий
 from django.core.validators import MinValueValidator  # валидатор значений
+
+
 from users.models import User
 
 
@@ -17,7 +19,6 @@ class Product(models.Model):
 
     # meta
     sku = models.CharField(max_length=255, verbose_name='Артикул', unique=True)
-    barcode = models.CharField(verbose_name='Код', max_length=255, blank=True)
     manufacturer = models.ForeignKey('Manufacturer', on_delete=models.CASCADE, related_name='products', verbose_name='Производитель')
     manufacturer_countries = models.CharField(max_length=255, verbose_name='Страна-производитель', blank=True)
     unit_measure = models.CharField(max_length=255, verbose_name='Единица измерения', blank=True)
@@ -47,6 +48,13 @@ class Product(models.Model):
     updated = models.DateTimeField(verbose_name='Дата обновления', auto_now=True)
 
 
+    # Метка ограничеие продажи товаров
+    restriction_sale = models.BooleanField(verbose_name='Ограничение продажи для физ лиц', default=False)
+
+    # Тэги
+    tags = models.ManyToManyField('TagProduct', blank=True, related_name='tags')
+
+
     class Meta:
         ordering = ['pk']
         verbose_name = 'Товар'
@@ -55,12 +63,27 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('product', kwargs={'product_slug': self.slug})
 
+
     def __str__(self):
         return f'{self.title} --- {self.price}'
 
 
+class TagProduct(models.Model):
+    tag = models.CharField(max_length=255, db_index=True, verbose_name='Тэг')
+    slug = models.SlugField(max_length=255, db_index=True, unique=True)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, verbose_name='parent_tag')
+
+    def get_absolute_url(self):
+
+        return reverse('product_tag', kwargs={'tag_slug': self.slug})
+
+    def __str__(self):
+        return f'{self.tag}'
+
+
 class Manufacturer(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название')
+    slug = models.SlugField(max_length=200, verbose_name='slug', unique=True)
     image = models.ImageField(upload_to='static/uploads/images/%Y/%m', verbose_name='Изображение', null=True, blank=True)
     alt = models.CharField(max_length=255, verbose_name='Атрибут alt', blank=True)
 
@@ -76,8 +99,7 @@ class Gallery(models.Model):
     image = models.ImageField(upload_to='static/uploads/images')
     main_image = models.BooleanField(verbose_name='Выберите гланое изображение', default=False)
     alt = models.CharField(max_length=255, verbose_name='Атрибут alt', blank=True)
-    product = models.ForeignKey(Product, on_delete=models.PROTECT, related_name='gallery_images')
-
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='gallery_images')
 
 
 class Currency(models.Model):
@@ -87,6 +109,7 @@ class Currency(models.Model):
     class Meta:
         verbose_name = 'Валюта'
         verbose_name_plural = 'Валюта'
+
 
     def __str__(self):
         return f'{self.name}'
@@ -101,6 +124,9 @@ class ProductCategory(MPTTModel):
     alt = models.CharField(max_length=255, verbose_name='Атрибут alt', blank=True)
     supplier_url = models.URLField(verbose_name='URL', blank=True)
 
+    # Тэги
+    # tags = models.ManyToManyField(TagProduct, blank=True, related_name='tags')
+
 
     # данные синхронизации
 
@@ -113,9 +139,14 @@ class ProductCategory(MPTTModel):
         verbose_name_plural = 'Категории'
 
     def get_absolute_url(self):
-        return reverse('product-by-category', args=[str(self.slug)])
+        return reverse('product-by-category', args=[str(self.slug)], kwargs={'path': self.get_path()})
+
 
     def __str__(self):
         return self.title
 
 
+# class TagProductsIntermediate(models.Model):
+#      tags = models.ForeignKey(TagProduct, on_delete=models.CASCADE)
+#      products = models.ForeignKey(Product, on_delete=models.CASCADE)
+     # category = TreeForeignKey(ProductCategory, on_delete=models.CASCADE)

@@ -44,6 +44,9 @@ $( document ).ready(function() {
         e.preventDefault();
     });
 
+
+    $('.product-list-off.add-to-cart form label').hide()
+    $('.product-list-off.add-to-cart form select').hide()
     $('.add-to-cart form label').text('Количество:')
 });
 

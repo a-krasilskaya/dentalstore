@@ -32,7 +32,7 @@
                 <p class="bestsellers px-5">Хит продаж</p>
             {% endif %}
             </div>
-            <h1 class="h1 h1-title fw-bolder lh-1 mb-3">{{ product.title }}</h1>
+            <h1 class="h1 h1-title fw-bolder lh-1 mb-3">{{ product.title }}, <span> {{product.manufacturer.name}}, {{ product.manufacturer_countries }}</span></h1>
             <div class="product_info">
                 <p class="description">{{ product.description }}</p>
                 {% if product.sale_price %}
@@ -41,7 +41,6 @@
                 {% else %}
                 <p class="price fw-bolder fs-4">{{ product.price }} <span> {{ product.currency.currency_sign }}</span></p>
                 {% endif %}
-                <p class="barcode">Код: {{ product.barcode }}</p>
                 <p class="sku">Артикул: {{ product.sku }}</p>
                 <p class="manufacturer-name ">Производитель: {{ product.manufacturer.name }}</p>
                 <div class="row">
@@ -50,10 +49,11 @@
                 <p class="manufacturer_countries">Страна: {{ product.manufacturer_countries }}</p>
                 <p class="unit_measure">Единица товара: {{ product.unit_measure }}</p>
                 {% if product.quantity == 0 %}
-                <p class="availability-product">Под заказ</p>
+<!--                <p class="availability-product">Под заказ</p>-->
                 {% else %}
-                <p class="quantity">Количество товара на складе: {{ product.quantity }}</p>
+<!--                <p class="quantity">Количество товара на складе: {{ product.quantity }}</p>-->
                 {% endif %}
+
                 <div class="add-to-cart">
                     <form action="{% url 'cart:cart_add' product.id %}" method="post">
                         <div class="form-wrapper d-flex align-items-center">
@@ -69,6 +69,11 @@
         </div>
     </div>
     <div class="row tabs-info">
+        {% if product.restriction_sale %}
+        <div class="col-12 border mx-2 mb-3 rounded">
+            <p class="p-2">Частным (физическим лицам) продажа товаров данной категории не производится. Анестетики карпульные (растворы для инъекций) отпускаются только организациям строго при наличии лицензии на медицинскую деятельность и регистрации в Честном знаке.</p>
+        </div>
+        {% endif %}
         <div class="col-12">
             <nav>
               <div class="nav nav-tabs" id="nav-tab" role="tablist">

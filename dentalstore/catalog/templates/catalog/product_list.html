@@ -26,17 +26,37 @@
 <!--            {% endfor %}-->
 <!--        </ul>-->
         <div class="tags_filter">
-            <ul>
+            <h1 class="h1 h1-title">{% if tag.slug in request.path %}<a href="../../{{title.slug}}">{% endif %}{{title}}{% if tag.slug in request.path %}</a>{% endif %}</h1>
+            <ul class="p-0 my-4">
                 {% for i in product_tags %}
-                <li><a href="{{ i.tags__slug }}">{{ i.tags__tag }}</a></li>
+                    {% if product_tags|length > 1  %}
+                        {% for j in product_tags %}
+                            {% if forloop.counter == 1 and not i.tags__parent %}
+                                <li class="tags p-2 rounded-1 my-1 tags-parent tags-{{i.tags__slug}} {% if i.tags__tag in request.path %}active{% endif %}">
+                                    <a href="{% if tag.slug in request.path %}../{% endif %}{{i.tags__slug}}">{{i.tags__tag}}</a>
+                                </li>
+                            {% endif %}
+                            {% if j.tags__parent == i.tags__id %}
+                                <ul class="p-0">
+                                    <li class="tags px-4 my-1 rounded-1 tags-child tags-child-{{j.tags__parent__slug}} {% if j.tags__tag in request.path %}active{% endif %}"><a href="{% if tag.slug in request.path %}../{% endif %}{{j.tags__slug}}">{{j.tags__tag}}</a></li>
+                                </ul>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <li class="tags tags-parent p-2 rounded-1 my-1 tags-{{i.tags__slug}} {% if i.tags__tag in request.path %}active{% endif %}"><a href="{% if tag.slug in request.path %}../{% endif %}{{i.tags__slug}}">{{i.tags__tag}}</a></li>
+                    {% endif %}
                 {% endfor %}
             </ul>
+
+
         </div>
 
-        <h6>Цена</h6>
-        <form action="" method="get">
+        <h6 class="h6-title form_filter mb-4">Цена:</h6>
+        <form action="" method="get" class="form_filter">
+            {% csrf_token %}
             {{ form.as_p }}
-            <input type="submit" value="Поиск">
+<!--            <input  type="submit" value="Поиск">-->
+            <button class="btn btn-purple-dark mb-5 mt-3 px-4" type="submit">Поиск</button>
         </form>
     </div>
         <div class="col-xl-9 col-md-10">

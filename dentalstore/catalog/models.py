@@ -87,6 +87,7 @@ class Manufacturer(models.Model):
     image = models.ImageField(upload_to='static/uploads/images/%Y/%m', verbose_name='Изображение', null=True, blank=True)
     alt = models.CharField(max_length=255, verbose_name='Атрибут alt', blank=True)
 
+
     class Meta:
         verbose_name = 'Производитель'
         verbose_name_plural = 'Производители'

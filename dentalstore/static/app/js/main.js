@@ -44,7 +44,21 @@ $( document ).ready(function() {
         e.preventDefault();
     });
 
+
+    $('.product-list-off.add-to-cart form label').hide()
+    $('.product-list-off.add-to-cart form select').hide()
     $('.add-to-cart form label').text('Количество:')
+
+
+// фильтры
+//    $('.sidebar .form_filter_checkbox label').click(function(){
+//        if ($('input[type=checkbox]').is(':checked')){
+//            $('input[type=checkbox]').prop('checked', false);
+//            $(this).toggleClass('checked-item')
+//        } else {
+//            $('input[type=checkbox]').prop('checked', true);
+//        }
+//    });
 });
 
 

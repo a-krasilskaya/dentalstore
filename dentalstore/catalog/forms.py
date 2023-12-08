@@ -2,6 +2,7 @@ from django import forms
 
 from catalog.models import Product, Manufacturer
 
+
 # ManufacturerCountries = Product.objects.all()
 # availability = ['В наличии', 'Под заказ']
 

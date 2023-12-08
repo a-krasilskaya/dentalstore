@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'app.apps.AppConfig',
     'django_bootstrap5',
     'django_static_jquery',
+    'django_ckeditor_5',
     'mptt',
     'users',
 ]
@@ -70,6 +71,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.media',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
@@ -90,7 +92,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('NAME'),
-        'USER': os.getenv('USER'),
+        'USER': 'dentalstore_user',
         'PASSWORD': os.getenv('PASSWORD'),
         'HOST': 'localhost',
         'PORT': os.getenv('PORT'),

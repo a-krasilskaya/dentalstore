@@ -32,18 +32,18 @@
                     {% if product_tags|length > 1  %}
                         {% for j in product_tags %}
                             {% if forloop.counter == 1 and not i.tags__parent %}
-                                <li class="tags p-2 rounded-1 my-1 tags-parent tags-{{i.tags__slug}} {% if i.tags__tag in request.path %}active{% endif %}">
-                                    <a href="{% if tag.slug in request.path %}../{% endif %}{{i.tags__slug}}">{{i.tags__tag}}</a>
+                                <li class="tags my-1 rounded-1 tags-parent tags-{{i.tags__slug}} {% if i.tags__slug in request.path %}active{% endif %}">
+                                    <a class="p-2 rounded-1" href="{% if tag.slug in request.path %}../{% endif %}{{i.tags__slug}}">{{i.tags__tag}}</a>
                                 </li>
                             {% endif %}
                             {% if j.tags__parent == i.tags__id %}
                                 <ul class="p-0">
-                                    <li class="tags px-4 my-1 rounded-1 tags-child tags-child-{{j.tags__parent__slug}} {% if j.tags__tag in request.path %}active{% endif %}"><a href="{% if tag.slug in request.path %}../{% endif %}{{j.tags__slug}}">{{j.tags__tag}}</a></li>
+                                    <li class="tags my-1 rounded-1 tags-child tags-child-{{j.tags__parent__slug}} {% if j.tags__slug in request.path %}active{% endif %}"><a class="px-4 rounded-1" href="{% if tag.slug in request.path %}../{% endif %}{{j.tags__slug}}">{{j.tags__tag}}</a></li>
                                 </ul>
                             {% endif %}
                         {% endfor %}
                     {% else %}
-                        <li class="tags tags-parent p-2 rounded-1 my-1 tags-{{i.tags__slug}} {% if i.tags__tag in request.path %}active{% endif %}"><a href="{% if tag.slug in request.path %}../{% endif %}{{i.tags__slug}}">{{i.tags__tag}}</a></li>
+                        <li class="tags rounded-1 tags-parent my-1 tags-{{i.tags__slug}} {% if i.tags__slug in request.path %}active{% endif %}"><a class="p-2 rounded-1" href="{% if tag.slug in request.path %}../{% endif %}{{i.tags__slug}}">{{i.tags__tag}}</a></li>
                     {% endif %}
                 {% endfor %}
             </ul>

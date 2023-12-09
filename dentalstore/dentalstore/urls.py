@@ -21,8 +21,6 @@ from django.urls import path, include
 from catalog.views import CategoryListView
 from dentalstore import settings
 
-# from django.views.static import serve as mediaserve
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,20 +28,13 @@ urlpatterns = [
     path('orders/', include(('orders.urls', 'orders'), namespace='orders')),
     path('catalog/', include('catalog.urls')),
     path('feedback/', include('feedback.urls')),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
     path('', include('app.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
-
-
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-# else:
-#     urlpatterns += [
-#         url(f'^{settings.MEDIA_URL.lstrip("/")}(?P<path>.*)$',
-#             mediaserve, {'document_root': settings.MEDIA_ROOT}),
-#         url(f'^{settings.STATIC_URL.lstrip("/")}(?P<path>.*)$',
-#             mediaserve, {'document_root': settings.STATIC_ROOT}),
-#     ]
+
 
 # handler404 = pageNotFound #page 404

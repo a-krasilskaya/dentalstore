@@ -590,6 +590,16 @@ select{
     font-size: 20px;
 }
 
+.sidebar .tags_filter li a:focus{
+    background: #b3baff;
+    transition: 1s;
+}
+
+.sidebar .tags_filter li.active{
+    background: #b3baff;
+    font-weight: 600;
+}
+
 .sidebar .tags_filter a{
     color: #4b5196;
     font-size: 18px;

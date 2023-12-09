@@ -1,7 +1,9 @@
+from django import forms
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 from mptt.admin import MPTTModelAdmin  # для древовидной структуры категорий
 from catalog.models import Product, ProductCategory, Gallery, Manufacturer, Currency, TagProduct
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 
 # Register your models here.
@@ -56,7 +58,15 @@ class GalleryInline(admin.TabularInline):
 admin.site.register(ProductCategory, ProductCategoryAdmin)
 
 
+class ProductsAdminForm(forms.ModelForm):
+    description = forms.CharField(widget=CKEditorUploadingWidget())
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+
 class ProductAdmin(admin.ModelAdmin):
+    form = ProductsAdminForm
     list_display = ['title', 'price', 'sale_price', 'quantity', 'publish', 'created', 'updated']
     inlines = [GalleryInline, ]
     filter_horizontal = ['tags', ]

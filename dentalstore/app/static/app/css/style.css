@@ -455,9 +455,12 @@ ul{
     line-height: 1.2;
     overflow: hidden;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     line-height: 1.2em;
+}
+
+.product_info .tsxt-hidden{
+    display: none;
 }
 
 /* form */

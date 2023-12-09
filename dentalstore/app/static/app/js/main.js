@@ -1,4 +1,23 @@
 $( document ).ready(function() {
+    $(function() {
+     let header = $('.header');
+     let hederHeight = header.height();
+
+         $(window).scroll(function() {
+           if($(this).scrollTop() > 1) {
+            header.addClass('sticky-top');
+            $('body').css({
+               'paddingTop': hederHeight+'px' // делаем отступ у body, равный высоте шапки
+            });
+           } else {
+            header.removeClass('sticky-top');
+            $('body').css({
+             'paddingTop': 0 // удаляем отступ у body, равный высоте шапки
+            })
+           }
+         });
+    });
+
     $('.owl-carousel').owlCarousel({
     items:4,
     loop:true,
@@ -24,7 +43,7 @@ $( document ).ready(function() {
                 items:5
             }
         }
-    })
+    });
 
 
     $('.helptext').click(function(){ // задаем функцию при нажатиии на элемент <button>

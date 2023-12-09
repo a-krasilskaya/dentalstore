@@ -125,9 +125,6 @@ class ProductCategory(MPTTModel):
     alt = models.CharField(max_length=255, verbose_name='Атрибут alt', blank=True)
     supplier_url = models.URLField(verbose_name='URL', blank=True)
 
-    # Тэги
-    # tags = models.ManyToManyField(TagProduct, blank=True, related_name='tags')
-
 
     # данные синхронизации
 
@@ -146,8 +143,3 @@ class ProductCategory(MPTTModel):
     def __str__(self):
         return self.title
 
-
-# class TagProductsIntermediate(models.Model):
-#      tags = models.ForeignKey(TagProduct, on_delete=models.CASCADE)
-#      products = models.ForeignKey(Product, on_delete=models.CASCADE)
-     # category = TreeForeignKey(ProductCategory, on_delete=models.CASCADE)

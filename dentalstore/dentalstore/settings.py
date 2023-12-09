@@ -29,6 +29,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = (os.getenv('DEBUG', 'False') == 'True')
 
+
 ALLOWED_HOSTS = ["*"]
 
 # Application definition
@@ -47,9 +48,9 @@ INSTALLED_APPS = [
     'app.apps.AppConfig',
     'django_bootstrap5',
     'django_static_jquery',
+    'mptt',
     'ckeditor',
     'ckeditor_uploader',
-    'mptt',
     'users',
 ]
 
@@ -235,8 +236,7 @@ else:
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'store.onine1@gmail.com'
-#EMAIL_HOST_PASSWORD = 'shgzdcvkutnsegio' \
-EMAIL_HOST_PASSWORD= 'jiffcmxpenrlvxbf'
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 
 TAGGIT_CASE_INSENSITIVE = True

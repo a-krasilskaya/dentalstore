@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Новый заказ с сайта dental-store</title>
+</head>
+<body>
+<h5>Здравствуйте! Вам новый заказ с сайта dental-store</h5>
+<p>Имя: {{first_name}}</p>
+<p>Фамилия: {{last_name}}</p>
+<p>Номер телефона: {{phone}}</p>
+<p>Email: {{email}}</p>
+<p>Адрес доставки: {{address}}</p>
+<h5>Заказ №{{order.id}} </h5>
+
+    <p>{{item.product}}</p>
+    <p>{{item.quantity}}</p>
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Наименование - цена</th>
+          <th scope="col">Количество товара</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for item in cart %}
+        <tr>
+          <td>{{item.product}}</td>
+          <td>{{item.quantity}}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+</body>
+</html>

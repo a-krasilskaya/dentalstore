@@ -4,24 +4,23 @@
 {% block title %}Каталог{% endblock %}
 
 {% block breadcrumb %}
-    <nav aria-label="breadcrumb">
-        <ul class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/">Главная</a></li>
-        {% for node in ancestors %}
-        <li class="breadcrumb-item"><a href="{{node.get_absolute_url}}">{{node.name}}</a></li>
-            {% endfor %}
-        <li class="breadcrumb-item active" aria-current="page">{{ object }}</li>
-        </ul>
-    </nav>
+<!--    <nav aria-label="breadcrumb">-->
+<!--        <ul class="breadcrumb">-->
+<!--        <li class="breadcrumb-item"><a href="/">Главная</a></li>-->
+<!--        {% for node in ancestors %}-->
+<!--        <li class="breadcrumb-item"><a href="{{node.get_absolute_url}}">{{node.name}}</a></li>-->
+<!--            {% endfor %}-->
+<!--        <li class="breadcrumb-item active" aria-current="page">{{ object }}</li>-->
+<!--        </ul>-->
+<!--    </nav>-->
 {% endblock %}
 
 {% block content %}
 <div class="container category-product-list">
-    <h1 class="h1 h1-title text-center my-4">Каталог</h1>
     <ul>
         {% recursetree object_list %}
         {% if node.level == 0 %}
-        <h2 class="h2-title mt-4 mb-5">{{node.title}}</h2>
+        <h1 class="h1-title text-center my-5">{{node.title}}</h1>
         {% endif %}
 
         <li class="{% if node.level == 1 %}col-xl-3 col-md-6 col-sm-12 mb-5 {% endif %}">
@@ -48,6 +47,7 @@
 
         {% endrecursetree %}
     </ul>
+
 
 </div>
 

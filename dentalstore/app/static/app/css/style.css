@@ -9,8 +9,11 @@ a{
 }
 
 .header{
-    position: fixed;
     width: 100%;
+}
+
+.header.sticky-top{
+    position: fixed;
 }
 
 .header, .footer{
@@ -565,6 +568,10 @@ select{
 
 
 /* catalog sidebar */
+.sidebar .h1-title{
+    font-size: 2rem;
+}
+
 .subcategories-menu .active{
     background: #eef7ff;
 }

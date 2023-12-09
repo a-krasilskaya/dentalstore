@@ -24,11 +24,11 @@ from dentalstore import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
     path('cart/', include(('cart.urls', 'cart'), namespace='cart')),
     path('orders/', include(('orders.urls', 'orders'), namespace='orders')),
     path('catalog/', include('catalog.urls')),
     path('feedback/', include('feedback.urls')),
-    path('ckeditor/', include('ckeditor_uploader.urls')),
     path('', include('app.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

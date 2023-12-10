@@ -133,7 +133,7 @@
 
 </section>
 
-<section class="form backup-form mt-5 pt-3">
+<section class="form backup-form mt-5 pt-3" id="feedback">
   <div class="container">
     <h2 class="h2-title pt-5">Нужна помощь менеджера?</h2>
     <h2 class="h2-title pb-5">Закажите обратный звонок</h2>
@@ -145,7 +145,16 @@
         {{ form.as_p }}
         <div class="privacy-policy pb-5"><a href="{% url 'privacy_policy' %}">Ознакомиться с условиями обработки персональных данных</a></div>
         <button class="btn btn-purple-dark" type="submit">Заказать звонок</button>
+<!--        <a href="#contact" class="btn btn-purple-dark" type="submit">Заказать звонок</a>-->
       </form>
+      {% if messages %}
+          {% for message in messages %}
+              <div class="alert alert-success mt-3" role="alert">
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  <p class="reviews">{{ message }}</p>
+              </div>
+          {% endfor %}
+      {% endif %}
       </div>
       </div>
       <div class="img-block">

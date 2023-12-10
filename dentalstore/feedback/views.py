@@ -17,7 +17,7 @@ class OrderCallBackFormView(View):
             name = form.cleaned_data['name']
             phone = form.cleaned_data['phone']
         #     print(request.POST.get('url_form'))
-            html_body = render_to_string('app/message.html', {'name': name, 'phone': phone})
+            html_body = render_to_string('app/application_main_page.html', {'name': name, 'phone': phone})
 
             msg = EmailMultiAlternatives(subject='Новая заявка "Заказать звонок"', to=['store.onine1@gmail.com'])
             msg.attach_alternative(html_body, 'text/html')
@@ -39,7 +39,7 @@ class FeedBackFormView(View):
             email = form.cleaned_data['email']
             text_message = form.cleaned_data['text_message']
         #     print(request.POST.get('url_form'))
-            html_body = render_to_string('app/message.html', {'name': name, 'phone': phone, 'email': email, 'text_message': text_message})
+            html_body = render_to_string('app/application_contacts_page.html', {'name': name, 'phone': phone, 'email': email, 'text_message': text_message})
 
             msg = EmailMultiAlternatives(subject='Новая заявка "Пользователь написал сообщение"', to=['store.onine1@gmail.com'])
             msg.attach_alternative(html_body, 'text/html')

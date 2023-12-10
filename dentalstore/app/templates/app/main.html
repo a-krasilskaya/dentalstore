@@ -137,8 +137,8 @@
   <div class="container">
     <h2 class="h2-title pt-5">Нужна помощь менеджера?</h2>
     <h2 class="h2-title pb-5">Закажите обратный звонок</h2>
-    <div class="form-block-wrapper d-flex justify-content-between">
-      <div class="form-wrapper">
+    <div class="row form-block-wrapper d-flex justify-content-between">
+      <div class="col-5 mb-4 form-wrapper">
       <div class="form-block rounded p-5 w-100">
       <form action="{% url 'ordercallback_view' %}" method="post">
         {% csrf_token %}
@@ -157,7 +157,7 @@
       {% endif %}
       </div>
       </div>
-      <div class="img-block">
+      <div class="img-block col-5">
         <img src="{% static '/app/images/stom-img.png' alt='' %}">
       </div>
     </div>

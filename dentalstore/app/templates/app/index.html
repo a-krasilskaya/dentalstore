@@ -19,44 +19,57 @@
 </head>
 <body>
     <div class="page-wrapper d-flex min-vh-100 flex-column overflow-hidden">
-    <header class="p-2 border-bottom header">
-        <div class="container">
-      <div class="d-flex flex-wrap align-items-end justify-content-center justify-content-lg-start">
-        <div class="header-logo col-2">
+
+
+<!--header-->
+<header class="p-2 border-bottom header">
+    <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light">
+<!--      <div class="container">-->
         <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
             <img class="logo-img" src="{% static '/app/images/svglogo.svg' %}">
         </a>
-        </div>
-        <div class="nav col-7">
-        <ul class="d-flex justify-content-evenly align-items-end col-lg-auto me-lg-auto mb-2 mb-md-0">
-          <li><a href="{% url 'home' %}" class="nav-link px-2 link-secondary">Главная</a></li>
-          <li><a href="{% url 'catalog' %}" class="nav-link px-2 link-body-emphasis">Каталог</a></li>
-          <li><a href="{% url 'delivery' %}" class="nav-link px-2 link-body-emphasis">Доставка и оплата</a></li>
-          <li><a href="{% url 'contacts' %}" class="nav-link px-2 link-body-emphasis">Контакты</a></li>
-        </ul>
-        </div>
-      <div class="cart col-1 d-flex justify-content-center">
-          {% with total_items=cart|length %}
-          <a href="{% url 'cart:cart_detail' %}">
-              <img class="pb-2" src="{% static '/app/images/shopping-cart.png' %}" alt='Корзина'>
-              {% if cart|length > 0 %}
-              {{ total_items }}
-              {% endif %}
-          </a>
-          {% endwith %}
-      </div>
-        <div class="col-2 header-contacts text-center">
-            <div class="link-phone">
-                <a href="tel:+79999683506">+7 (999) 968-35-06</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Переключатель навигации">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav col-12 col-xl-9 col-lg-8 justify-content-lg-evenly mb-2 mb-lg-0 align-items-center align-self-lg-end">
+            <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Главная</a>
+            <a class="nav-link" href="{% url 'catalog' %}">Каталог</a>
+            <a class="nav-link" href="{% url 'delivery' %}">Доставка и оплата</a>
+            <a class="nav-link" href="{% url 'contacts' %}">Контакты</a>
+           </div>
+           <div class="navbar-nav col-12 col-xl-1 col-lg-1 align-self-lg-end justify-content-xl-center justify-content-lg-end">
+            <div class="cart col-12 col-lg-2 d-flex justify-content-center">
+              {% with total_items=cart|length %}
+              <a href="{% url 'cart:cart_detail' %}">
+                  <img class="pb-2" src="{% static '/app/images/shopping-cart.png' %}" alt='Корзина'>
+                  {% if cart|length > 0 %}
+                  {{ total_items }}
+                  {% endif %}
+              </a>
+              {% endwith %}
             </div>
-            <div class="link-messangers d-flex justify-content-center">
-                <a  href="https://t.me/+79999683506" class="telegram-link"><img class="link-messangers-item p-2" src="{% static '/app/images/telegram.png' %}" alt="Написать в Telegram"></a>
-                <a href="https://wa.me/+79999683506" class="whatsapp-link"><img class="link-messangers-item p-2" src="{% static '/app/images/whatsapp.png' %}" alt="Написать в Whatsapp"></a>
+               </div>
+               <div class="navbar-nav col-12 col-xl-2 col-lg-3 align-self-lg-end  justify-content-lg-end">
+            <div class="header-contacts text-center">
+                <div class="link-phone">
+                    <a href="tel:+79999683506">+7 (999) 968-35-06</a>
+                </div>
+                <div class="link-messangers d-flex justify-content-center">
+                    <a  href="https://t.me/+79999683506" class="telegram-link"><img class="link-messangers-item p-2" src="{% static '/app/images/telegram.png' %}" alt="Написать в Telegram"></a>
+                    <a href="https://wa.me/+79999683506" class="whatsapp-link"><img class="link-messangers-item p-2" src="{% static '/app/images/whatsapp.png' %}" alt="Написать в Whatsapp"></a>
+                </div>
             </div>
+          </div>
         </div>
+<!--      </div>-->
+    </nav>
         </div>
-      </div>
     </header>
+
+
+<!--header end-->
     {% block breadcrumb %}
     {% endblock %}
 

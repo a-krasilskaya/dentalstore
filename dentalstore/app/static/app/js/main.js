@@ -18,6 +18,14 @@ $( document ).ready(function() {
          });
     });
 
+   // Подсветка меню
+   $(function(){
+        let loc = window.location.pathname;
+        $('.nav-link').each(function(){
+            $(this).toggleClass('active', $(this).attr('href') == loc);
+        });
+    });
+
     $('.owl-carousel').owlCarousel({
     items:4,
     loop:true,

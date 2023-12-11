@@ -9,8 +9,11 @@ a{
 }
 
 .header{
-    position: fixed;
     width: 100%;
+}
+
+.header.sticky-top{
+    position: fixed;
 }
 
 .header, .footer{
@@ -216,6 +219,10 @@ li{
 .form-block-wrapper .form-block,
 .form-block-wrapper .img-block{
     width: 50%;
+}
+
+.form-block-wrapper .img-block{
+    align-self: flex-end;
 }
 
 .form-block-wrapper .form-block{
@@ -455,9 +462,12 @@ ul{
     line-height: 1.2;
     overflow: hidden;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     line-height: 1.2em;
+}
+
+.product_info .tsxt-hidden{
+    display: none;
 }
 
 /* form */
@@ -562,6 +572,10 @@ select{
 
 
 /* catalog sidebar */
+.sidebar .h1-title{
+    font-size: 2rem;
+}
+
 .subcategories-menu .active{
     background: #eef7ff;
 }

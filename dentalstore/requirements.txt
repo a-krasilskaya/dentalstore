@@ -1,4 +1,5 @@
 amqp==5.1.1
+argh==0.29.4
 asgiref==3.7.2
 billiard==4.1.0
 celery==5.3.3
@@ -10,12 +11,14 @@ colorama==0.4.6
 Django==4.2.4
 django-appconf==1.0.5
 django-bootstrap5==23.3
+django-ckeditor==6.7.0
 django-classy-tags==4.1.0
 django-cms==3.11.4
 django-formtools==2.4.1
 django-js-asset==2.1.0
 django-mptt==0.14.0
 django-sekizai==4.1.0
+django-static-autocollect==0.1
 django-static-jquery==2.1.4
 django-treebeard==4.7
 djangocms-admin-style==3.2.5
@@ -23,12 +26,16 @@ form==0.0.1
 jsonfield==3.1.0
 kombu==5.3.2
 packaging==23.1
+pathtools==0.1.2
 Pillow==10.0.0
 prompt-toolkit==3.0.39
 psycopg2-binary==2.9.7
 python-dateutil==2.8.2
+python-dotenv==1.0.0
+PyYAML==6.0.1
 six==1.16.0
 sqlparse==0.4.4
 tzdata==2023.3
 vine==5.0.0
+watchdog==0.8.3
 wcwidth==0.2.6

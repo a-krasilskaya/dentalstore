@@ -9,7 +9,7 @@
         <div class="col-12">
             <h1 class="h1 h1-title py-5">Корзина</h1>
             <div class="cart-detail-wrapper">
-            <div class="cart-detail-title row fw-bold">
+            <div class="cart-detail-title row fw-bold d-none d-md-flex">
                 <div class="col-2 border p-2 text-center">
                     <h6 class="h6 m-0 py-2">Изображение</h6>
                 </div>
@@ -32,7 +32,7 @@
             <div class="cart-detail-products row">
             {% for item in cart %}
             {% with product=item.product %}
-                <div class="col-2 border">
+                <div class="col-md-2 col-6 border">
                     {% for img in images %}
                         {% if img.product_id == product.id and img.main_image %}
                         <div class="wrapper-cart-img p-1">
@@ -41,18 +41,22 @@
                         {% endif %}
                     {% endfor %}
                 </div>
-                <div class="col-3 border">
+                <div class="col-md-3 col-6 border">
                     <p class="py-2">{{ product.title }}</p>
                 </div>
-                <div class="col-2 border">
+                <div class="col-md-2 col-6 border">
                     <p class="py-2">{{ item.price }} {{ product.currency.currency_sign }}</p>
                 </div>
-                <div class="col-2 border">
+                <div class="col-md-2 col-6 border">
                     <div class="update-quantity py-2">
                         <form action="{% url 'cart:cart_add' product.id %}" method="post">
-                            <div class="form-wrapper d-flex align-items-center justify-content-evenly">
+                            <div class="form-wrapper d-flex flex-md-column flex-lg-row align-items-center justify-content-md-evenly">
+                        <div class="quantity-range">
                         {{ item.update_quantity_form.quantity }}
+                         </div>
+                        <div class="quantity-update">
                         {{ item.update_quantity_form.update }}
+                        </div>
                         <div class=btn-wrapper">
                             <button class="btn btn-purple-dark btn-sm" type="submit">Обновить</button>
                         </div>
@@ -61,14 +65,14 @@
                         </form>
                     </div>
                 </div>
-                <div class="col-1 border">
-                    <div class="remove-product py-2 text-center">
+                <div class="col-md-1 col-6 border">
+                    <div class="remove-product py-2 text-md-center">
                         <a href="{% url 'cart:cart_remove' product.id %}">
                             <img src="{% static '/app/images/delete-symbol.png' %}" alt="Удалить">
                         </a>
                     </div>
                 </div>
-                <div class="col-2 border">
+                <div class="col-md-2 col-6 border">
                     <div class="total-price py-2">
                         {{cart.get_total_price}} {{ product.currency.currency_sign }}
                     </div>
@@ -78,22 +82,22 @@
             </div>
             <div class="total-price-wrapper fw-bold">
             <div class="row">
-                <div class="col-2 border">
+                <div class="col-md-2 col-6 border">
                     <h6 class="h6 py-2">Всего:</h6>
                 </div>
-                <div class="col-8 border"></div>
-                <div class="col-2 border py-2">
+                <div class="col-md-8 d-none d-md-block border"></div>
+                <div class="col-md-2 col-6 border py-2">
                     <h6 class="h6">{{cart.get_total_price}} {{ product.currency.currency_sign }}</h6>
                 </div>
             </div>
             </div>
         </div>
     </div>
-    <div class="row py-5">
-        <div class="col-2">
-            <a href="{% url 'orders:order_create' %}" class="button btn btn-purple-dark">Оформить заказ</a>
+    <div class="d-flex flex-column py-5">
+        <div class="col-md-5 col-lg-3 mr-md-2">
+            <a href="{% url 'orders:order_create' %}" class="button btn btn-purple-dark d-block mb-3 mb-lg-4">Оформить заказ</a>
         </div>
-        <div class="col-2">
+        <div class="col-md-5 col-lg-3 mr-md-2">
             <a href="/catalog" class="button btn return-store d-block">Вернуться в магазин</a>
         </div>
     </div>

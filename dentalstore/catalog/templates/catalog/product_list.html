@@ -1,11 +1,12 @@
 {% extends 'app/index.html' %}
+{% load static %}
 {% block title %}Каталог - {{title}}{% endblock %}
 
 
 {% block content %}
-<div class="container card-product-category-item mt-5">
-    <div class="row d-flex mt-4">
-    <div class="sidebar col-xl-3 col-md-2">
+<div class="container card-product-category-item mt-xl-5 mt-4">
+    <div class="row d-lg-flex mt-xl-4">
+    <div class="sidebar col-lg-4 col-xl-3">
 <!--        <ul class="subcategories-menu">-->
 
 <!--            {% for i in cat_family %}-->
@@ -20,8 +21,12 @@
 <!--                {% endif %}-->
 <!--            {% endfor %}-->
 <!--        </ul>-->
+        <div class="wrap-sidebar-title d-flex justify-content-between align-items-center mb-3 mb-xl-0">
+                <h1 class="h1 h1-title">{% if tag.slug in request.path %}<a href="../../{{title.slug}}">{% endif %}{{title}}{% if tag.slug in request.path %}</a>{% endif %}</h1>
+                <div class="mobile-filter-btn d-lg-none"><img src="{% static '/catalog/images/filter.png' %}" alt="filter"></div>
+        </div>
+        <div class="wrap-mobile-filter d-lg-block d-none">
         <div class="tags_filter">
-            <h1 class="h1 h1-title">{% if tag.slug in request.path %}<a href="../../{{title.slug}}">{% endif %}{{title}}{% if tag.slug in request.path %}</a>{% endif %}</h1>
             <ul class="p-0 my-4">
                 {% for i in product_tags %}
                     {% if product_tags|length > 1  %}
@@ -42,22 +47,46 @@
                     {% endif %}
                 {% endfor %}
             </ul>
-
-
         </div>
-
-        <h6 class="h6-title form_filter mb-4">Цена:</h6>
+        <h5 class="my-3 h5-title form_filter h6-title">Фильтры</h5>
         <form action="" method="get" class="form_filter">
             {% csrf_token %}
-            {{ form.as_p }}
-<!--            <input  type="submit" value="Поиск">-->
-            <button class="btn btn-purple-dark mb-5 mt-3 px-4" type="submit">Поиск</button>
+            <div class="my-2 h6-title form_filter">Цена:</div>
+            <div class="d-flex justify-content-between mb-4">{{ form.min_price }} {{ form.max_price }}</div>
+            <div class="my-2 h6-title form_filter">Сортировать по:</div>
+            <div class="mb-4">{{ form.ordering }}</div>
+            <div class="my-2 h6-title form_filter">Производитель:</div>
+            <div class="mb-4">
+            {% for i in form.manufacturer %}
+                {% for j in products_manufacturers %}
+                    {% if i.choice_label == j.manufacturer__name %}
+                        <div>{{i}}</div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+            </div>
+            <div class="my-2 h6-title form_filter">Страна:</div>
+            <div class="mb-3">
+            {% for i in form.countries %}
+                {% for j in products_manufacturer_countries %}
+                    {% if i.choice_label == j.manufacturer_countries %}
+                        <div>{{i}}</div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+            </div>
+            <div class="btn-block d-flex justify-content-between py-3">
+            <button class="btn btn-purple-dark px-4" type="submit">Поиск</button>
+            <a href="{{request.path}}" class="button btn btn-reset-filter d-block">Сбросить фильтр</a>
+            </div>
         </form>
+        </div>
     </div>
-        <div class="col-xl-9 col-md-10">
-    <ul class="row">
+    <div class="col-lg-8 col-xl-9 col-md-12">
+    <ul class="row px-0">
+        {% if object_list %}
         {% for product in object_list %}
-        <li class="col-xl-4 col-md-6 col-sm-12 mb-5">
+        <li class="col-xl-4 col-sm-6 col-12 mb-4">
             <a href="{% if tag.slug in request.path %}../{% endif %}products/{{ product.slug }}">
                 <div class="card">
                     <div class="card-img img-wrapper overflow-hidden">
@@ -98,6 +127,9 @@
             </a>
         </li>
         {% endfor %}
+        {% else %}
+            <p class="">По вашему запросу товаров не найдено</p>
+        {% endif %}
     </ul>
             </div>
         </div>

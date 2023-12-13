@@ -2,9 +2,9 @@
 {% block title %}{{ product.title }}{% endblock %}
 
 {% block content %}
-<div class="container product-card my-5">
-    <div class="row my-5">
-        <div class="col-5">
+<div class="container product-card my-md-5 my-4">
+    <div class="row mt-lg-4 mb-lg-5">
+        <div class="col-sm-5 col-md-6 col-lg-5 mb-3 mb-md-0 d-md-block d-none">
             <div class="gallery row">
                 {% for img in images %}
                 {% if img.product_id == product.id and img.main_image %}
@@ -12,7 +12,7 @@
                         <img src="/media/{{ img.image }}" alt="{{ img.alt }}" class="img-fluid img-thumbnail rounded d-block">
                     </div>
                 {% endif %}
-                    <div class="small col-3">
+                    <div class="small col-4 col-lg-3">
                         <a href="/media/{{ img.image }}" class="small-item {% if img.product_id == product.id and img.main_image %}active{% endif %}">
                             <img src="/media/{{ img.image }}" alt="{{ img.alt }}" class="img-fluid img-thumbnail rounded d-block">
                         </a>
@@ -20,8 +20,8 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="col-7">
-            <div class="product-label d-flex align-items-center">
+        <div class="col-lg-7 col-md-6">
+            <div class="product-label align-items-center d-none d-md-flex">
             {% if product.stock > 0 %}
                 <p class="stock px-5">Акция -{{ product.stock }}</p>
             {% endif %}
@@ -33,8 +33,35 @@
             {% endif %}
             </div>
             <h1 class="h1 h1-title fw-bolder lh-1 mb-3">{{ product.title }}, <span> {{product.manufacturer.name}}, {{ product.manufacturer_countries }}</span></h1>
+            <div class="col-md-5 mb-3 mb-md-0 d-md-none">
+            <div class="gallery row">
+                {% for img in images %}
+                {% if img.product_id == product.id and img.main_image %}
+                    <div class="big col-12 mb-3">
+                        <img src="/media/{{ img.image }}" alt="{{ img.alt }}" class="img-fluid img-thumbnail rounded d-block">
+                    </div>
+                {% endif %}
+                    <div class="small col-4 col-md-3">
+                        <a href="/media/{{ img.image }}" class="small-item {% if img.product_id == product.id and img.main_image %}active{% endif %}">
+                            <img src="/media/{{ img.image }}" alt="{{ img.alt }}" class="img-fluid img-thumbnail rounded d-block">
+                        </a>
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
             <div class="product_info">
                 <p class="description">{{ product.description | safe }}</p>
+                <div class="product-label d-flex align-items-center d-lg-none">
+                {% if product.stock > 0 %}
+                    <p class="stock px-5">Акция -{{ product.stock }}</p>
+                {% endif %}
+                {% if product.hit_sales %}
+                    <p class="new px-5">Новинка</p>
+                {% endif %}
+                {% if product.new_product %}
+                    <p class="bestsellers px-5">Хит продаж</p>
+                {% endif %}
+                </div>
                 {% if product.sale_price %}
                 <p class="sale-price fw-bolder fs-4">{{ product.sale_price}} <span> {{ product.currency.currency_sign }}</span></p>
                 <p class="price text-decoration-line-through fw-bolder fs-4">{{ product.price }} <span> {{ product.currency.currency_sign }}</span></p>
@@ -68,13 +95,15 @@
             </div>
         </div>
     </div>
-    <div class="row tabs-info">
+    <div>
         {% if product.restriction_sale %}
-        <div class="col-12 border mx-2 mb-3 rounded">
-            <p class="p-2">Частным (физическим лицам) продажа товаров данной категории не производится. Анестетики карпульные (растворы для инъекций) отпускаются только организациям строго при наличии лицензии на медицинскую деятельность и регистрации в Честном знаке.</p>
+        <div class="col-12 border p-2 mb-3 mt-3 rounded">
+            <p class="p-lg-2 pb-0">Частным (физическим лицам) продажа товаров данной категории не производится. Анестетики карпульные (растворы для инъекций) отпускаются только организациям строго при наличии лицензии на медицинскую деятельность и регистрации в Честном знаке.</p>
         </div>
         {% endif %}
-        <div class="col-12">
+    </div>
+    <div class="row tabs-info">
+        <div class="col-12 mt-3">
             <nav>
               <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Характеристики</button>
@@ -82,7 +111,7 @@
               </div>
             </nav>
             <div class="tab-content" id="nav-tabContent">
-              <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+              <div class="tab-pane show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                 <div class="product_features p-3">
                     <p>Длина (мм): {% if product.length %}{{ product.length }}{% endif %}</p>
                     <p>Ширина (мм): {% if product.width %}{{ product.width }}{% endif %}</p>
@@ -90,14 +119,14 @@
                     <p>Вес (г.): {% if product.weight %}{{ product.weight }}{% endif %}</p>
                 </div>
               </div>
-              <div class="tab-pane fade p-3" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                <div class="descriotion">{{ product.description | safe  }}</div>
+              <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <div class="descriotion  p-3">{{ product.description | safe  }}</div>
               </div>
             </div>
         </div>
     </div>
     <div class="row button-back">
-        <div class="col-2">
+        <div class="col-4 col-md-2">
             <a onclick="javascript:history.back(); return false" class="button btn return-store d-block">Назад</a>
         </div>
     </div>

@@ -43,10 +43,10 @@
             <div class="cart col-12 col-lg-2 d-flex justify-content-center">
               {% with total_items=cart|length %}
               <a href="{% url 'cart:cart_detail' %}">
-                  <img class="pb-2" src="{% static '/app/images/shopping-cart.png' %}" alt='Корзина'>
                   {% if cart|length > 0 %}
-                  {{ total_items }}
+                  <div class="text-center">{{ total_items }}</div>
                   {% endif %}
+                  <img class="pb-2" src="{% static '/app/images/shopping-cart.png' %}" alt='Корзина'>
               </a>
               {% endwith %}
             </div>
@@ -85,23 +85,24 @@
                     <img class="logo-img" src="{% static '/app/images/svglogo.svg' %}">
                 </a>
 </h2>
-<div class="footer-menu d-flex w-100">
-<ul class="d-flex w-30 flex-column align-items-start col-lg-auto me-lg-auto mb-2 mb-md-0">
-    <li><a href="{% url 'home' %}" class="nav-link px-2 link-secondary">Главная</a></li>
-    <li><a href="{% url 'catalog' %}" class="nav-link px-2 link-body-emphasis">Каталог</a></li>
-    <li><a href="{% url 'delivery' %}" class="nav-link px-2 link-body-emphasis">Доставка и оплата</a></li>
-    <li><a href="{% url 'contacts' %}" class="nav-link px-2 link-body-emphasis">Контакты</a></li>
+<div class="row footer-menu d-flex w-xl-100">
+<ul class="d-flex w-xl-30 flex-column align-items-start col-lg-auto me-lg-auto mb-xl-2 mb-3 mb-md-3 mb-xl-0 col-12 col-md-6">
+    <li><a href="{% url 'home' %}" class="nav-link px-xl-2 link-secondary">Главная</a></li>
+    <li><a href="{% url 'catalog' %}" class="nav-link px-xl-2 link-body-emphasis">Каталог</a></li>
+    <li><a href="{% url 'delivery' %}" class="nav-link px-xl-2 link-body-emphasis">Доставка и оплата</a></li>
+    <li><a href="{% url 'contacts' %}" class="nav-link px-xl-2 link-body-emphasis">Контакты</a></li>
 </ul>
-<ul class="footer-social d-flex flex-column w-30 align-items-start col-lg-auto me-lg-auto mb-2 mb-md-0">
-    <li><div class="footer-link-phone"><a href="tel:+79999683506" class="link-body-emphasis nav-link px-2 ">+7 (999) 968-35-06</a></div></li>
-    <li><a  href="https://t.me/+79999683506" class="telegram-link nav-link px-2  link-body-emphasis">Telegram</a></li>
-    <li><a href="https://wa.me/+79999683506" class="whatsapp-link nav-link px-2  link-body-emphasis">Whatsapp</a></li>
+<ul class="footer-social d-flex flex-column w-xl-30 align-items-start col-lg-auto me-lg-auto mb-xl-2 mb-3 mb-md-3 mb-xl-0 col-12 col-md-6">
+    <li><div class="footer-link-phone"><a href="tel:+79999683506" class="link-body-emphasis nav-link p-xl-2 ">+7 (999) 968-35-06</a></div></li>
+    <li><a  href="https://t.me/+79999683506" class="telegram-link nav-link px-xl-2  link-body-emphasis">Telegram</a></li>
+    <li><a href="https://wa.me/+79999683506" class="whatsapp-link nav-link px-xl-2  link-body-emphasis">Whatsapp</a></li>
 </ul>
-<ul class="footer-social d-flex flex-column w-50 align-items-start col-lg-auto me-lg-auto mb-2 mb-md-0">
-    <li><h6 class="h6">Мы находимся по адресу:</h6></li>
-    <li><div class="font-weight-normal">МО, г. Реутов, Юбилейный проспект дом 66</div></li>
+<ul class="footer-social d-flex flex-column w-xl-50 align-items-start col-lg-auto me-lg-auto mb-2 mb-md-0 col-12">
+    <li><h6 class="h6 mb-0">Мы находимся по адресу:</h6></li>
+    <li><div class="font-weight-normal text-start">МО, г. Реутов, Юбилейный проспект дом 66</div></li>
 </ul>
 </div>
+
 </div>
 </div>
 <div class="row mt-5">

@@ -8,8 +8,8 @@ from catalog.models import Product, Manufacturer
 
 
 class ProductsFilterForm(forms.Form):
-    min_price = forms.IntegerField(label='', required=False, widget=forms.NumberInput(attrs={'placeholder': 'от', 'class': 'form-control'}))
-    max_price = forms.IntegerField(label='', required=False, widget=forms.NumberInput(attrs={'placeholder': 'до', 'class': 'form-control'}))
+    min_price = forms.IntegerField(label='', required=False, widget=forms.NumberInput(attrs={'placeholder': 'от', 'class': 'form-control form-price'}))
+    max_price = forms.IntegerField(label='', required=False, widget=forms.NumberInput(attrs={'placeholder': 'до', 'class': 'form-control form-price'}))
     ordering = forms.ChoiceField(label='Сортировать по', required=False, widget=forms.Select(attrs={'class': 'form-control'}), choices=[
         ['title', 'Алфавиту'],
         ['price', 'Цене min'],

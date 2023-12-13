@@ -13,7 +13,7 @@
       {% if forloop.first %}
         <div class="carousel-item active">
           <img class="img-carousel" src="media/{{ banner.image }}" alt="{{ banner.alt }}">
-          <div class="carousel-caption d-none d-md-block carousel-caption-our-style">
+          <div class="carousel-caption d-md-block carousel-caption-our-style">
             <h2 class="h2-carousel">{{ banner.title }}</h2>
             <p class="mt-5 mb-5 p-carousel">{{ banner.text }}</p>
               <a class="button-carousel d-inline-block fw-semibold" href="{{ banner.link }}">Перейти в каталог</a>
@@ -22,7 +22,7 @@
       {% else %}
         <div class="carousel-item">
             <img class="img-carousel" src="media/{{ banner.image }}" alt="{{ banner.alt }}">
-            <div class="carousel-caption d-none d-md-block carousel-caption-our-style">
+            <div class="carousel-caption d-md-block carousel-caption-our-style">
               <h2 class="h2-carousel">{{ banner.title }}</h2>
               <p class="mt-5 mb-5 p-carousel">{{ banner.text }}</p>
               <a class="button-carousel d-inline-block" href="{{ banner.link }}" role="button">Перейти в каталог</a>
@@ -46,11 +46,11 @@
 
 <section class="advantages">
   <div class="container py-5">
-    <div class="wrapper d-flex py-5 justify-content-between">
-      <div class="advantag-item align-items-center px-5 py-5 fw-semibold">Широкий ассортимент товаров</div>
-      <div class="advantag-item align-items-center px-3 py-5 fw-semibold">Индивидуальный подход к каждому покупателю</div>
-      <div class="advantag-item align-items-center px-3 py-5 fw-semibold">Быстрая доставка</div>
-      <div class="advantag-item align-items-center px-3 py-5 fw-semibold">Конкурентноспособные цены</div>
+    <div class="wrapper d-flex flex-wrap pt-xl-3 pb-xl-0 py-xxl-5 justify-content-between">
+      <div class="advantag-item align-items-center w-md-50 w-100 px-5 py-3 p-md-5 my-2 fw-semibold">Широкий ассортимент товаров</div>
+      <div class="advantag-item align-items-center w-md-50 w-100 px-3 py-3 p-md-5 my-2 fw-semibold">Индивидуальный подход к каждому покупателю</div>
+      <div class="advantag-item align-items-center w-md-50 w-100 px-3 py-3 p-md-5 my-2 fw-semibold">Быстрая доставка</div>
+      <div class="advantag-item align-items-center w-md-50 w-100 px-3 py-3 p-md-5 my-2 fw-semibold">Конкурентноспособные цены</div>
     </div>
     <div class="advantages-text">
       <p>У нас вы найдете широкий ассортимент качественных стоматологических материалов от ведущих производителей.
@@ -63,7 +63,7 @@
 </section>
 <section class="category-products">
 <div class="container">
-  <h2 class="h2-title py-5">Категории товаров</h2>
+  <h2 class="h2-title pt-5 pb-4">Категории товаров</h2>
   <div class="row">
     <div class="owl-carousel owl-theme" id="category_products">
       {% for item in category %}
@@ -101,7 +101,7 @@
 
 <section class="bestsellers">
   <div class="container">
-    <h2 class="h2-title py-5">Хиты продаж</h2>
+    <h2 class="h2-title pt-5 pb-4">Хиты продаж</h2>
     <div class="row">
       <div class="owl-carousel owl-theme" id="bestsellers_products">
       {% for item in bestsellers %}
@@ -135,11 +135,11 @@
 
 <section class="form backup-form mt-5 pt-3" id="feedback">
   <div class="container">
-    <h2 class="h2-title pt-5">Нужна помощь менеджера?</h2>
-    <h2 class="h2-title pb-5">Закажите обратный звонок</h2>
+    <h2 class="h2-title pt-4">Нужна помощь менеджера?</h2>
+    <h2 class="h2-title pb-4">Закажите обратный звонок</h2>
     <div class="row form-block-wrapper d-flex justify-content-between">
-      <div class="col-5 mb-4 form-wrapper">
-      <div class="form-block rounded p-5 w-100">
+      <div class="col-lg-5 mb-4 form-wrapper">
+      <div class="form-block rounded p-md-5 p-4 w-100">
       <form action="{% url 'ordercallback_view' %}" method="post">
         {% csrf_token %}
         {{ form.as_p }}
@@ -157,7 +157,7 @@
       {% endif %}
       </div>
       </div>
-      <div class="img-block col-5">
+      <div class="img-block d-lg-block d-none col-5">
         <img src="{% static '/app/images/stom-img.png' alt='' %}">
       </div>
     </div>

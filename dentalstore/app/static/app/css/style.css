@@ -51,14 +51,14 @@ li{
     right: auto !important;
     bottom: auto !important;
     text-align: left !important;
-    top: 10.25rem !important;
+    top: 4rem !important;
     color: #eef7ff !important;
 }
 
 .h2-carousel{
-    font-size:60px;
+    font-size:30px;
     font-weight: 500;
-    max-width: 60%;
+    max-width: 90%;
     line-height: 1;
     color: #eef7ffa1;
 }
@@ -66,7 +66,7 @@ li{
 .p-carousel{
     font-size: 20px;
     font-weight: 400;
-    max-width: 40%
+    max-width: 90%
 }
 
 .button-carousel{
@@ -85,8 +85,22 @@ li{
 }
 
 .img-carousel{
-    filter: brightness(50%)
+    filter: brightness(50%);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
+
+.carousel-item{
+    height: 400px;
+}
+
+@media (min-width: 720px){
+    .carousel-item{
+        height: 100%;
+    }
+}
+
 
 .manufacturer .wrapper{
     flex-wrap: wrap;
@@ -96,7 +110,7 @@ li{
 .h2-title{
     text-align: center;
     color: #565e64;
-    font-size: 38px;
+    font-size: 34px;
     line-height: 1;
 }
 
@@ -118,10 +132,10 @@ li{
     position: relative;
 }
 
-.advantages .wrapper{
+/*.advantages .wrapper{
     position: absolute;
     top: -55%;
-}
+}*/
 
 .advantag-item{
     width: 22%;
@@ -135,8 +149,60 @@ li{
 }
 
 .advantages-text{
-    margin-top: 100px;
+    margin-top: 40px;
     color:#084eb7;
+}
+@media (min-width: 68px){
+    .advantag-item{
+        width: 48%!important;
+    }
+}
+
+@media (min-width: 1200px){
+    .carousel-item{
+        height: 600px;
+    }
+
+    .h2-carousel{
+        font-size:60px;
+        font-weight: 500;
+        max-width: 60%;
+        line-height: 1;
+        color: #eef7ffa1;
+    }
+
+    .p-carousel{
+        font-size: 20px;
+        font-weight: 400;
+        max-width: 40%
+    }
+
+    .carousel-caption.carousel-caption-our-style{
+        top: 10.25rem !important;
+    }
+
+    .advantages-text{
+        margin-top: 100px;
+    }
+
+    .h2-title{
+        font-size: 38px;
+    }
+}
+
+@media (min-width: 1400px){
+    .advantages .wrapper{
+        position: absolute;
+        top: -55%;
+    }
+
+    .advantag-item{
+        width: 24%!important;
+    }
+
+    .carousel-item{
+        height: 700px;
+    }
 }
 
 /* Owl-carousel */
@@ -364,7 +430,8 @@ ul{
 
 /*  товары категории  */
 
-.card-product-category-item .h1-title{
+.card-product-category-item .h1-title,
+.card-product-category-item .h1-title a{
     color: #4b5196 !important;
 }
 
@@ -389,6 +456,46 @@ ul{
 .card-product-category-item .card:hover {
     filter: brightness(80%);
     transition: .2s;
+}
+
+@media(min-width: 769px){
+    .h5.card-product-category-item-title{
+        min-height: 5em;
+    }
+
+    .h6.card-product-category-item-title{
+        min-height: 2em;
+    }
+}
+
+@media screen and (min-width: 576px) and (max-width: 768px){
+    .card-product-category-item .card-img {
+        height: 220px;
+    }
+
+    .h5.card-product-category-item-title{
+        font-size: 1rem;
+        min-height: 5em;
+    }
+
+    .h6.card-product-category-item-title{
+        min-height: 2em;
+    }
+}
+
+@media screen and (min-width: 992px) and (max-width: 1399px){
+    .card-product-category-item .card-img {
+            height: 250px;
+    }
+
+    .h5.card-product-category-item-title{
+        font-size: 1rem;
+        min-height: 5em;
+    }
+
+    .h6.card-product-category-item-title{
+        min-height: 2em;
+    }
 }
 
 
@@ -423,7 +530,7 @@ ul{
 /*----- галерея карточки товара --------*/
 
 .gallery .big {
-  height: 500px;
+  height: 320px;
   display: inline-block;
   overflow: hidden; /* Скрываем всё за контуром */
 }
@@ -453,9 +560,21 @@ ul{
     border: 1px solid #4b5196;
 }
 
+@media (min-width: 576px){
+    .gallery .big{
+        height: 500px;
+    }
+}
+
+@media screen and (min-width: 576px) and (max-width: 767px){
+    .gallery .small {
+        height: 150px;
+    }
+}
+
 /*   текст карточки  товара   */
 .product-card .h1-title{
-    font-size: 30px;
+    font-size: 22px;
 }
 
 .product-card .description{
@@ -470,10 +589,27 @@ ul{
     display: none;
 }
 
+@media (min-width: 576px){
+    .product-card .h1-title{
+        font-size: 30px;
+    }
+}
+
 /* form */
 label,
 select{
     margin-right: 15px;
+}
+
+@media screen and (min-width: 768px) and (max-width: 991px){
+    .quantity-range select{
+        margin-right: 0;
+
+    }
+
+    .quantity-range{
+        margin-bottom: 10px;
+    }
 }
 
 select{
@@ -517,12 +653,14 @@ select{
     margin: 0 15px !important;
 }
 
-.return-store{
+.return-store,
+.btn-reset-filter{
     color: #4b5196;
     border: solid 1px #4b5196;
 }
 
-.return-store:hover{
+.return-store:hover,
+.btn-reset-filter:hover{
     background: #feeeeb;
     color: #4b5196;
 }
@@ -666,6 +804,7 @@ select{
     margin-bottom: 25px;
 }
 
-.sidebar .form_filter .errorlist{
-    display: none;
+.form-price{
+    width: 48%;
 }
+

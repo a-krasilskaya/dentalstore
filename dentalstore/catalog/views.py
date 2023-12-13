@@ -22,7 +22,7 @@ class CategoryListView(ListView):
 class ProductCategoryView(ListView):
     model = Product
     template_name = 'catalog/product_list.html'
-    allow_empty = False
+    allow_empty = True
 
 
     def get_queryset(self):
@@ -39,6 +39,7 @@ class ProductCategoryView(ListView):
             queryset = queryset.filter(manufacturer__name__in=self.request.GET.getlist('manufacturer'))
         if self.request.GET.getlist('countries'):
             queryset = queryset.filter(manufacturer_countries__in=self.request.GET.getlist('countries'))
+
         return queryset
 
 
@@ -57,6 +58,10 @@ class ProductCategoryView(ListView):
         # products = Product.objects.filter(category__slug=self.category.slug, publish=True, tags__tag__isnull=False).values('tags__tag', 'tags__slug')
         # context['product_tags'] = [dict(s) for s in set(frozenset(d.items()) for d in products)]
         context['product_tags'] = Product.objects.filter(category__slug=self.category.slug, publish=True, tags__tag__isnull=False).values('tags__tag', 'tags__slug', 'tags__parent', 'tags__parent__tag', 'tags__parent__slug', 'tags__id').order_by('tags__tag', 'tags__parent__tag').distinct('tags__tag', 'tags__parent__tag')
+        context['products_manufacturers'] = Product.objects.filter(category__slug=self.category.slug, publish=True).values('manufacturer__name').order_by('manufacturer__name').distinct('manufacturer__name')
+        context['products_manufacturer_countries'] = Product.objects.filter(category__slug=self.category.slug,
+                                                                   publish=True).values('manufacturer_countries').order_by(
+            'manufacturer_countries').distinct('manufacturer_countries')
         return context
 
 
@@ -97,9 +102,14 @@ class ProductTagView(ListView):
                                                                                          'tags__parent',
                                                                                          'tags__parent__tag',
                                                                                          'tags__parent__slug',
-                                                                                         'tags__id').order_by(
-            'tags__tag', 'tags__parent__tag').distinct('tags__tag', 'tags__parent__tag')
-
+                                                                                         'tags__id').order_by('tags__tag',
+                                                                                                              'tags__parent__tag').distinct('tags__tag',
+                                                                                                                                            'tags__parent__tag')
+        context['products_manufacturers'] = Product.objects.filter(tags__slug=self.tag.slug, publish=True).values('manufacturer__name').order_by('manufacturer__name').distinct('manufacturer__name')
+        context['products_manufacturer_countries'] = Product.objects.filter(tags__slug=self.tag.slug,
+                                                                            publish=True).values(
+            'manufacturer_countries').order_by(
+            'manufacturer_countries').distinct('manufacturer_countries')
         return context
 
 

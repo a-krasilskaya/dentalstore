@@ -90,13 +90,13 @@ $( document ).ready(function() {
 // скрыть показать фильтры на мобильных
     $('.mobile-filter-btn').click(function(){
         $('.wrap-mobile-filter').toggleClass('d-none').fadeIn(500);
-        if ($('.wrap-mobile-filter').hasClass('d-none')){
-            $('.mobile-filter-btn img').attr({'src': "{% static '/catalog/images/filter.png' %}",
-            'alt': 'filter'});
-        } else {
-            $('.mobile-filter-btn img').attr({'src': "{% static '/catalog/images/close.png' %}",
-            'alt': 'close'});
-        }
+//        if ($('.wrap-mobile-filter').hasClass('d-none')){
+//            $('.mobile-filter-btn img').attr({'src': "{% static '/catalog/images/filter.png' %}",
+//            'alt': 'filter'});
+//        } else {
+//            $('.mobile-filter-btn img').attr({'src': "{% static '/catalog/images/close.png' %}",
+//            'alt': 'close'});
+//        }
     });
 
 

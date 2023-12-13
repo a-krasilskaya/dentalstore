@@ -92,7 +92,7 @@ li{
 }
 
 .carousel-item{
-    height: 400px;
+    height: 600px;
 }
 
 @media (min-width: 720px){
@@ -152,7 +152,7 @@ li{
     margin-top: 40px;
     color:#084eb7;
 }
-@media (min-width: 68px){
+@media (min-width: 768px){
     .advantag-item{
         width: 48%!important;
     }

@@ -67,10 +67,11 @@ class ProductsAdminForm(forms.ModelForm):
 
 class ProductAdmin(admin.ModelAdmin):
     form = ProductsAdminForm
-    list_display = ['title', 'price', 'sale_price', 'quantity', 'publish', 'created', 'updated']
+    list_display = ['title', 'category', 'price', 'sale_price', 'quantity', 'publish', 'created', 'updated']
     inlines = [GalleryInline, ]
     filter_horizontal = ['tags', ]
-    list_filter = ['publish', 'created']
+    search_fields = ('title', 'category__title', 'price', 'sale_price',)
+    list_filter = ['category', 'publish', 'created']
     list_editable = ['quantity', 'publish']
     prepopulated_fields = {'slug': ('title',)}
 

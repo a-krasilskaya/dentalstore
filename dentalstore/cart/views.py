@@ -1,9 +1,14 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
 from django.views.decorators.http import require_POST
+from django.http import JsonResponse
 from catalog.models import Product, Gallery
 from .cart import Cart
 from .forms import CartAddProductForm
+# from app.middlewares import AjaxMiddleware
 
+
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 @require_POST
 def cart_add(request, product_id):
@@ -14,7 +19,12 @@ def cart_add(request, product_id):
         cd = form.cleaned_data
         cart.add(product=product, quantity=cd['quantity'],
                  update_quantity=cd['update'])
-    return redirect('cart:cart_detail')
+    # return redirect('cart:cart_detail')
+    if is_ajax(request=request):
+        print('ajax')
+        return JsonResponse(data={'success': 'Товар добавлен в корзину'}, status=201)
+    else:
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
 def cart_remove(request, product_id):

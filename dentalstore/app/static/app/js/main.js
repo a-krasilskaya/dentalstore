@@ -100,6 +100,22 @@ $( document ).ready(function() {
     });
 
 
+//    cart
+    $(".add-to-cart-ajax").submit(function(e) {
+        e.preventDefault()
+        $.ajax({
+            url: this.action,
+            type: this.method,
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function(response) {
+                console.log('ok', response.success)
+            },
+            error: function(response) {
+                console.log('err', response)
+            },
+        })
+    });
 });
 
 

@@ -112,7 +112,7 @@
                         {% endif %}
                         <p class="card-product-category-item-sku mb-0">Артикул: {{ product.sku }}</p>
                         <div class="add-to-cart product-list-off">
-                            <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                            <form action="{% url 'cart:cart_add' product.id %}" method="post" class="add-to-cart-ajax">
                                 <div class="form-wrapper d-flex align-items-center mt-2">
                                 {{ cart_product_form }}
                                 {% csrf_token %}

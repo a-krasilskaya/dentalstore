@@ -117,7 +117,10 @@
                                 {{ cart_product_form }}
                                 {% csrf_token %}
                                 <div class=btn-wrapper">
-                                    <button class="btn btn-purple-dark" type="submit">В корзину</button>
+                                    <button class="btn btn-purple-dark add-cart list-products" type="submit">В корзину</button>
+                                    <div class="in-cart d-none align-items-center">
+                                        <button type="button" class="btn btn-cold-lilac" data-bs-toggle="tooltip" data-bs-placement="top" title="Перейти в корзину">В корзине</button>
+                                    </div>
                                 </div>
                                 </div>
                             </form>

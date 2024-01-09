@@ -72,8 +72,6 @@ $( document ).ready(function() {
     });
 
 
-    $('.product-list-off.add-to-cart form label').hide()
-    $('.product-list-off.add-to-cart form select').hide()
     $('.add-to-cart form label').text('Количество:')
 
 
@@ -101,6 +99,21 @@ $( document ).ready(function() {
 
 
 //    cart
+    $('.add-cart').click(function(){
+        if ($(this).hasClass('list-products')){
+            $(this).hide();
+        }else{
+            $(this).text('Добавить еще');
+        }
+        $(this).siblings('.in-cart').removeClass('d-none').addClass('d-flex');
+    });
+
+    $('.in-cart .btn').click(function(e){
+        e.preventDefault()
+        window.location.href = '/cart/';
+    });
+
+
     $(".add-to-cart-ajax").submit(function(e) {
         e.preventDefault()
         $.ajax({
@@ -109,7 +122,8 @@ $( document ).ready(function() {
             data: $(this).serialize(),
             dataType: 'json',
             success: function(response) {
-                console.log('ok', response.success)
+                let cartCount = +($('.count-cart').text()) + Number($('#id_quantity').val())
+                $('.count-cart').text(cartCount)
             },
             error: function(response) {
                 console.log('err', response)

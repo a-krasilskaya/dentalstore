@@ -43,9 +43,7 @@
             <div class="cart col-12 col-lg-2 d-flex justify-content-center">
               {% with total_items=cart|length %}
               <a href="{% url 'cart:cart_detail' %}">
-                  {% if cart|length > 0 %}
-                  <div class="text-center">{{ total_items }}</div>
-                  {% endif %}
+                  <div class="text-center count-cart">{% if cart|length > 0 %}{{ total_items }}{% endif %}</div>
                   <img class="pb-2" src="{% static '/app/images/shopping-cart.png' %}" alt='Корзина'>
               </a>
               {% endwith %}

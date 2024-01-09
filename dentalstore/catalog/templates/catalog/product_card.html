@@ -82,13 +82,12 @@
                 {% endif %}
 
                 <div class="add-to-cart">
-                    <form action="{% url 'cart:cart_add' product.id %}" method="post">
-                        <div class="form-wrapper d-flex align-items-center">
+                    <form action="{% url 'cart:cart_add' product.id %}" method="post" class="add-to-cart-ajax">
+                        <div class="form-wrapper d-flex align-items-center flex-md-wrap">
                         {{ cart_product_form }}
                         {% csrf_token %}
-                        <div class=btn-wrapper">
-                            <button class="btn btn-purple-dark" type="submit">В корзину</button>
-                        </div>
+                        <button class="btn btn-purple-dark add-cart" type="submit">В корзину</button>
+                        <a href="/cart/" class="btn btn-cold-lilac in-cart d-none ml-2">Перейти в корзину</a>
                         </div>
                     </form>
                 </div>

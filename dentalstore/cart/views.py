@@ -19,19 +19,23 @@ def cart_add(request, product_id):
         cd = form.cleaned_data
         cart.add(product=product, quantity=cd['quantity'],
                  update_quantity=cd['update'])
-    # return redirect('cart:cart_detail')
+
     if is_ajax(request=request):
-        print('ajax')
-        return JsonResponse(data={'success': 'Товар добавлен в корзину'}, status=201)
+        return JsonResponse(data={'success': 'В корзине'}, status=201)
     else:
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        # return redirect('cart:cart_detail')
 
 
 def cart_remove(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
     cart.remove(product)
-    return redirect('cart:cart_detail')
+
+    if is_ajax(request=request):
+        return JsonResponse(data={}, status=201)
+    else:
+        return redirect('cart:cart_detail')
 
 
 def cart_detail(request):

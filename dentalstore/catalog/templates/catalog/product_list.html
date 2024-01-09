@@ -83,7 +83,7 @@
         </div>
     </div>
     <div class="col-lg-8 col-xl-9 col-md-12">
-    <ul class="row px-0">
+    <ul class="row px-0 products-catalog-category-list">
         {% if object_list %}
         {% for product in object_list %}
         <li class="col-xl-4 col-sm-6 col-12 mb-4">
@@ -97,13 +97,13 @@
                         {% endfor %}
                     </div>
                     <div class="card-body fs-5 p-2 lh-sm d-flex flex-column bd-highlight border-top">
-                        <h5 class="h5 card-product-category-item-title">{{ product.title }}</h5>
+                        <h5 class="h5 card-product-category-item-title overflow-hidden">{{ product.title }}</h5>
                         <h6 class="h6 card-product-category-item-title">{{product.manufacturer.name}}, {{ product.manufacturer_countries }}</h6>
                         {% if product.sale_price %}
                         <p class="card-product-category-item-sale-price fw-bolder">{{ product.sale_price}}<span class="product-currency"> {{ product.currency.currency_sign }}</span></p>
                         <p class="card-product-category-item-price text-decoration-line-throug">{{ product.price }}<span class="product-currency"> {{ product.currency.currency_sign }}</span></p>
                         {% else %}
-                        <p class="card-product-category-item-price fw-bolder">{{ product.price }}<span class="product-currency"> {{ product.currency.currency_sign }}</span></p>
+                        <p class="card-product-category-item-price">{{ product.price }}<span class="product-currency"> {{ product.currency.currency_sign }}</span></p>
                         {% endif %}
                         {% if product.quantity > 0 %}
 <!--                        <p class="availability">В наличии</p>-->

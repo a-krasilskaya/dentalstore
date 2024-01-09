@@ -115,8 +115,8 @@
             {% endif %}
             {% endfor %}
           </div>
-          <div class="card-body fs-5 p-2 lh-sm d-flex flex-column bd-highlight ">
-            <h5 class="bestsellers-title h5 fs-5 fw-semibold mb-auto bd-highlight">{{ item.title }}</h5>
+          <div class="card-body p-2 d-flex flex-column bd-highlight ">
+            <div class="bestsellers-title my-3 bd-highlight">{{ item.title }}</div>
             <div class="bestsellers-price fw-semibold bd-highlight">{{ item.price }}<span class="bestsellers-currency"> {{ item.currency.currency_sign }}</span></div>
             <div class="bestsellers-barcode fw-ligh fs-6 bd-highlight">Артикул: {{ item.sku }}</div>
           </div>

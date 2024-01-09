@@ -25,14 +25,14 @@
             {% if product.stock > 0 %}
                 <p class="stock px-5">Акция -{{ product.stock }}</p>
             {% endif %}
-            {% if product.hit_sales %}
+            {% if product.new_product %}
                 <p class="new px-5">Новинка</p>
             {% endif %}
-            {% if product.new_product %}
+            {% if product.hit_sales %}
                 <p class="bestsellers px-5">Хит продаж</p>
             {% endif %}
             </div>
-            <h1 class="h1 h1-title fw-bolder lh-1 mb-3">{{ product.title }}, <span> {{product.manufacturer.name}}, {{ product.manufacturer_countries }}</span></h1>
+            <h1 class="h1 h1-title lh-1 mb-3">{{ product.title }}, <span> {{product.manufacturer.name}}, {{ product.manufacturer_countries }}</span></h1>
             <div class="col-md-5 mb-3 mb-md-0 d-md-none">
             <div class="gallery row">
                 {% for img in images %}
@@ -66,7 +66,7 @@
                 <p class="sale-price fw-bolder fs-4">{{ product.sale_price}} <span> {{ product.currency.currency_sign }}</span></p>
                 <p class="price text-decoration-line-through fw-bolder fs-4">{{ product.price }} <span> {{ product.currency.currency_sign }}</span></p>
                 {% else %}
-                <p class="price fw-bolder fs-4">{{ product.price }} <span> {{ product.currency.currency_sign }}</span></p>
+                <p class="price fs-4">{{ product.price }} <span> {{ product.currency.currency_sign }}</span></p>
                 {% endif %}
                 <p class="sku">Артикул: {{ product.sku }}</p>
                 <p class="manufacturer-name ">Производитель: {{ product.manufacturer.name }}</p>

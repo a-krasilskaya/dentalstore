@@ -281,7 +281,7 @@ li{
 .card-product-item .card-img img{
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .card-product-item .card-body{
@@ -290,6 +290,17 @@ li{
 
 .text-block{
     color:#084eb7;
+}
+
+.owl-carousel .bestsellers-title{
+    --max-lines: 2;
+    font-size: 1rem;
+    display: -webkit-box;
+    overflow: hidden !important;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--max-lines);
+    line-height: 1.2;
+    font-weight: 500;
 }
 
 /*   form   */
@@ -449,12 +460,13 @@ ul{
 
 .card-product-category-item .card-img{
     height: 300px;
+    padding: 10px;
 }
 
 .card-product-category-item .card-img img{
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .card-product-category-item .availability{
@@ -470,6 +482,25 @@ ul{
     transition: .2s;
 }
 
+.card-product-category-item .h5.card-product-category-item-title{
+    --max-lines: 3;
+
+    font-size: 1rem;
+    display: -webkit-box;
+    overflow: hidden !important;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--max-lines);
+}
+
+.card-product-category-item .h6.card-product-category-item-title{
+    font-size: 0.8rem;
+}
+
+.card-product-category-item-price{
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
 .card-product-category-item .product-list-off.add-to-cart label,
 .card-product-category-item .product-list-off.add-to-cart select{
     display: none;
@@ -479,28 +510,32 @@ ul{
     margin-left: 20px;
 }
 
-@media(min-width: 769px){
+
+/*mobile
+
+.products-catalog-category-list li:nth-child(odd){
+    padding-right: 5px;
+}
+
+.products-catalog-category-list li:nth-child(even){
+    padding-left: 5px;
+}
+
+--------*/
+
+@media(min-width: 576px){
     .h5.card-product-category-item-title{
-        min-height: 5em;
+        min-height: 60px;
     }
 
     .h6.card-product-category-item-title{
-        min-height: 2em;
+        min-height: 30px;
     }
 }
 
 @media screen and (min-width: 576px) and (max-width: 768px){
     .card-product-category-item .card-img {
         height: 220px;
-    }
-
-    .h5.card-product-category-item-title{
-        font-size: 1rem;
-        min-height: 5em;
-    }
-
-    .h6.card-product-category-item-title{
-        min-height: 2em;
     }
 }
 
@@ -511,11 +546,6 @@ ul{
 
     .h5.card-product-category-item-title{
         font-size: 1rem;
-        min-height: 5em;
-    }
-
-    .h6.card-product-category-item-title{
-        min-height: 2em;
     }
 }
 
@@ -561,7 +591,7 @@ ul{
   display: block;
   height: 100%;
   width: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 .gallery .big img:hover {
   transform: scale(1.2); /* Увеличиваем масштаб */
@@ -711,7 +741,7 @@ select{
 .wrapper-cart-img img{
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 /* oreder */

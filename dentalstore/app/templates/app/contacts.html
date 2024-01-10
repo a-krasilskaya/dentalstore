@@ -50,20 +50,24 @@
                             <div class="form-wrapper w-100">
                                 <div class="form-block rounded px-xl-5 px-3 pt-3 pb-4 w-100">
                                     <h3 class="h3 h3-title mb-3">Напишите нам сообщение</h3>
-                                    <form action="{% url 'feedback_view' %}" method="post">
+                                    <form action="{% url 'feedback_view' %}" method="post" class="feedback-form">
                                         {% csrf_token %}
                                         {{ form.as_p }}
                                         <div class="privacy-policy pb-3"><a href="{% url 'privacy_policy' %}">Ознакомиться с условиями обработки персональных данных</a></div>
                                         <button class="btn btn-purple-dark" type="submit">Отправить</button>
                                     </form>
-                                    {% if messages %}
-                                      {% for message in messages %}
-                                          <div class="alert alert-success mt-3" role="alert">
-                                              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                              <p class="reviews">{{ message }}</p>
-                                          </div>
-                                      {% endfor %}
-                                  {% endif %}
+<!--                                    {% if messages %}-->
+<!--                                      {% for message in messages %}-->
+<!--                                          <div class="alert alert-success mt-3" role="alert">-->
+<!--                                              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
+<!--                                              <p class="reviews">{{ message }}</p>-->
+<!--                                          </div>-->
+<!--                                      {% endfor %}-->
+<!--                                  {% endif %}-->
+                                    <div class="alert mt-3 d-none">
+                                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                      <p class="reviews"></p>
+                                  </div>
                                 </div>
                             </div>
                         </div>

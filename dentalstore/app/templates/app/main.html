@@ -140,21 +140,25 @@
     <div class="row form-block-wrapper d-flex justify-content-between">
       <div class="col-lg-5 mb-4 form-wrapper">
       <div class="form-block rounded p-md-5 p-4 w-100">
-      <form action="{% url 'ordercallback_view' %}" method="post">
+      <form action="{% url 'ordercallback_view' %}" method="post" class="feedback-form">
         {% csrf_token %}
         {{ form.as_p }}
         <div class="privacy-policy pb-5"><a href="{% url 'privacy_policy' %}">Ознакомиться с условиями обработки персональных данных</a></div>
         <button class="btn btn-purple-dark" type="submit">Заказать звонок</button>
 <!--        <a href="#contact" class="btn btn-purple-dark" type="submit">Заказать звонок</a>-->
       </form>
-      {% if messages %}
-          {% for message in messages %}
-              <div class="alert alert-success mt-3" role="alert">
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                  <p class="reviews">{{ message }}</p>
-              </div>
-          {% endfor %}
-      {% endif %}
+<!--      {% if messages %}-->
+<!--          {% for message in messages %}-->
+<!--              <div class="alert alert-success mt-3" role="alert">-->
+<!--                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
+<!--                  <p class="reviews">{{ message }}</p>-->
+<!--              </div>-->
+<!--          {% endfor %}-->
+<!--      {% endif %}-->
+      <div class="alert mt-3 d-none">
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          <p class="reviews"></p>
+      </div>
       </div>
       </div>
       <div class="img-block d-lg-block d-none col-5">

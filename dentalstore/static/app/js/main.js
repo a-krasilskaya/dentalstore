@@ -72,6 +72,29 @@ $( document ).ready(function() {
     });
 
 
+    $('.feedback-form').submit(function(e) {
+        e.preventDefault()
+        $.ajax({
+            url: this.action,
+            type: this.method,
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function(response){
+                $('.alert').addClass('alert-success').removeClass('d-none')
+                $('.alert-success .reviews').text('Спасибо за заявку, наш сотрудник позвонит вам в ближайшее время')
+                $(".feedback-form").trigger("reset");
+            },
+            error: function(response) {
+                console.log('err', response)
+                if (response.status === 400){
+                    $('.alert').addClass('alert-danger').removeClass('d-none')
+                    $('.alert-danger .reviews').text('Заполните обязательные поля')
+                }
+            },
+        })
+    });
+
+
     $('.add-to-cart form label').text('Количество:')
 
 

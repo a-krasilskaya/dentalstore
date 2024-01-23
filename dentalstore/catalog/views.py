@@ -3,10 +3,15 @@ from django.http import HttpResponse, request
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView
 from .forms import ProductsFilterForm
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.renderers import TemplateHTMLRenderer
 
+from rest_framework import generics
+from catalog.serializers import ProductSerializer
+from rest_framework.exceptions import ValidationError
 
 from cart.forms import CartAddProductForm
-from catalog.models import ProductCategory, Product, Gallery, TagProduct, Manufacturer
+from catalog.models import ProductCategory, Product, Gallery, TagProduct, Manufacturer, Currency
 
 
 class CategoryListView(ListView):
@@ -63,6 +68,26 @@ class ProductCategoryView(ListView):
                                                                    publish=True).values('manufacturer_countries').order_by(
             'manufacturer_countries').distinct('manufacturer_countries')
         return context
+
+
+
+class ProductListAPIView(generics.ListAPIView):
+    serializer_class = ProductSerializer
+    pagination_class = PageNumberPagination
+
+    def get_queryset(self):
+        category_slug = self.request.query_params.get('category')
+        # if self.request.query_params.get('min_price'):
+        #     queryset = queryset.filter(price__gte=self.request.query_params.get('min_price'))
+        # if self.request.GET.get('max_price'):
+        #     queryset = queryset.filter(price__lte=self.request.GET.get('max_price'))
+        if category_slug:
+            try:
+                category = ProductCategory.objects.get(slug=category_slug)
+            except ProductCategory.DoesNotExist:
+                raise ValidationError("Такой категории не существует")
+            return Product.objects.all().filter(category__slug=category.slug, publish=True)
+        return Product.objects.all()
 
 
 class ProductTagView(ListView):
@@ -127,7 +152,34 @@ class ShowProduct(DetailView):
 
 
 
+# for ajax
+# def product_catalog(request):
+#     return render(request, 'catalog/product_list.html')
 
+
+def load_products(request):
+    # Получаем номер страницы и количество товаров, которые нужно загрузить
+    page = request.GET.get('page')
+    per_page = request.GET.get('per_page')
+
+    # Вычисляем начальный и конечный индексы для выборки товаров из базы данных
+    start_index = (int(page) - 1) * int(per_page)
+    end_index = start_index + int(per_page)
+
+    # Загружаем товары из базы данных
+    products = Product.objects.all()[start_index:end_index]
+
+    # Создаем словарь с данными о товарах
+    product_data = []
+    for product in products:
+        product_data.append({
+            'name': product.name,
+            'price': product.price,
+            'image_url': product.image.url
+        })
+
+    # Возвращаем данные в формате JSON
+    return JsonResponse({'products': product_data})
 
 
 

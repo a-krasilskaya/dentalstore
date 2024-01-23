@@ -153,6 +153,23 @@ $( document ).ready(function() {
             },
         })
     });
+
+
+
+// подгрузка товаров ajax
+//    $(window).scroll(function() {
+//       if($(window).scrollTop() + $(window).height() == $(document).height()) {
+//           $.ajax({
+//                type: 'GET',
+//                url: '{% url 'catalog:product_category' %}', //Ссылка на вьюху
+//                dataType: "json",
+//                data: {'value': 10},  //Здесь можно передать данные в GET запросе, например сколько значений получить
+//                success: function(data) {
+//                    // Ответ приходит в переменную data. Её и рендерим на страницу
+//                }
+//            });
+//      }
+//    });
 });
 
 

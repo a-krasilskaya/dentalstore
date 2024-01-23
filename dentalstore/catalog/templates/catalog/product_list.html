@@ -137,4 +137,66 @@
             </div>
         </div>
 </div>
+<script
+  src="https://code.jquery.com/jquery-3.6.3.js"
+  integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+  crossorigin="anonymous">
+</script>
+<script>
+    $( document ).ready(function() {
+
+        $.ajax({
+            type: "GET",
+            url: `{% url 'paginations'  %}`,
+            data: JSON.stringify({
+            }),
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+                let products = $("#products");
+                console.log(response.results.length);
+                for (let i = 0; i < response.results.length; i++) {
+                    console.log(response.results[i]);
+                    let product_title = response.results[i].title;
+                    let manufacturer = response.results[i].manufacturer.name
+                    let countries = response.results[i].manufacturer_countries
+                    let price = response.results[i].price
+                    let sale_price = response.results[i].sale_price
+                    let availability = response.results[i].availability
+                    let sku = response.results[i].sku
+                    let currency = response.results[i].currency.currency_sign
+                    let quantity = response.results[i].quantity
+                    let image = response.results[i].gallery_images[0].image
+                    let alt = response.results[i].gallery_images[0].alt
+                    products.append(`{% include 'catalog/products.html' with title="${product_title}" manufacturer="${manufacturer}" manufacturer_countries="${countries}" price="${price}" price="${price}" sale_price="${sale_price}" currency="${currency}" availability="${availability}" sku="${sku}" image="${image}" alt="${alt}"%}`);
+                }
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        });
+        return false;
+    });
+</script>
+
+<div class="container card-product-category-item mt-xl-5 mt-4">
+  <div class="row d-lg-flex mt-xl-4">
+      <div class="sidebar col-lg-4 col-xl-3">
+        <h5 class="my-3 h5-title form_filter h6-title">Фильтры</h5>
+        <div class="d-flex justify-content-between mb-4">
+            <input type="number" name="min_price" placeholder="от" class="form-control form-price" id="id_min_price">
+            <input type="number" name="max_price" placeholder="до" class="form-control form-price" id="id_max_price">
+        </div>
+        <div class="btn-block d-flex justify-content-between py-3">
+            <button class="btn btn-purple-dark px-4" type="submit" id="search-filter">Поиск</button>
+            <a href="{{request.path}}" class="button btn btn-reset-filter d-block">Сбросить фильтр</a>
+        </div>
+      </div>
+      <div class="col-lg-8 col-xl-9 col-md-12">
+    <ul class="row px-0 products-catalog-category-list" id="products"></ul>
+    </div>
+  </div>
+</div>
+
+
 {% endblock %}

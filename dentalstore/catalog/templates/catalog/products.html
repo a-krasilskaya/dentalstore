@@ -1,0 +1,25 @@
+<li class="col-xl-4 col-sm-6 col-12 mb-4">
+    <a href="{% if tag.slug in request.path %}../{% endif %}products/{{ product.slug }}">
+        <div class="card">
+            <div class="card-img img-wrapper overflow-hidden">
+                <img src="{{ image }}" alt="{{ alt }}">
+            </div>
+            <div class="card-body fs-5 p-2 lh-sm d-flex flex-column bd-highlight border-top">
+                <h5 class="h5 card-product-category-item-title overflow-hidden">{{ title }}</h5>
+                <h6 class="h6 card-product-category-item-title">{{ manufacturer }}, {{ manufacturer_countries }}</h6>
+                {% if sale_price %}
+                <p class="card-product-category-item-sale-price fw-bolder">{{ sale_price }}<span class="product-currency"> {{ currency }}</span></p>
+                <p class="card-product-category-item-price text-decoration-line-throug">{{ price }}<span class="product-currency"> {{ currency }}</span></p>
+                {% else %}
+                <p class="card-product-category-item-price">{{ price }}<span class="product-currency"> {{ currency }}</span></p>
+                {% endif %}
+                {% if quantity > 0 %}
+<!--                        <p class="availability">В наличии</p>-->
+                {% else %}
+<!--                        <p class="availability">Под заказ</p>-->
+                {% endif %}
+                <p class="card-product-category-item-sku mb-0">Артикул: {{ sku }}</p>
+            </div>
+        </div>
+    </a>
+</li>

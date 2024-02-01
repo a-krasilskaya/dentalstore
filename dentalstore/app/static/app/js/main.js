@@ -154,72 +154,23 @@ $( document ).ready(function() {
         })
     });
 
-
-// Подгрузка товаров ajax
-    // Переменная для хранения текущей страницы
-//    let currentPage = 1;
-//
-//    // Функция для отправки Ajax-запроса на сервер
-//    function loadMoreProducts() {
-//      // Создание и настройка объекта XMLHttpRequest
-//      const xhr = new XMLHttpRequest();
-//      xhr.open('GET', `/products?page=${currentPage}`, true);
-//
-//      // Обработка успешного ответа от сервера
-//      xhr.onload = function() {
-//        if (xhr.status >= 200 && xhr.status < 400) {
-//          const response = JSON.parse(xhr.responseText);
-//          const products = response.products;
-//
-//          // Обновление страницы с новыми товарами
-//          const productList = document.getElementById('productList');
-//          products.forEach(product => {
-//            const productElement = document.createElement('div');
-//            productElement.textContent = product.name;
-//            productList.appendChild(productElement);
-//          });
-//
-//          // Увеличение номера текущей страницы
-//          currentPage++;
-//
-//          // Если больше нет товаров, скрываем кнопку или блок для подгрузки
-//          if (!response.has_next) {
-//            const loadMoreButton = document.getElementById('loadMoreButton');
-//            loadMoreButton.style.display = 'none';
-//          }
-//        }
-//      };
-//
-//      // Отправка запроса на сервер
-//      xhr.send();
-//    }
-//
-//    // Функция для обработки события скролла страницы
-//    function handleScroll() {
-//      // Если достигнут конец страницы, вызываем функцию для загрузки новых товаров
-//      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-//        loadMoreProducts();
-//      }
-//    }
-
-    // Добавляем обработчик события скролла страницы
-//    window.addEventListener('scroll', handleScroll);
-
-//    $.ajax({
-//        url: '/products/paginations',
-//        method: 'GET',
-//        data: { category: 'anesteziya' }, // Замените 'your_category_slug' на актуальное значение
-//        success: function(response) {
-//
-//            // Обработка успешного ответа от сервера
-//            console.log(response); // Выводим ответ в консоль
-//        },
-//        error: function(xhr, status, error) {
-//            // Обработка ошибки запроса
-//            console.error(error); // Выводим ошибку в консоль
-//        }
-//    });
-
+    $('.btn-update').submit(function(e) {
+        e.preventDefault()
+        $.ajax({
+            url: this.action,
+            type: this.method,
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function(response) {
+                let cartCount = +($('.count-cart').text()) + Number($('#id_quantity').val())
+                $('.count-cart').text(cartCount)
+                console.log('success', response)
+            },
+            error: function(response) {
+                console.log('err', response)
+            },
+        })
+    });
 });
 
 

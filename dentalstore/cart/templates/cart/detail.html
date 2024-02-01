@@ -58,7 +58,7 @@
                         {{ item.update_quantity_form.update }}
                         </div>
                         <div class=btn-wrapper">
-                            <button class="btn btn-purple-dark btn-sm" type="submit">Обновить</button>
+                            <button class="btn btn-purple-dark btn-sm btn-update" type="submit">Обновить</button>
                         </div>
                             </div>
                         {% csrf_token %}
@@ -98,9 +98,10 @@
             <a href="{% url 'orders:order_create' %}" class="button btn btn-purple-dark d-block mb-3 mb-lg-4">Оформить заказ</a>
         </div>
         <div class="col-md-5 col-lg-3 mr-md-2">
-            <a href="/catalog" class="button btn return-store d-block">Вернуться в магазин</a>
+            <a href="javascript:history.back()" class="button btn return-store d-block">Назад</a>
         </div>
     </div>
 </div>
 </div>
+
 {% endblock %}

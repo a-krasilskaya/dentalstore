@@ -142,40 +142,128 @@
   integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
   crossorigin="anonymous">
 </script>
+{% csrf_token %}
 <script>
     $( document ).ready(function() {
-
-        $.ajax({
-            type: "GET",
-            url: `{% url 'paginations'  %}`,
-            data: JSON.stringify({
-            }),
-            contentType: "application/json",
-            dataType: "json",
-            success: function (response) {
-                let products = $("#products");
-                console.log(response.results.length);
-                for (let i = 0; i < response.results.length; i++) {
-                    console.log(response.results[i]);
-                    let product_title = response.results[i].title;
-                    let manufacturer = response.results[i].manufacturer.name
-                    let countries = response.results[i].manufacturer_countries
-                    let price = response.results[i].price
-                    let sale_price = response.results[i].sale_price
-                    let availability = response.results[i].availability
-                    let sku = response.results[i].sku
-                    let currency = response.results[i].currency.currency_sign
-                    let quantity = response.results[i].quantity
-                    let image = response.results[i].gallery_images[0].image
-                    let alt = response.results[i].gallery_images[0].alt
-                    products.append(`{% include 'catalog/products.html' with title="${product_title}" manufacturer="${manufacturer}" manufacturer_countries="${countries}" price="${price}" price="${price}" sale_price="${sale_price}" currency="${currency}" availability="${availability}" sku="${sku}" image="${image}" alt="${alt}"%}`);
+        function getCookie(с_name) {
+            if (document.cookie.length > 0) {
+                c_start = document.cookie.indexOf(c_name + "=");
+                if (c_start !== -1){
+                    c_start = c_start + c_name.length + 1;
+                    c_end = document.cookie.indexOf(";", c_start);
+                    if (c_end === -1) c_end = document.cookie.length;
+                    return unescape(document.cookie.substring(c_start, c_end));
                 }
-            },
-            error: function (response) {
-                console.log(response);
+            }
+            return "";
+        }
+
+        let input = document.querySelector('input[name="csrfmiddlewaretoken"]');
+        $.ajaxSetup({
+            headers: {
+                'X-CSRFToken': input.value,
             }
         });
-        return false;
+
+        let products = $("#products");
+        let page = localStorage.getItem("page") || 1;
+        let min_price = localStorage.getItem("min_price") || $("#min_price").val();
+        let max_price = localStorage.getItem("max_price") || $("#max_price").val();
+        let loading = false;
+        let footer = $('footer').height() - 100;
+
+        send_ajax(page);
+
+        $(window).scroll(function() {
+        if ($(window).scrollTop() + $(window).height() > $(document).height() - footer) {
+            if (!loading) {
+                loading = true;
+                page += 1;
+                send_ajax(page);
+                }
+            }
+        })
+
+        $(document).on('click', '#search-filter', function (e) {
+            e.preventDefault()
+            products.empty();
+            send_ajax()
+        })
+
+
+         function send_ajax(page){
+             let min_price = $("#min_price").val();
+             let max_price = $("#max_price").val();
+             localStorage.setItem("min_price", min_price);
+             localStorage.setItem("max_price", max_price);
+             $.ajax({
+                type: "GET",
+                url: `{% url 'paginations'  %}`,
+                data: {
+                    min_price: min_price,
+                    max_price: max_price,
+                    page: page,
+                },
+                contentType: "application/json",
+                dataType: "json",
+                success: function (response) {
+                    for (let i = 0; i < response.results.length; i++) {
+                        let product_title = response.results[i].title;
+                        let manufacturer = response.results[i].manufacturer.name
+                        let countries = response.results[i].manufacturer_countries
+                        let price = response.results[i].price
+                        let stock = response.results[i].stock
+                        let sale_price = response.results[i].sale_price;
+                        let availability = response.results[i].availability
+                        let sku = response.results[i].sku
+                        let currency = response.results[i].currency.currency_sign
+                        let quantity = response.results[i].quantity
+                        let image = response.results[i].gallery_images[0].image
+                        let alt = response.results[i].gallery_images[0].alt
+                        let slug = response.results[i].slug
+                        let id = response.results[i].id
+                        let in_cart = response.results[i].in_cart
+                        products.append(`{% include 'catalog/products.html' with title="${product_title}" manufacturer="${manufacturer}" manufacturer_countries="${countries}" price="${price}" price="${price}" stock="${stock}" sale_price="${sale_price}" currency="${currency}" availability="${availability}" sku="${sku}" image="${image}" alt="${alt}" slug="${slug}" id="${id}" in_cart="${in_cart}" %}`)
+                        console.log(response)
+                    }
+
+                    $('.product-add-to-cart').click(function(e){
+                        e.preventDefault()
+                        let cartCount = +($('.count-cart').text()) + 1
+                        let p_id = $(this).attr('data-product-id')
+                        let buttonAddToCart = $(this)
+                        $.ajax({
+                          url: `{% url 'add_to_cart' 0 %}`.replace(0, p_id),
+                          method: 'POST',
+                          data: JSON.stringify({
+                            product_id: p_id,
+                          }),
+                          dataType: "json",
+                          contentType: "application/json",
+                          success: function(response2) {
+                            $('.count-cart').text(cartCount)
+                            buttonAddToCart.siblings('.in-cart').removeClass('d-none').addClass('d-flex');
+                            buttonAddToCart.hide();
+                            console.log("success" ,response2)
+                          },
+                          error: function(error2) {
+                            console.log("error" ,error2)
+                          }
+                        });
+                        $('.in-cart .btn').click(function(e){
+                            e.preventDefault()
+                            window.location.href = '/cart/';
+                        });
+
+                    })
+
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+             });
+         }
+         return false;
     });
 </script>
 
@@ -184,19 +272,57 @@
       <div class="sidebar col-lg-4 col-xl-3">
         <h5 class="my-3 h5-title form_filter h6-title">Фильтры</h5>
         <div class="d-flex justify-content-between mb-4">
-            <input type="number" name="min_price" placeholder="от" class="form-control form-price" id="id_min_price">
-            <input type="number" name="max_price" placeholder="до" class="form-control form-price" id="id_max_price">
+            <input type="number" name="min_price" placeholder="от" class="form-control form-price" id="min_price">
+            <input type="number" name="max_price" placeholder="до" class="form-control form-price" id="max_price">
         </div>
+            <div>
+                <div class="my-2 h6-title form_filter">Сортировать по:</div>
+                <select class="form-select form-control" aria-label="Default select example" name="ordering" id="id_ordering">
+                  <option value="title">Алфавиту</option>
+                  <option value="price">Цене min</option>
+                  <option value="-price">Цене max</option>
+                </select>
+            </div>
+            <div class="my-2 h6-title form_filter">Производитель:</div>
+            <div class="mb-4">
+            {% for i in manufacturer %}
+                <div>{{i}}</div>
+            {% endfor %}
+            </div>
+            <div class="my-2 h6-title form_filter">Страна:</div>
+            <div class="mb-3">
+            {% for i in form.countries %}
+                {% for j in products_manufacturer_countries %}
+                    {% if i.choice_label == j.manufacturer_countries %}
+                        <div>{{i}}</div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+            </div>
+
         <div class="btn-block d-flex justify-content-between py-3">
+
             <button class="btn btn-purple-dark px-4" type="submit" id="search-filter">Поиск</button>
             <a href="{{request.path}}" class="button btn btn-reset-filter d-block">Сбросить фильтр</a>
         </div>
       </div>
       <div class="col-lg-8 col-xl-9 col-md-12">
-    <ul class="row px-0 products-catalog-category-list" id="products"></ul>
+    <ul class="row px-0 products-catalog-category-list" id="products">
+
+    </ul>
     </div>
   </div>
+<script>
+    $( document ).ready(function() {
+        function addToCart(product_id){
+            console.log(product_id)
+        }
+        $('.product-add-to-cart').click(function(){
+            console.log(111)
+        })
+    });
+</script>
+
+
 </div>
-
-
 {% endblock %}

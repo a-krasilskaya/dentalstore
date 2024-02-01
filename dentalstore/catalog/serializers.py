@@ -1,6 +1,7 @@
 from catalog.models import Product, Manufacturer, Gallery, Currency
-from rest_framework import serializers
 
+from rest_framework import serializers
+from rest_framework.serializers import SerializerMethodField
 
 class GallerySerializer(serializers.ModelSerializer):
     """Сериализатор для подгрузки изображений."""
@@ -28,10 +29,18 @@ class ManufacturerSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     """Сериализатор для подгрузки товара."""
+    in_cart = SerializerMethodField()
+
     currency = CurrencySerializer(read_only=True)
     gallery_images = GallerySerializer(read_only=True, many=True)
     manufacturer = ManufacturerSerializer(read_only=True)
     class Meta:
         model = Product
         fields = "__all__"
-        # fields = ['title', 'manufacturer', 'manufacturer_countries', 'price', 'sale_price', 'availability', 'sku', 'currency_sign', 'quantity', 'gallery_images']
+
+    def get_in_cart(self, obj):
+        request = self.context['request']
+        if 'in_cart' in request.session:
+            return obj.id in request.session['in_cart']
+        return False
+

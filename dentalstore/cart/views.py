@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
+from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 from catalog.models import Product, Gallery
@@ -19,7 +20,8 @@ def cart_add(request, product_id):
         cd = form.cleaned_data
         cart.add(product=product, quantity=cd['quantity'],
                  update_quantity=cd['update'])
-
+    else:
+        cart.add(product=product, quantity=1, update_quantity=True)
     if is_ajax(request=request):
         return JsonResponse(data={'success': 'В корзине'}, status=201)
     else:
@@ -39,7 +41,12 @@ def cart_detail(request):
     for item in cart:
         item['update_quantity_form'] = CartAddProductForm(
             initial={'quantity': item['quantity'], 'update': True})
-    return render(request, 'cart/detail.html', {'cart': cart, 'images': Gallery.objects.all()})
+    if is_ajax(request=request):
+        return JsonResponse(data={'success': 'cart/detail.html'}, status=201)
+    else:
+        return render(request, 'cart/detail.html', {'cart': cart, 'images': Gallery.objects.all()})
+
+
 
 
 

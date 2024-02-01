@@ -1,5 +1,5 @@
 <li class="col-xl-4 col-sm-6 col-12 mb-4">
-    <a href="{% if tag.slug in request.path %}../{% endif %}products/{{ product.slug }}">
+    <a href="products/{{ slug }}">
         <div class="card">
             <div class="card-img img-wrapper overflow-hidden">
                 <img src="{{ image }}" alt="{{ alt }}">
@@ -7,18 +7,28 @@
             <div class="card-body fs-5 p-2 lh-sm d-flex flex-column bd-highlight border-top">
                 <h5 class="h5 card-product-category-item-title overflow-hidden">{{ title }}</h5>
                 <h6 class="h6 card-product-category-item-title">{{ manufacturer }}, {{ manufacturer_countries }}</h6>
-                {% if sale_price %}
-                <p class="card-product-category-item-sale-price fw-bolder">{{ sale_price }}<span class="product-currency"> {{ currency }}</span></p>
-                <p class="card-product-category-item-price text-decoration-line-throug">{{ price }}<span class="product-currency"> {{ currency }}</span></p>
+                <div class="sale-price-wrapper d-flex justify-content-start">
+                {% if stock == True %}
+                    <p class="card-product-category-item-sale-price fw-bolder">{{ sale_price }}<span class="product-currency"> {{ currency }}</span></p>
+                    <p class="card-product-category-item-price text-decoration-line-throug">{{ price }}<span class="product-currency"> {{ currency }}</span></p>
                 {% else %}
-                <p class="card-product-category-item-price">{{ price }}<span class="product-currency"> {{ currency }}</span></p>
+                    <p class="card-product-category-item-price">{{ price }}<span class="product-currency"> {{ currency }}</span></p>
                 {% endif %}
+                </div>
                 {% if quantity > 0 %}
 <!--                        <p class="availability">В наличии</p>-->
                 {% else %}
 <!--                        <p class="availability">Под заказ</p>-->
                 {% endif %}
                 <p class="card-product-category-item-sku mb-0">Артикул: {{ sku }}</p>
+                <div class="btn-wrapper mt-2">
+                    <div class="product-add-to-cart btn btn-purple-dark add-cart list-products" data-product-id="{{ id }}">В корзину</div>
+                    <div class="in-cart d-none align-items-center">
+                        <button type="button" class="btn btn-cold-lilac" data-bs-toggle="tooltip" data-bs-placement="top" title="Перейти в корзину">В корзине</button>
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </a>

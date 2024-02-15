@@ -12,7 +12,8 @@ from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from catalog.serializers import ProductSerializer
+from catalog.serializers import ProductSerializer, ManufacturerSerializer, ManufacturerValueSerializer, \
+    ManufacturerCountriesSerializer
 from rest_framework.exceptions import ValidationError
 
 from cart.forms import CartAddProductForm
@@ -32,24 +33,25 @@ class CategoryListView(ListView):
 class ProductCategoryView(ListView):
     model = Product
     template_name = 'catalog/product_list.html'
-    allow_empty = True
+    queryset = Product.objects.filter(id=0)
 
-    def get_queryset(self):
-        self.category = ProductCategory.objects.get(slug=self.kwargs['slug'])
-        queryset = Product.objects.all().filter(category__slug=self.category.slug, publish=True)
+    # allow_empty = True
 
-        if self.request.GET.get('min_price'):
-            queryset = queryset.filter(price__gte=self.request.GET.get('min_price'))
-        if self.request.GET.get('max_price'):
-            queryset = queryset.filter(price__lte=self.request.GET.get('max_price'))
-        if self.request.GET.get('ordering'):
-            queryset = queryset.order_by(self.request.GET.get('ordering'))
-        if self.request.GET.getlist('manufacturer'):
-            queryset = queryset.filter(manufacturer__name__in=self.request.GET.getlist('manufacturer'))
-        if self.request.GET.getlist('countries'):
-            queryset = queryset.filter(manufacturer_countries__in=self.request.GET.getlist('countries'))
-
-        return queryset
+    # def get_queryset(self):
+    #     self.category = ProductCategory.objects.get(slug=self.kwargs['slug'])
+    #     queryset = Product.objects.all().filter(category__slug=self.category.slug, publish=True)
+    #
+    #     if self.request.GET.get('min_price'):
+    #         queryset = queryset.filter(price__gte=self.request.GET.get('min_price'))
+    #     if self.request.GET.get('max_price'):
+    #         queryset = queryset.filter(price__lte=self.request.GET.get('max_price'))
+    #     if self.request.GET.get('ordering'):
+    #         queryset = queryset.order_by(self.request.GET.get('ordering'))
+    #     if self.request.GET.getlist('manufacturer'):
+    #         queryset = queryset.filter(manufacturer__name__in=self.request.GET.getlist('manufacturer'))
+    #     if self.request.GET.getlist('countries'):
+    #         queryset = queryset.filter(manufacturer_countries__in=self.request.GET.getlist('countries'))
+    #     return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -82,6 +84,27 @@ class ProductCategoryView(ListView):
         return context
 
 
+class ManufacturerListAPIView(generics.ListAPIView):
+    model = Manufacturer
+    serializer_class = ManufacturerValueSerializer
+
+    def get_queryset(self):
+        manufacturers = Product.objects.filter(
+            category__slug=self.request.query_params.get('category')
+        ).order_by('manufacturer').values_list('manufacturer__name').distinct()
+        return [{'name': name} for name in manufacturers]
+
+
+class CountriesListAPIView(generics.ListAPIView):
+    serializer_class = ManufacturerCountriesSerializer
+    def get_queryset(self):
+        manufacturers_countries = Product.objects.filter(
+            category__slug=self.request.query_params.get('category')
+        ).order_by('manufacturer_countries').values_list('manufacturer_countries').distinct()
+        return [{'manufacturer_countries': country} for country in manufacturers_countries]
+
+
+
 class ProductListAPIView(generics.ListAPIView):
     serializer_class = ProductSerializer
     pagination_class = PageNumberPagination
@@ -92,22 +115,19 @@ class ProductListAPIView(generics.ListAPIView):
         min_price = self.request.query_params.get('min_price')
         max_price = self.request.query_params.get('max_price')
         ordering = self.request.query_params.get('ordering')
-        manufacturer = self.request.query_params.getlist('manufacturer')
-        countries = self.request.query_params.getlist('countries')
+        manufacturers = self.request.query_params.get('manufacturers')
+        countries = self.request.query_params.get('countries')
+
         if min_price:
             queryset = queryset.filter(price__gte=int(min_price), publish=True)
         if max_price:
             queryset = queryset.filter(price__lte=int(max_price), publish=True)
         if ordering:
             queryset = queryset.order_by(ordering)
-        if manufacturer:
-            queryset = queryset.filter(manufacturer__name__in=manufacturer)
+        if manufacturers:
+            queryset = queryset.filter(manufacturer__name__in=manufacturers.split(','))
         if countries:
-            queryset = queryset.filter(manufacturer__countries__in=countries)
-        # if manufacturer:
-        #     queryset = queryset.filter(manufacturer__name__in=self.request.query_params.getlist('manufacturer'))
-        # if countries:
-        #     queryset = queryset.filter(manufacturer_countries__in=self.request.query_params.getlist('countries'))
+            queryset = queryset.filter(manufacturer_countries__in=countries.split(','))
         if category_slug:
             try:
                 category = ProductCategory.objects.get(slug=category_slug)
@@ -115,8 +135,6 @@ class ProductListAPIView(generics.ListAPIView):
             except ProductCategory.DoesNotExist:
                 raise ValidationError("Такой категории не существует")
         return queryset
-
-
 
 
 class AddToCartAPIView(APIView):

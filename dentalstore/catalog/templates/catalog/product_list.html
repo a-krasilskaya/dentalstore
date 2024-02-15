@@ -49,37 +49,37 @@
             </ul>
         </div>
         <h5 class="my-3 h5-title form_filter h6-title">Фильтры</h5>
-        <form action="" method="get" class="form_filter">
-            {% csrf_token %}
-            <div class="my-2 h6-title form_filter">Цена:</div>
-            <div class="d-flex justify-content-between mb-4">{{ form.min_price }} {{ form.max_price }}</div>
-            <div class="my-2 h6-title form_filter">Сортировать по:</div>
-            <div class="mb-4">{{ form.ordering }}</div>
-            <div class="my-2 h6-title form_filter">Производитель:</div>
-            <div class="mb-4">
-            {% for i in form.manufacturer %}
-                {% for j in products_manufacturers %}
-                    {% if i.choice_label == j.manufacturer__name %}
-                        <div>{{i}}</div>
-                    {% endif %}
-                {% endfor %}
-            {% endfor %}
-            </div>
-            <div class="my-2 h6-title form_filter">Страна:</div>
-            <div class="mb-3">
-            {% for i in form.countries %}
-                {% for j in products_manufacturer_countries %}
-                    {% if i.choice_label == j.manufacturer_countries %}
-                        <div>{{i}}</div>
-                    {% endif %}
-                {% endfor %}
-            {% endfor %}
-            </div>
-            <div class="btn-block d-flex justify-content-between py-3">
-            <button class="btn btn-purple-dark px-4" type="submit">Поиск</button>
-            <a href="{{request.path}}" class="button btn btn-reset-filter d-block">Сбросить фильтр</a>
-            </div>
-        </form>
+<!--        <form action="" method="get" class="form_filter">-->
+<!--            {% csrf_token %}-->
+<!--            <div class="my-2 h6-title form_filter">Цена:</div>-->
+<!--            <div class="d-flex justify-content-between mb-4">{{ form.min_price }} {{ form.max_price }}</div>-->
+<!--            <div class="my-2 h6-title form_filter">Сортировать по:</div>-->
+<!--            <div class="mb-4">{{ form.ordering }}</div>-->
+<!--            <div class="my-2 h6-title form_filter">Производитель:</div>-->
+<!--            <div class="mb-4">-->
+<!--            {% for i in form.manufacturer %}-->
+<!--                {% for j in products_manufacturers %}-->
+<!--                    {% if i.choice_label == j.manufacturer__name %}-->
+<!--                        <div>{{i}}</div>-->
+<!--                    {% endif %}-->
+<!--                {% endfor %}-->
+<!--            {% endfor %}-->
+<!--            </div>-->
+<!--            <div class="my-2 h6-title form_filter">Страна:</div>-->
+<!--            <div class="mb-3">-->
+<!--            {% for i in form.countries %}-->
+<!--                {% for j in products_manufacturer_countries %}-->
+<!--                    {% if i.choice_label == j.manufacturer_countries %}-->
+<!--                        <div>{{i}}</div>-->
+<!--                    {% endif %}-->
+<!--                {% endfor %}-->
+<!--            {% endfor %}-->
+<!--            </div>-->
+<!--            <div class="btn-block d-flex justify-content-between py-3">-->
+<!--            <button class="btn btn-purple-dark px-4" type="submit">Поиск</button>-->
+<!--            <a href="{{request.path}}" class="button btn btn-reset-filter d-block">Сбросить фильтр</a>-->
+<!--            </div>-->
+<!--        </form>-->
         </div>
     </div>
     <div class="col-lg-8 col-xl-9 col-md-12">
@@ -166,13 +166,23 @@
         });
 
         let products = $("#products");
+        let filter_manufacturer = $("#filter_manufacturer");
+        let filter_countries = $("#filter_countries");
+        let manufacturer_set = new Set();
+        let countries_set = new Set();
         let page = localStorage.getItem("page") || 1;
         let min_price = localStorage.getItem("min_price") || $("#min_price").val();
         let max_price = localStorage.getItem("max_price") || $("#max_price").val();
+        let manufacturer = localStorage.getItem("manufacturer") || $("#manufacturer").serializeArray().map(function(item) {return item.value});
+        let countries = localStorage.getItem("countries") || $("#countries").serializeArray().map(function(item) {return item.value});
+        let ordering = localStorage.getItem("ordering") || $("#ordering").val();
+        let category = localStorage.getItem("category") || $("#category").val();
         let loading = false;
         let footer = $('footer').height() - 100;
 
         send_ajax(page);
+        filter_manufacturers_ajax();
+        filter_countries_ajax();
 
         $(window).scroll(function() {
         if ($(window).scrollTop() + $(window).height() > $(document).height() - footer) {
@@ -184,29 +194,93 @@
             }
         })
 
+
         $(document).on('click', '#search-filter', function (e) {
             e.preventDefault()
+            let arr_manufacturers = ['Inibsa', 'Septodont'];
             products.empty();
-            send_ajax()
+            send_ajax();
         })
+
+        function filter_manufacturers_ajax(){
+
+            $.ajax({
+              url: `{% url 'manufacturers' %}?category={{title.slug}}`,
+              method: 'GET',
+              data: ({
+                manufacturer: manufacturer,
+              }),
+              dataType: "json",
+              contentType: "application/json",
+              success: function(response_filter_manufacturer) {
+                for (let i = 0; i < response_filter_manufacturer.length; i++){
+                    let manufacturers_item = response_filter_manufacturer[i].name.replace(/[\(''\),]/g, "");
+                    filter_manufacturer.append(`{% include 'catalog/filter_manufacturer.html' with name="${manufacturers_item}" %}`)
+                }
+                console.log(1, response_filter_manufacturer)
+              },
+              error: function(error_filter_manufacturer) {
+                console.log(2, "error", error_filter_manufacturer)
+              }
+            });
+        }
+
+
+        function filter_countries_ajax(){
+
+            $.ajax({
+              url: `{% url 'manufacturers_countries' %}?category={{title.slug}}`,
+              method: 'GET',
+              data: ({
+                manufacturer_countries: countries,
+              }),
+              dataType: "json",
+              contentType: "application/json",
+              success: function(response_filter_countries) {
+                for (let i = 0; i < response_filter_countries.length; i++){
+                    let countries_item = response_filter_countries[i].manufacturer_countries.replace(/[\(''\),]/g, "");
+                    filter_countries.append(`{% include 'catalog/filter_countries.html' with country="${countries_item}" %}`)
+                }
+                console.log(response_filter_countries)
+              },
+              error: function(error_filter_countries) {
+                console.log("error", error_filter_countries)
+              }
+            });
+        }
 
 
          function send_ajax(page){
              let min_price = $("#min_price").val();
              let max_price = $("#max_price").val();
+             let manufacturers = $(".form_filter_manufacturer").serializeArray().map(function(item) {return item.value});
+             let countries = $(".form_filter_contry").serializeArray().map(function(item) {return item.value});
+             console.log(11111, countries)
+             let ordering = $("#id_ordering option:selected").val();
+             let category = `{{title.slug}}`;
              localStorage.setItem("min_price", min_price);
              localStorage.setItem("max_price", max_price);
+             localStorage.setItem("manufacturers", manufacturers);
+             localStorage.setItem("countries", countries);
+             localStorage.setItem("ordering", ordering);
+             localStorage.setItem("category", category);
+             console.log(`{{title.slug}}`)
              $.ajax({
                 type: "GET",
                 url: `{% url 'paginations'  %}`,
                 data: {
                     min_price: min_price,
                     max_price: max_price,
+                    manufacturers: manufacturers.join(','),
+                    countries: countries.join(','),
+                    ordering: ordering,
+                    category: category,
                     page: page,
                 },
                 contentType: "application/json",
                 dataType: "json",
                 success: function (response) {
+                    console.log(response)
                     for (let i = 0; i < response.results.length; i++) {
                         let product_title = response.results[i].title;
                         let manufacturer = response.results[i].manufacturer.name
@@ -224,7 +298,9 @@
                         let id = response.results[i].id
                         let in_cart = response.results[i].in_cart
                         products.append(`{% include 'catalog/products.html' with title="${product_title}" manufacturer="${manufacturer}" manufacturer_countries="${countries}" price="${price}" price="${price}" stock="${stock}" sale_price="${sale_price}" currency="${currency}" availability="${availability}" sku="${sku}" image="${image}" alt="${alt}" slug="${slug}" id="${id}" in_cart="${in_cart}" %}`)
-                        console.log(response)
+                        manufacturer_set.add(manufacturer)
+                        countries_set.add(countries)
+<!--                        console.log(response)-->
                     }
 
                     $('.product-add-to-cart').click(function(e){
@@ -256,13 +332,13 @@
                         });
 
                     })
-
                 },
                 error: function (response) {
-                    console.log(response);
+                    console.log(9, response);
                 }
              });
          }
+
          return false;
     });
 </script>
@@ -278,26 +354,18 @@
             <div>
                 <div class="my-2 h6-title form_filter">Сортировать по:</div>
                 <select class="form-select form-control" aria-label="Default select example" name="ordering" id="id_ordering">
-                  <option value="title">Алфавиту</option>
+                  <option value="title" selected>Алфавиту</option>
                   <option value="price">Цене min</option>
                   <option value="-price">Цене max</option>
                 </select>
             </div>
-            <div class="my-2 h6-title form_filter">Производитель:</div>
+            <div class="my-2 h6-title form_filter pt-3" >Производитель:</div>
             <div class="mb-4">
-            {% for i in manufacturer %}
-                <div>{{i}}</div>
-            {% endfor %}
+                <div class="d-flex flex-column" id="filter_manufacturer"></div>
             </div>
             <div class="my-2 h6-title form_filter">Страна:</div>
             <div class="mb-3">
-            {% for i in form.countries %}
-                {% for j in products_manufacturer_countries %}
-                    {% if i.choice_label == j.manufacturer_countries %}
-                        <div>{{i}}</div>
-                    {% endif %}
-                {% endfor %}
-            {% endfor %}
+                <div class="d-flex flex-column" id="filter_countries"></div>
             </div>
 
         <div class="btn-block d-flex justify-content-between py-3">
@@ -312,17 +380,5 @@
     </ul>
     </div>
   </div>
-<script>
-    $( document ).ready(function() {
-        function addToCart(product_id){
-            console.log(product_id)
-        }
-        $('.product-add-to-cart').click(function(){
-            console.log(111)
-        })
-    });
-</script>
-
-
 </div>
 {% endblock %}

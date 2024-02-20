@@ -4,139 +4,7 @@
 
 
 {% block content %}
-<div class="container card-product-category-item mt-xl-5 mt-4">
-    <div class="row d-lg-flex mt-xl-4">
-    <div class="sidebar col-lg-4 col-xl-3">
-<!--        <ul class="subcategories-menu">-->
 
-<!--            {% for i in cat_family %}-->
-<!--                {% if i.level > 0 %}-->
-<!--                    <li class="link{% if i == title %}active{% endif %}"><a href="../{{ i.slug }}">{{ i }}</a></li>-->
-<!--                {% endif %}-->
-<!--            {% endfor %}-->
-
-<!--            {% for i in cat_siblings %}-->
-<!--                {% if i.level > 1 %}-->
-<!--                    <li><a href="../{{ i.slug }}">{{ i }}</a></li>-->
-<!--                {% endif %}-->
-<!--            {% endfor %}-->
-<!--        </ul>-->
-        <div class="wrap-sidebar-title d-flex justify-content-between align-items-center mb-3 mb-xl-0">
-                <h1 class="h1 h1-title">{% if tag.slug in request.path %}<a href="../../{{title.slug}}">{% endif %}{{title}}{% if tag.slug in request.path %}</a>{% endif %}</h1>
-                <div class="mobile-filter-btn d-lg-none"><img src="{% static '/catalog/images/filter.png' %}" alt="filter"></div>
-        </div>
-        <div class="wrap-mobile-filter d-lg-block d-none">
-        <div class="tags_filter">
-            <ul class="p-0 my-4">
-                {% for i in product_tags %}
-                    {% if product_tags|length > 1  %}
-                        {% for j in product_tags %}
-                            {% if forloop.counter == 1 and not i.tags__parent %}
-                                <li class="tags my-1 rounded-1 tags-parent tags-{{i.tags__slug}} {% if i.tags__slug in request.path %}active{% endif %}">
-                                    <a class="p-2 rounded-1" href="{% if tag.slug in request.path %}../{% endif %}{{i.tags__slug}}">{{i.tags__tag}}</a>
-                                </li>
-                            {% endif %}
-                            {% if j.tags__parent == i.tags__id %}
-                                <ul class="p-0">
-                                    <li class="tags my-1 rounded-1 tags-child tags-child-{{j.tags__parent__slug}} {% if j.tags__slug in request.path %}active{% endif %}"><a class="px-4 rounded-1" href="{% if tag.slug in request.path %}../{% endif %}{{j.tags__slug}}">{{j.tags__tag}}</a></li>
-                                </ul>
-                            {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        <li class="tags rounded-1 tags-parent my-1 tags-{{i.tags__slug}} {% if i.tags__slug in request.path %}active{% endif %}"><a class="p-2 rounded-1" href="{% if tag.slug in request.path %}../{% endif %}{{i.tags__slug}}">{{i.tags__tag}}</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-        </div>
-        <h5 class="my-3 h5-title form_filter h6-title">Фильтры</h5>
-<!--        <form action="" method="get" class="form_filter">-->
-<!--            {% csrf_token %}-->
-<!--            <div class="my-2 h6-title form_filter">Цена:</div>-->
-<!--            <div class="d-flex justify-content-between mb-4">{{ form.min_price }} {{ form.max_price }}</div>-->
-<!--            <div class="my-2 h6-title form_filter">Сортировать по:</div>-->
-<!--            <div class="mb-4">{{ form.ordering }}</div>-->
-<!--            <div class="my-2 h6-title form_filter">Производитель:</div>-->
-<!--            <div class="mb-4">-->
-<!--            {% for i in form.manufacturer %}-->
-<!--                {% for j in products_manufacturers %}-->
-<!--                    {% if i.choice_label == j.manufacturer__name %}-->
-<!--                        <div>{{i}}</div>-->
-<!--                    {% endif %}-->
-<!--                {% endfor %}-->
-<!--            {% endfor %}-->
-<!--            </div>-->
-<!--            <div class="my-2 h6-title form_filter">Страна:</div>-->
-<!--            <div class="mb-3">-->
-<!--            {% for i in form.countries %}-->
-<!--                {% for j in products_manufacturer_countries %}-->
-<!--                    {% if i.choice_label == j.manufacturer_countries %}-->
-<!--                        <div>{{i}}</div>-->
-<!--                    {% endif %}-->
-<!--                {% endfor %}-->
-<!--            {% endfor %}-->
-<!--            </div>-->
-<!--            <div class="btn-block d-flex justify-content-between py-3">-->
-<!--            <button class="btn btn-purple-dark px-4" type="submit">Поиск</button>-->
-<!--            <a href="{{request.path}}" class="button btn btn-reset-filter d-block">Сбросить фильтр</a>-->
-<!--            </div>-->
-<!--        </form>-->
-        </div>
-    </div>
-    <div class="col-lg-8 col-xl-9 col-md-12">
-    <ul class="row px-0 products-catalog-category-list">
-        {% if object_list %}
-        {% for product in object_list %}
-        <li class="col-xl-4 col-sm-6 col-12 mb-4">
-            <a href="{% if tag.slug in request.path %}../{% endif %}products/{{ product.slug }}">
-                <div class="card">
-                    <div class="card-img img-wrapper overflow-hidden">
-                        {% for img in images %}
-                        {% if img.product_id == product.id and img.main_image %}
-                        <img src="/media/{{ img.image }}" alt="{{ img.alt }}">
-                        {% endif %}
-                        {% endfor %}
-                    </div>
-                    <div class="card-body fs-5 p-2 lh-sm d-flex flex-column bd-highlight border-top">
-                        <h5 class="h5 card-product-category-item-title overflow-hidden">{{ product.title }}</h5>
-                        <h6 class="h6 card-product-category-item-title">{{product.manufacturer.name}}, {{ product.manufacturer_countries }}</h6>
-                        {% if product.sale_price %}
-                        <p class="card-product-category-item-sale-price fw-bolder">{{ product.sale_price}}<span class="product-currency"> {{ product.currency.currency_sign }}</span></p>
-                        <p class="card-product-category-item-price text-decoration-line-throug">{{ product.price }}<span class="product-currency"> {{ product.currency.currency_sign }}</span></p>
-                        {% else %}
-                        <p class="card-product-category-item-price">{{ product.price }}<span class="product-currency"> {{ product.currency.currency_sign }}</span></p>
-                        {% endif %}
-                        {% if product.quantity > 0 %}
-<!--                        <p class="availability">В наличии</p>-->
-                        {% else %}
-<!--                        <p class="availability">Под заказ</p>-->
-                        {% endif %}
-                        <p class="card-product-category-item-sku mb-0">Артикул: {{ product.sku }}</p>
-                        <div class="add-to-cart product-list-off">
-                            <form action="{% url 'cart:cart_add' product.id %}" method="post" class="add-to-cart-ajax">
-                                <div class="form-wrapper d-flex align-items-center mt-2">
-                                {{ cart_product_form }}
-                                {% csrf_token %}
-                                <div class=btn-wrapper">
-                                    <button class="btn btn-purple-dark add-cart list-products" type="submit">В корзину</button>
-                                    <div class="in-cart d-none align-items-center">
-                                        <button type="button" class="btn btn-cold-lilac" data-bs-toggle="tooltip" data-bs-placement="top" title="Перейти в корзину">В корзине</button>
-                                    </div>
-                                </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </li>
-        {% endfor %}
-        {% else %}
-            <p class="">По вашему запросу товаров не найдено</p>
-        {% endif %}
-    </ul>
-            </div>
-        </div>
-</div>
 <script
   src="https://code.jquery.com/jquery-3.6.3.js"
   integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
@@ -176,13 +44,18 @@
         let manufacturer = localStorage.getItem("manufacturer") || $("#manufacturer").serializeArray().map(function(item) {return item.value});
         let countries = localStorage.getItem("countries") || $("#countries").serializeArray().map(function(item) {return item.value});
         let ordering = localStorage.getItem("ordering") || $("#ordering").val();
-        let category = localStorage.getItem("category") || $("#category").val();
+        let category = localStorage.getItem("category");
+        let tag = localStorage.getItem("tag");
+
+        let manufacturer_page = localStorage.getItem("manufacturer");
         let loading = false;
         let footer = $('footer').height() - 100;
 
         send_ajax(page);
         filter_manufacturers_ajax();
         filter_countries_ajax();
+
+
 
         $(window).scroll(function() {
         if ($(window).scrollTop() + $(window).height() > $(document).height() - footer) {
@@ -197,8 +70,12 @@
 
         $(document).on('click', '#search-filter', function (e) {
             e.preventDefault()
-            let arr_manufacturers = ['Inibsa', 'Septodont'];
             products.empty();
+            send_ajax();
+        })
+
+
+        $(document).on('click', '.tags', function (e) {
             send_ajax();
         })
 
@@ -253,18 +130,26 @@
          function send_ajax(page){
              let min_price = $("#min_price").val();
              let max_price = $("#max_price").val();
+             const urlParams = new URLSearchParams(window.location.search);
+             const manufacturer_name = urlParams.get('manufacturer_name');
              let manufacturers = $(".form_filter_manufacturer").serializeArray().map(function(item) {return item.value});
+             if (manufacturer_name){
+                manufacturers.push(manufacturer_name);
+             }
              let countries = $(".form_filter_contry").serializeArray().map(function(item) {return item.value});
-             console.log(11111, countries)
              let ordering = $("#id_ordering option:selected").val();
              let category = `{{title.slug}}`;
+             let tag = `{{tag.slug}}`;
+
+             let manufacturer_page = `{{manufacturer_page.slug}}`;
              localStorage.setItem("min_price", min_price);
              localStorage.setItem("max_price", max_price);
              localStorage.setItem("manufacturers", manufacturers);
              localStorage.setItem("countries", countries);
              localStorage.setItem("ordering", ordering);
              localStorage.setItem("category", category);
-             console.log(`{{title.slug}}`)
+             localStorage.setItem("tag", tag);
+             console.log(888, manufacturer_page)
              $.ajax({
                 type: "GET",
                 url: `{% url 'paginations'  %}`,
@@ -274,6 +159,8 @@
                     manufacturers: manufacturers.join(','),
                     countries: countries.join(','),
                     ordering: ordering,
+                    tags: tag,
+                    manufacturer: manufacturer_page,
                     category: category,
                     page: page,
                 },
@@ -300,7 +187,6 @@
                         products.append(`{% include 'catalog/products.html' with title="${product_title}" manufacturer="${manufacturer}" manufacturer_countries="${countries}" price="${price}" price="${price}" stock="${stock}" sale_price="${sale_price}" currency="${currency}" availability="${availability}" sku="${sku}" image="${image}" alt="${alt}" slug="${slug}" id="${id}" in_cart="${in_cart}" %}`)
                         manufacturer_set.add(manufacturer)
                         countries_set.add(countries)
-<!--                        console.log(response)-->
                     }
 
                     $('.product-add-to-cart').click(function(e){
@@ -330,7 +216,6 @@
                             e.preventDefault()
                             window.location.href = '/cart/';
                         });
-
                     })
                 },
                 error: function (response) {
@@ -338,7 +223,6 @@
                 }
              });
          }
-
          return false;
     });
 </script>
@@ -346,6 +230,36 @@
 <div class="container card-product-category-item mt-xl-5 mt-4">
   <div class="row d-lg-flex mt-xl-4">
       <div class="sidebar col-lg-4 col-xl-3">
+          <div class="wrap-sidebar-title d-flex justify-content-between align-items-center mb-3 mb-xl-0">
+                <h1 class="h1 h1-title">{% if tag.slug in request.path %}<a href="../../{{title.slug}}">{% endif %}{{title}}{% if tag.slug in request.path %}</a>{% endif %}{% if manufacturer.slug in request.path %}{{manufacturer.name}}{% endif %}</h1>
+                <div class="mobile-filter-btn d-lg-none"><img src="{% static '/catalog/images/filter.png' %}" alt="filter"></div>
+        </div>
+          <div class="wrap-mobile-filter d-lg-block d-none">
+        <div class="tags_filter">
+            <ul class="p-0 my-4">
+                {% for i in product_tags %}
+                    {% if product_tags|length > 1  %}
+                        {% for j in product_tags %}
+                            {% if forloop.counter == 1 and not i.tags__parent %}
+
+                                <li class="tags my-1 rounded-1 tags-parent tags-{{i.tags__slug}} {% if i.tags__slug in request.path %}active{% endif %}">
+                                    <a class="p-2 rounded-1" href="{% if tag.slug in request.path %}../{% endif %}{{i.tags__slug}}">{{i.tags__tag}}</a>
+                                </li>
+                            {% endif %}
+                            {% if j.tags__parent == i.tags__id %}
+                                <ul class="p-0">
+                                    <li class="tags my-1 rounded-1 tags-child tags-child-{{j.tags__parent__slug}} {% if j.tags__slug in request.path %}active{% endif %}"><a class="px-4 rounded-1" href="{% if tag.slug in request.path %}../{% endif %}{{j.tags__slug}}">{{j.tags__tag}}</a></li>
+                                </ul>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <li class="tags rounded-1 tags-parent my-1 tags-{{i.tags__slug}} {% if i.tags__slug in request.path %}active{% endif %}"><a class="p-2 rounded-1" href="{% if tag.slug in request.path %}../{% endif %}{{i.tags__slug}}">{{i.tags__tag}}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+
+        </div>
         <h5 class="my-3 h5-title form_filter h6-title">Фильтры</h5>
         <div class="d-flex justify-content-between mb-4">
             <input type="number" name="min_price" placeholder="от" class="form-control form-price" id="min_price">

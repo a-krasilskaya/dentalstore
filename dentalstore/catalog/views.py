@@ -7,7 +7,7 @@ from cart.views import cart_add
 from .forms import ProductsFilterForm
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.renderers import TemplateHTMLRenderer
-
+from rest_framework import mixins
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response
@@ -18,6 +18,7 @@ from rest_framework.exceptions import ValidationError
 
 from cart.forms import CartAddProductForm
 from catalog.models import ProductCategory, Product, Gallery, TagProduct, Manufacturer, Currency
+from .utils import ProductListMixins
 
 
 class CategoryListView(ListView):
@@ -30,43 +31,12 @@ class CategoryListView(ListView):
         return context
 
 
-class ProductCategoryView(ListView):
-    model = Product
-    template_name = 'catalog/product_list.html'
+class ProductCategoryView(ProductListMixins, ListView):
     queryset = Product.objects.filter(id=0)
 
-    # allow_empty = True
-
-    # def get_queryset(self):
-    #     self.category = ProductCategory.objects.get(slug=self.kwargs['slug'])
-    #     queryset = Product.objects.all().filter(category__slug=self.category.slug, publish=True)
-    #
-    #     if self.request.GET.get('min_price'):
-    #         queryset = queryset.filter(price__gte=self.request.GET.get('min_price'))
-    #     if self.request.GET.get('max_price'):
-    #         queryset = queryset.filter(price__lte=self.request.GET.get('max_price'))
-    #     if self.request.GET.get('ordering'):
-    #         queryset = queryset.order_by(self.request.GET.get('ordering'))
-    #     if self.request.GET.getlist('manufacturer'):
-    #         queryset = queryset.filter(manufacturer__name__in=self.request.GET.getlist('manufacturer'))
-    #     if self.request.GET.getlist('countries'):
-    #         queryset = queryset.filter(manufacturer_countries__in=self.request.GET.getlist('countries'))
-    #     return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        self.category = ProductCategory.objects.get(slug=self.kwargs['slug'])
-        context['sub_categories'] = self.category.get_descendants()
-        context['title'] = self.category
-        context['parent'] = self.category.parent
-        context['images'] = Gallery.objects.all()
-        context['cat_level'] = self.category.get_level()
-        context['cat_family'] = self.category.get_family()
-        context['cat_siblings'] = self.category.get_siblings()
-        context['cart_product_form'] = CartAddProductForm()
-        context['form'] = ProductsFilterForm(self.request.GET)
-        # products = Product.objects.filter(category__slug=self.category.slug, publish=True, tags__tag__isnull=False).values('tags__tag', 'tags__slug')
-        # context['product_tags'] = [dict(s) for s in set(frozenset(d.items()) for d in products)]
         context['product_tags'] = Product.objects.filter(category__slug=self.category.slug, publish=True,
                                                          tags__tag__isnull=False).values('tags__tag', 'tags__slug',
                                                                                          'tags__parent',
@@ -74,13 +44,6 @@ class ProductCategoryView(ListView):
                                                                                          'tags__parent__slug',
                                                                                          'tags__id').order_by(
             'tags__tag', 'tags__parent__tag').distinct('tags__tag', 'tags__parent__tag')
-        context['products_manufacturers'] = Product.objects.filter(category__slug=self.category.slug,
-                                                                   publish=True).values('manufacturer__name').order_by(
-            'manufacturer__name').distinct('manufacturer__name')
-        context['products_manufacturer_countries'] = Product.objects.filter(category__slug=self.category.slug,
-                                                                            publish=True).values(
-            'manufacturer_countries').order_by(
-            'manufacturer_countries').distinct('manufacturer_countries')
         return context
 
 
@@ -101,8 +64,10 @@ class CountriesListAPIView(generics.ListAPIView):
         manufacturers_countries = Product.objects.filter(
             category__slug=self.request.query_params.get('category')
         ).order_by('manufacturer_countries').values_list('manufacturer_countries').distinct()
+        manufacturers_countries = Product.objects.filter(
+            category__slug=self.request.query_params.get('category')
+        ).order_by('manufacturer_countries').values_list('manufacturer_countries').distinct()
         return [{'manufacturer_countries': country} for country in manufacturers_countries]
-
 
 
 class ProductListAPIView(generics.ListAPIView):
@@ -117,6 +82,7 @@ class ProductListAPIView(generics.ListAPIView):
         ordering = self.request.query_params.get('ordering')
         manufacturers = self.request.query_params.get('manufacturers')
         countries = self.request.query_params.get('countries')
+        tag_slug = self.request.query_params.get('tags')
 
         if min_price:
             queryset = queryset.filter(price__gte=int(min_price), publish=True)
@@ -134,6 +100,13 @@ class ProductListAPIView(generics.ListAPIView):
                 queryset = queryset.filter(category__slug=category.slug, publish=True)
             except ProductCategory.DoesNotExist:
                 raise ValidationError("Такой категории не существует")
+        if tag_slug:
+            try:
+                tag = TagProduct.objects.get(slug=tag_slug)
+                queryset = Product.objects.filter(tags__slug=tag.slug, publish=True)
+            except TagProduct.DoesNotExist:
+                raise ValidationError("Такой подкатегории не существует")
+
         return queryset
 
 
@@ -145,36 +118,15 @@ class AddToCartAPIView(APIView):
         return Response({"message": "Товар успешно добавлен в корзину"}, status=status.HTTP_200_OK)
 
 
-class ProductTagView(ListView):
-    model = Product
-    template_name = 'catalog/product_list.html'
+class ProductTagView(ProductListMixins, ListView):
+    queryset = Product.objects.filter(id=0)
 
-    def get_queryset(self):
-        self.tag = TagProduct.objects.get(slug=self.kwargs['tag_slug'])
-        queryset = Product.objects.all().filter(tags__slug=self.tag.slug, publish=True)
-
-        if self.request.GET.get('min_price'):
-            queryset = queryset.filter(price__gte=self.request.GET.get('min_price'))
-        if self.request.GET.get('max_price'):
-            queryset = queryset.filter(price__lte=self.request.GET.get('max_price'))
-        if self.request.GET.get('ordering'):
-            queryset = queryset.order_by(self.request.GET.get('ordering'))
-        if self.request.GET.getlist('manufacturer'):
-            queryset = queryset.filter(manufacturer__name__in=self.request.GET.getlist('manufacturer'))
-        if self.request.GET.getlist('countries'):
-            queryset = queryset.filter(manufacturer_countries__in=self.request.GET.getlist('countries'))
-        return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         self.tag = TagProduct.objects.get(slug=self.kwargs['tag_slug'])
         self.category = ProductCategory.objects.get(slug=self.kwargs['slug'])
-        context['title'] = self.category
         context['tag'] = self.tag
-        context['list_prod'] = Product.objects.filter(tags__slug='tag_slug')
-        context['product_tags'] = TagProduct.objects.all()
-        context['images'] = Gallery.objects.all()
-        context['form'] = ProductsFilterForm(self.request.GET)
         context['product_tags'] = Product.objects.filter(category__slug=self.category.slug, publish=True,
                                                          tags__tag__isnull=False).values('tags__tag', 'tags__slug',
                                                                                          'tags__parent',
@@ -184,12 +136,19 @@ class ProductTagView(ListView):
             'tags__tag',
             'tags__parent__tag').distinct('tags__tag',
                                           'tags__parent__tag')
-        context['products_manufacturers'] = Product.objects.filter(tags__slug=self.tag.slug, publish=True).values(
-            'manufacturer__name').order_by('manufacturer__name').distinct('manufacturer__name')
-        context['products_manufacturer_countries'] = Product.objects.filter(tags__slug=self.tag.slug,
-                                                                            publish=True).values(
-            'manufacturer_countries').order_by(
-            'manufacturer_countries').distinct('manufacturer_countries')
+
+        return context
+
+
+class ManufacturerItemPage(ListView):
+    model = Product
+    template_name = 'catalog/product_list.html'
+    queryset = Product.objects.filter(id=0)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self.manufacturer = Manufacturer.objects.get(slug=self.kwargs['manufacturer_slug'])
+        context['manufacturer'] = self.manufacturer
         return context
 
 

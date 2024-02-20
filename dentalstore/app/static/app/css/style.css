@@ -551,7 +551,8 @@ ul{
 
 
 /* карточка товара */
-.product-card{
+.product-card,
+.manufacturer-name a{
     color: #4b5196 !important;
 }
 
@@ -880,4 +881,6 @@ select{
 .form-price{
     width: 48%;
 }
+
+
 

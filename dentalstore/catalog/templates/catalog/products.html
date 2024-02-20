@@ -1,5 +1,5 @@
 <li class="col-xl-4 col-sm-6 col-12 mb-4">
-    <a href="products/{{ slug }}">
+    <a href="{% if manufacturer.slug in request.path %}../../{% elif tag.slug in request.path %}../{% endif %}products/{{ slug }}">
         <div class="card">
             <div class="card-img img-wrapper overflow-hidden">
                 <img src="{{ image }}" alt="{{ alt }}">

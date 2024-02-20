@@ -69,7 +69,8 @@
                 <p class="price fs-4">{{ product.price }} <span> {{ product.currency.currency_sign }}</span></p>
                 {% endif %}
                 <p class="sku">Артикул: {{ product.sku }}</p>
-                <p class="manufacturer-name ">Производитель: {{ product.manufacturer.name }}</p>
+                <p class="manufacturer-name ">Производитель:  <a href="/catalog/manufacturer/item/{{ product.manufacturer.slug }}/?manufacturer_name={{ product.manufacturer.name }}">{{ product.manufacturer.name }}</a>  </p>
+
                 <div class="row">
                     <p class="manufacturer-img col-lg-2 "><img src="/media/{{product.manufacturer.image}}" alt="{{product.manufacturer.alt}}" class="img-fluid"></p>
                 </div>

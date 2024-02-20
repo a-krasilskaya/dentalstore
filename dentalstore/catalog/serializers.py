@@ -47,6 +47,7 @@ class ProductSerializer(serializers.ModelSerializer):
     gallery_images = GallerySerializer(read_only=True, many=True)
     manufacturer = ManufacturerSerializer(read_only=True)
 
+
     class Meta:
         model = Product
         fields = "__all__"

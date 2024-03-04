@@ -52,18 +52,28 @@ class ManufacturerListAPIView(generics.ListAPIView):
     serializer_class = ManufacturerValueSerializer
 
     def get_queryset(self):
-        manufacturers = Product.objects.filter(
-            category__slug=self.request.query_params.get('category')
-        ).order_by('manufacturer').values_list('manufacturer__name').distinct()
-        return [{'name': name} for name in manufacturers]
+        queryset = Product.objects.all()
+        category_slug = self.request.query_params.get('category')
+        tag_slug = self.request.query_params.get('tags')
+
+        if category_slug:
+            manufacturers = Product.objects.filter(
+                category__slug=self.request.query_params.get('category')
+            ).order_by('manufacturer').values_list('manufacturer__name').distinct()
+            queryset = [{'name': name} for name in manufacturers]
+        if tag_slug:
+            manufacturers = Product.objects.filter(
+                tags__slug=self.request.query_params.get('tags')
+            ).order_by('manufacturer').values_list('manufacturer__name').distinct()
+            queryset = [{'name': name} for name in manufacturers]
+
+        return queryset
 
 
 class CountriesListAPIView(generics.ListAPIView):
     serializer_class = ManufacturerCountriesSerializer
+
     def get_queryset(self):
-        manufacturers_countries = Product.objects.filter(
-            category__slug=self.request.query_params.get('category')
-        ).order_by('manufacturer_countries').values_list('manufacturer_countries').distinct()
         manufacturers_countries = Product.objects.filter(
             category__slug=self.request.query_params.get('category')
         ).order_by('manufacturer_countries').values_list('manufacturer_countries').distinct()

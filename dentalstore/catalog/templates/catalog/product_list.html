@@ -45,7 +45,7 @@
         let countries = localStorage.getItem("countries") || $("#countries").serializeArray().map(function(item) {return item.value});
         let ordering = localStorage.getItem("ordering") || $("#ordering").val();
         let category = localStorage.getItem("category");
-        let tag = localStorage.getItem("tag");
+        let tag = localStorage.getItem("tags");
 
         let manufacturer_page = localStorage.getItem("manufacturer");
         let loading = false;
@@ -54,8 +54,6 @@
         send_ajax(page);
         filter_manufacturers_ajax();
         filter_countries_ajax();
-
-
 
         $(window).scroll(function() {
         if ($(window).scrollTop() + $(window).height() > $(document).height() - footer) {
@@ -67,6 +65,7 @@
             }
         })
 
+        $('.btn-reset-filter').attr('href', window.location.href)
 
         $(document).on('click', '#search-filter', function (e) {
             e.preventDefault()
@@ -74,15 +73,17 @@
             send_ajax();
         })
 
-
         $(document).on('click', '.tags', function (e) {
-            send_ajax();
+            send_ajax(page);
+            consle.log()
+            filter_manufacturers_ajax(url=`{% url 'manufacturers' %}?tags={{tag.slug}}`)
         })
 
-        function filter_manufacturers_ajax(){
 
+
+        function filter_manufacturers_ajax(url=`{% url 'manufacturers' %}?category={{title.slug}}`){
             $.ajax({
-              url: `{% url 'manufacturers' %}?category={{title.slug}}`,
+              url: url,
               method: 'GET',
               data: ({
                 manufacturer: manufacturer,
@@ -149,7 +150,7 @@
              localStorage.setItem("ordering", ordering);
              localStorage.setItem("category", category);
              localStorage.setItem("tag", tag);
-             console.log(888, manufacturer_page)
+
              $.ajax({
                 type: "GET",
                 url: `{% url 'paginations'  %}`,
@@ -273,6 +274,7 @@
                   <option value="-price">Цене max</option>
                 </select>
             </div>
+          {% if not manufacturer.slug in request.path %}
             <div class="my-2 h6-title form_filter pt-3" >Производитель:</div>
             <div class="mb-4">
                 <div class="d-flex flex-column" id="filter_manufacturer"></div>
@@ -281,11 +283,15 @@
             <div class="mb-3">
                 <div class="d-flex flex-column" id="filter_countries"></div>
             </div>
-
+          {% else %}
+          <br>
+          {% endif %}
         <div class="btn-block d-flex justify-content-between py-3">
 
             <button class="btn btn-purple-dark px-4" type="submit" id="search-filter">Поиск</button>
+
             <a href="{{request.path}}" class="button btn btn-reset-filter d-block">Сбросить фильтр</a>
+
         </div>
       </div>
       <div class="col-lg-8 col-xl-9 col-md-12">

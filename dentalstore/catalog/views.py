@@ -34,16 +34,23 @@ class CategoryListView(ListView):
 class ProductCategoryView(ProductListMixins, ListView):
     queryset = Product.objects.filter(id=0)
 
-
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['product_tags'] = Product.objects.filter(category__slug=self.category.slug, publish=True,
-                                                         tags__tag__isnull=False).values('tags__tag', 'tags__slug',
-                                                                                         'tags__parent',
-                                                                                         'tags__parent__tag',
-                                                                                         'tags__parent__slug',
-                                                                                         'tags__id').order_by(
-            'tags__tag', 'tags__parent__tag').distinct('tags__tag', 'tags__parent__tag')
+        context['product_tags'] = Product.objects.filter(
+            category__slug=self.category.slug,
+            publish=True,
+            tags__tag__isnull=False
+        ).values(
+            'tags__tag',
+            'tags__slug',
+            'tags__parent',
+            'tags__parent__tag',
+            'tags__parent__slug',
+            'tags__id'
+        ).order_by(
+            'tags__tag',
+            'tags__parent__tag'
+        ).distinct('tags__tag', 'tags__parent__tag')
         return context
 
 
@@ -131,21 +138,28 @@ class AddToCartAPIView(APIView):
 class ProductTagView(ProductListMixins, ListView):
     queryset = Product.objects.filter(id=0)
 
-
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         self.tag = TagProduct.objects.get(slug=self.kwargs['tag_slug'])
         self.category = ProductCategory.objects.get(slug=self.kwargs['slug'])
         context['tag'] = self.tag
-        context['product_tags'] = Product.objects.filter(category__slug=self.category.slug, publish=True,
-                                                         tags__tag__isnull=False).values('tags__tag', 'tags__slug',
-                                                                                         'tags__parent',
-                                                                                         'tags__parent__tag',
-                                                                                         'tags__parent__slug',
-                                                                                         'tags__id').order_by(
+        context['product_tags'] = Product.objects.filter(
+            category__slug=self.category.slug, publish=True,
+            tags__tag__isnull=False
+        ).values(
             'tags__tag',
-            'tags__parent__tag').distinct('tags__tag',
-                                          'tags__parent__tag')
+            'tags__slug',
+            'tags__parent',
+            'tags__parent__tag',
+            'tags__parent__slug',
+            'tags__id'
+        ).order_by(
+            'tags__tag',
+            'tags__parent__tag'
+        ).distinct(
+            'tags__tag',
+            'tags__parent__tag'
+        )
 
         return context
 

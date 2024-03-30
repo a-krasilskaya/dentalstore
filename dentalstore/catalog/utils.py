@@ -3,7 +3,7 @@ from django.views.generic import ListView
 from cart.forms import CartAddProductForm
 from catalog.forms import ProductsFilterForm
 from catalog.models import ProductCategory, Gallery, Product
-
+import sys
 
 class ProductListMixins(ListView):
     model = Product

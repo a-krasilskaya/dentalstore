@@ -154,22 +154,23 @@ $( document ).ready(function() {
         })
     });
 
-
-
-// подгрузка товаров ajax
-//    $(window).scroll(function() {
-//       if($(window).scrollTop() + $(window).height() == $(document).height()) {
-//           $.ajax({
-//                type: 'GET',
-//                url: '{% url 'catalog:product_category' %}', //Ссылка на вьюху
-//                dataType: "json",
-//                data: {'value': 10},  //Здесь можно передать данные в GET запросе, например сколько значений получить
-//                success: function(data) {
-//                    // Ответ приходит в переменную data. Её и рендерим на страницу
-//                }
-//            });
-//      }
-//    });
+    $('.btn-update').submit(function(e) {
+        e.preventDefault()
+        $.ajax({
+            url: this.action,
+            type: this.method,
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function(response) {
+                let cartCount = +($('.count-cart').text()) + Number($('#id_quantity').val())
+                $('.count-cart').text(cartCount)
+                console.log('success', response)
+            },
+            error: function(response) {
+                console.log('err', response)
+            },
+        })
+    });
 });
 
 

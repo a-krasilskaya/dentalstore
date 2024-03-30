@@ -7,7 +7,7 @@ click-didyoumean==0.3.0
 click-plugins==1.1.1
 click-repl==0.3.0
 colorama==0.4.6
-Django==4.2.4
+Django==4.0
 django-appconf==1.0.5
 django-bootstrap5==23.3
 django-ckeditor==6.7.0
@@ -21,6 +21,7 @@ django-static-autocollect==0.1
 django-static-jquery==2.1.4
 django-treebeard==4.7
 djangocms-admin-style==3.2.5
+djangorestframework==3.13.1
 form==0.0.1
 jsonfield==3.1.0
 kombu==5.3.2
@@ -31,6 +32,7 @@ prompt-toolkit==3.0.39
 psycopg2-binary==2.9.7
 python-dateutil==2.8.2
 python-dotenv==1.0.0
+pytz==2023.4
 PyYAML==6.0.1
 six==1.16.0
 sqlparse==0.4.4

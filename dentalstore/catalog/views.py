@@ -1,24 +1,22 @@
-from django.db.models import F, Q
-from django.http import HttpResponse, request, JsonResponse
-from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView
 
 from cart.views import cart_add
-from .forms import ProductsFilterForm
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.renderers import TemplateHTMLRenderer
-from rest_framework import mixins
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from catalog.serializers import ProductSerializer, ManufacturerSerializer, ManufacturerValueSerializer, \
+from catalog.serializers import (
+    ProductSerializer,
+    ManufacturerValueSerializer,
     ManufacturerCountriesSerializer
+)
 from rest_framework.exceptions import ValidationError
 
 from cart.forms import CartAddProductForm
 from catalog.models import ProductCategory, Product, Gallery, TagProduct, Manufacturer, Currency
-from .utils import ProductListMixins
+from .utils import ProductListMixins, transliterate
+from django.db.models import Q
 
 
 class CategoryListView(ListView):
@@ -125,6 +123,31 @@ class ProductListAPIView(generics.ListAPIView):
                 raise ValidationError("Такой подкатегории не существует")
 
         return queryset
+
+
+class ProductSearchAPIView(generics.ListAPIView):
+    serializer_class = ProductSerializer
+    pagination_class = PageNumberPagination
+
+    def get_queryset(self, **kwargs):
+        search_string = self.request.GET.get('q')
+        search_string1, search_string2 = transliterate(search_string)
+        product_qs = Product.objects.filter(
+            Q(title__icontains=search_string1) |
+            Q(description__icontains=search_string1) |
+            Q(manufacturer_countries__icontains=search_string1) |
+            Q(title__icontains=search_string2) |
+            Q(description__icontains=search_string2) |
+            Q(manufacturer_countries__icontains=search_string2) |
+            Q(category__title__icontains=search_string1) |
+            Q(category__title__icontains=search_string2) |
+            Q(manufacturer__name__icontains=search_string1) |
+            Q(manufacturer__name__icontains=search_string2) |
+            Q(tags__tag__icontains=search_string1) |
+            Q(tags__tag__icontains=search_string2)
+        ).distinct()
+
+        return product_qs
 
 
 class AddToCartAPIView(APIView):

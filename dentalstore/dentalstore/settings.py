@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'users',
     'rest_framework',
+    'catalog.tests',
 ]
 
 MIDDLEWARE = [
@@ -227,8 +228,6 @@ CKEDITOR_CONFIGS = {
 }
 # CKEditor END
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 AUTH_USER_MODEL = 'users.User'
 LOGIN_URL = '/users/login'
 
@@ -251,3 +250,4 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
     ]
 }
+MIN_SEARCH_STRING_LENGTH = 2

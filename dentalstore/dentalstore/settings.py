@@ -54,7 +54,6 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'users',
     'rest_framework',
-    'catalog.tests',
 ]
 
 MIDDLEWARE = [
@@ -250,4 +249,3 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
     ]
 }
-MIN_SEARCH_STRING_LENGTH = 2

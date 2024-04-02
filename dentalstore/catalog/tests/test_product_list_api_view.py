@@ -1,19 +1,13 @@
-import os
 from decimal import Decimal
 
-# Это для запуска тестов по одному, из IDE:
-# os.environ['DJANGO_SETTINGS_MODULE'] = 'dentalstore.settings'
-# import django
-# django.setup()
-# Остальные импорты
-from django.test import TestCase
 from rest_framework.test import APIRequestFactory
 from mixer.backend.django import mixer
 
 from catalog.views import ProductListAPIView
+from catalog.tests.catalog import ProductListAPIViewTestBase
 
 
-class ProductListAPIViewTest(TestCase):
+class ProductListAPIViewTest(ProductListAPIViewTestBase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self._setup_view_and_uri()

@@ -19,6 +19,11 @@ from .utils import ProductListMixins, transliterate
 from django.db.models import Q
 
 
+MIN_SEARCH_STRING_LENGTH = 2
+MAX_SEARCH_STRING_LENGTH = 50
+QUERY_STRING_MAX_WORDS = 10
+
+
 class CategoryListView(ListView):
     model = ProductCategory
     template_name = "catalog/catalog.html"
@@ -131,22 +136,34 @@ class ProductSearchAPIView(generics.ListAPIView):
 
     def get_queryset(self, **kwargs):
         search_string = self.request.GET.get('q')
-        search_string1, search_string2 = transliterate(search_string)
-        product_qs = Product.objects.filter(
-            Q(title__icontains=search_string1) |
-            Q(description__icontains=search_string1) |
-            Q(manufacturer_countries__icontains=search_string1) |
-            Q(title__icontains=search_string2) |
-            Q(description__icontains=search_string2) |
-            Q(manufacturer_countries__icontains=search_string2) |
-            Q(category__title__icontains=search_string1) |
-            Q(category__title__icontains=search_string2) |
-            Q(manufacturer__name__icontains=search_string1) |
-            Q(manufacturer__name__icontains=search_string2) |
-            Q(tags__tag__icontains=search_string1) |
-            Q(tags__tag__icontains=search_string2)
-        ).distinct()
+        if search_string and len(search_string) > MAX_SEARCH_STRING_LENGTH:
+            search_string = search_string[:MAX_SEARCH_STRING_LENGTH]
+        product_qs = Product.objects.all()
+        if not search_string or len(search_string) < MIN_SEARCH_STRING_LENGTH:
+            return product_qs
+        counter = 0
 
+        for substring in search_string.split():
+            if counter >= QUERY_STRING_MAX_WORDS:
+                break
+            substring1, substring2 = transliterate(substring)
+            product_qs = product_qs.filter(
+                Q(title__icontains=substring1) |
+                Q(description__icontains=substring1) |
+                Q(manufacturer_countries__icontains=substring1) |
+                Q(title__icontains=substring2) |
+                Q(description__icontains=substring2) |
+                Q(manufacturer_countries__icontains=substring2) |
+                Q(category__title__icontains=substring1) |
+                Q(category__title__icontains=substring2) |
+                Q(manufacturer__name__icontains=substring1) |
+                Q(manufacturer__name__icontains=substring2) |
+                Q(tags__tag__icontains=substring1) |
+                Q(tags__tag__icontains=substring2)
+            )
+            counter += 1
+
+        product_qs = product_qs.distinct()
         return product_qs
 
 

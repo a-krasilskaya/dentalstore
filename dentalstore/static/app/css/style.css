@@ -551,7 +551,8 @@ ul{
 
 
 /* карточка товара */
-.product-card{
+.product-card,
+.manufacturer-name a{
     color: #4b5196 !important;
 }
 
@@ -787,12 +788,16 @@ select{
     background: #eef7ff;
 }
 
-.form_filter input[type=checkbox]{
+.form_filter input[type=checkbox],
+#filter_manufacturer input[type=checkbox],
+#filter_countries input[type=checkbox]{
    display: inline-block;
    /*opacity: 0;*/
 }
 
-.sidebar .form_filter label{
+.sidebar .form_filter label,
+#filter_manufacturer label,
+#filter_countries label{
     color: #4b5196;
     font-size: 16px;
     margin-bottom: 0 !important;
@@ -876,4 +881,6 @@ select{
 .form-price{
     width: 48%;
 }
+
+
 

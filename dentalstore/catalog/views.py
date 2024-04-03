@@ -1,24 +1,27 @@
-from django.db.models import F, Q
-from django.http import HttpResponse, request, JsonResponse
-from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView
 
 from cart.views import cart_add
-from .forms import ProductsFilterForm
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.renderers import TemplateHTMLRenderer
-from rest_framework import mixins
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from catalog.serializers import ProductSerializer, ManufacturerSerializer, ManufacturerValueSerializer, \
+from catalog.serializers import (
+    ProductSerializer,
+    ManufacturerValueSerializer,
     ManufacturerCountriesSerializer
+)
 from rest_framework.exceptions import ValidationError
 
 from cart.forms import CartAddProductForm
 from catalog.models import ProductCategory, Product, Gallery, TagProduct, Manufacturer, Currency
-from .utils import ProductListMixins
+from .utils import ProductListMixins, transliterate
+from django.db.models import Q
+
+
+MIN_SEARCH_STRING_LENGTH = 2
+MAX_SEARCH_STRING_LENGTH = 50
+QUERY_STRING_MAX_WORDS = 10
 
 
 class CategoryListView(ListView):
@@ -34,16 +37,23 @@ class CategoryListView(ListView):
 class ProductCategoryView(ProductListMixins, ListView):
     queryset = Product.objects.filter(id=0)
 
-
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['product_tags'] = Product.objects.filter(category__slug=self.category.slug, publish=True,
-                                                         tags__tag__isnull=False).values('tags__tag', 'tags__slug',
-                                                                                         'tags__parent',
-                                                                                         'tags__parent__tag',
-                                                                                         'tags__parent__slug',
-                                                                                         'tags__id').order_by(
-            'tags__tag', 'tags__parent__tag').distinct('tags__tag', 'tags__parent__tag')
+        context['product_tags'] = Product.objects.filter(
+            category__slug=self.category.slug,
+            publish=True,
+            tags__tag__isnull=False
+        ).values(
+            'tags__tag',
+            'tags__slug',
+            'tags__parent',
+            'tags__parent__tag',
+            'tags__parent__slug',
+            'tags__id'
+        ).order_by(
+            'tags__tag',
+            'tags__parent__tag'
+        ).distinct('tags__tag', 'tags__parent__tag')
         return context
 
 
@@ -120,6 +130,43 @@ class ProductListAPIView(generics.ListAPIView):
         return queryset
 
 
+class ProductSearchAPIView(generics.ListAPIView):
+    serializer_class = ProductSerializer
+    pagination_class = PageNumberPagination
+
+    def get_queryset(self, **kwargs):
+        search_string = self.request.GET.get('q')
+        if search_string and len(search_string) > MAX_SEARCH_STRING_LENGTH:
+            search_string = search_string[:MAX_SEARCH_STRING_LENGTH]
+        product_qs = Product.objects.all()
+        if not search_string or len(search_string) < MIN_SEARCH_STRING_LENGTH:
+            return product_qs
+        counter = 0
+
+        for substring in search_string.split():
+            if counter >= QUERY_STRING_MAX_WORDS:
+                break
+            substring1, substring2 = transliterate(substring)
+            product_qs = product_qs.filter(
+                Q(title__icontains=substring1) |
+                Q(description__icontains=substring1) |
+                Q(manufacturer_countries__icontains=substring1) |
+                Q(title__icontains=substring2) |
+                Q(description__icontains=substring2) |
+                Q(manufacturer_countries__icontains=substring2) |
+                Q(category__title__icontains=substring1) |
+                Q(category__title__icontains=substring2) |
+                Q(manufacturer__name__icontains=substring1) |
+                Q(manufacturer__name__icontains=substring2) |
+                Q(tags__tag__icontains=substring1) |
+                Q(tags__tag__icontains=substring2)
+            )
+            counter += 1
+
+        product_qs = product_qs.distinct()
+        return product_qs
+
+
 class AddToCartAPIView(APIView):
     def post(self, request, *args, **kwargs):
         product_id = request.data.get('product_id')
@@ -131,21 +178,28 @@ class AddToCartAPIView(APIView):
 class ProductTagView(ProductListMixins, ListView):
     queryset = Product.objects.filter(id=0)
 
-
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         self.tag = TagProduct.objects.get(slug=self.kwargs['tag_slug'])
         self.category = ProductCategory.objects.get(slug=self.kwargs['slug'])
         context['tag'] = self.tag
-        context['product_tags'] = Product.objects.filter(category__slug=self.category.slug, publish=True,
-                                                         tags__tag__isnull=False).values('tags__tag', 'tags__slug',
-                                                                                         'tags__parent',
-                                                                                         'tags__parent__tag',
-                                                                                         'tags__parent__slug',
-                                                                                         'tags__id').order_by(
+        context['product_tags'] = Product.objects.filter(
+            category__slug=self.category.slug, publish=True,
+            tags__tag__isnull=False
+        ).values(
             'tags__tag',
-            'tags__parent__tag').distinct('tags__tag',
-                                          'tags__parent__tag')
+            'tags__slug',
+            'tags__parent',
+            'tags__parent__tag',
+            'tags__parent__slug',
+            'tags__id'
+        ).order_by(
+            'tags__tag',
+            'tags__parent__tag'
+        ).distinct(
+            'tags__tag',
+            'tags__parent__tag'
+        )
 
         return context
 

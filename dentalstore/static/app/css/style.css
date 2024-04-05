@@ -47,6 +47,16 @@ li{
     color: #4688eb;
 }
 
+#btn-search{
+   color: #4b5196;
+   border: solid 1px #4b5196;
+}
+
+#btn-search:hover{
+   color: #b3baff;
+   background: #4b5196;
+}
+
 .carousel-caption.carousel-caption-our-style{
     right: auto !important;
     bottom: auto !important;

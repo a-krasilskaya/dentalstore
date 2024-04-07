@@ -74,9 +74,16 @@
     </nav>
 
     </div>
-    <div id="search-res">1111</div>
-    </header>
 
+    </header>
+<div class="search-res popup p-0">
+    <div class="container">
+        <div class="row search-scroll">
+            <div id="search-res"></div>
+        </div>
+    </div>
+    <div class="overlay"></div>
+</div>
 
 <!--header end-->
     {% block breadcrumb %}
@@ -170,10 +177,15 @@ const getSearchPage = (page=1) => {
 
 $( document ).ready(function() {
 
+    $('.search-res.popup').hide();
     $('#btn-search').click(function(){
         products = getProductsContainer()
         products.empty()
         getSearchPage(1)
+        $('.search-res.popup').show();
+    })
+    $('.overlay').click(function(){
+        $('.search-res.popup').hide();
     })
 
     $(window).scroll(function() {

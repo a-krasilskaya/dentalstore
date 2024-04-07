@@ -176,16 +176,17 @@ const getSearchPage = (page=1) => {
 }
 
 $( document ).ready(function() {
-
     $('.search-res.popup').hide();
     $('#btn-search').click(function(){
         products = getProductsContainer()
         products.empty()
         getSearchPage(1)
         $('.search-res.popup').show();
+        $('body').css('overflow', 'hidden');
     })
     $('.overlay').click(function(){
         $('.search-res.popup').hide();
+        $('body').css('overflow', 'auto');
     })
 
     $(window).scroll(function() {

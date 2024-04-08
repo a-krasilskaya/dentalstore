@@ -61,10 +61,10 @@
         </div>
 <!--      </div>-->
         <div class="d-flex justify-content-lg-end col-12 mt-1 pl-5 flex-column flex-md-row">
-            <form action="search" class="d-flex col-md-9 col-lg-8 col-12">
+            <div class="d-flex col-md-9 col-lg-8 col-12">
                 <input type="text" id="string-search" placeholder="Что хотите найти?" class="form-control me-2"/>
                 <input type="button" id="btn-search" value="Поиск" class="btn"/>
-            </form>
+            </div>
             <div class="link-phone col-md-3 col-12 text-md-end text-lg-center text-xl-end text-start pt-3 pt-md-1">
                 <a href="tel:+79999683506">+7 (999) 968-35-06</a>
             </div>
@@ -162,6 +162,9 @@ const getSearchPage = (page=1) => {
             success: function(response) {
                 console.log('success', response)
                 products = getProductsContainer()
+                if (response.results.length == 0) {
+                    products.text('По вашему запросу ничего не найдено')
+                }
                 for (let i = 0; i < response.results.length; i++) {
                     product = response.results[i]
                     console.log('appending ', product.title)
@@ -175,21 +178,30 @@ const getSearchPage = (page=1) => {
         })
 }
 
+const search = () => {
+    products = getProductsContainer()
+    products.empty()
+    getSearchPage(1)
+    $('.search-res.popup').show();
+    $('body').css('overflow', 'hidden');
+}
+
 $( document ).ready(function() {
     $('.search-res.popup').hide();
     $('#btn-search').click(function(){
-        products = getProductsContainer()
-        products.empty()
-        getSearchPage(1)
-        $('.search-res.popup').show();
-        $('body').css('overflow', 'hidden');
+        search()
     })
+    $('#string-search').keypress(function(e) {
+        if (e.which === 13) {
+            search();
+        }
+    });
     $('.overlay').click(function(){
         $('.search-res.popup').hide();
         $('body').css('overflow', 'auto');
     })
 
-    $(window).scroll(function() {
+    $(".search-res.popup").scroll(function() {
         let charge = ($("#search-res").height() - $("#search-res").scrollTop() > $(window).height())
         console.log(
             'scroll: ',
@@ -205,7 +217,7 @@ $( document ).ready(function() {
         let height = search_res.height();
         let scroll = $(window).scrollTop();
         let windowHeight = $(window).height();
-        if (offset + height < scroll + windowHeight) {
+        if (offset + height <= scroll + windowHeight) {
         // if ($("#search-res").height() - $("#search-res").scrollTop() > $(window).height()) {
             if (!search_loading) {
                 search_loading = true;

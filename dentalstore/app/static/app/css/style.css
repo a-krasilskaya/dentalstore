@@ -69,6 +69,7 @@ li{
     z-index: 9;
     backdrop-filter: blur(1.5rem);
     overflow-y: scroll;
+    cursor: pointer;
 }
 
 .search-scroll{
@@ -86,7 +87,6 @@ li{
     position: absolute;
     width: 100%;
     bottom: 0;
-
     z-index: -1;
     top: 0;
     cursor: pointer;
@@ -503,11 +503,13 @@ ul{
     color: #4b5196 !important;
 }
 
+#search-res .card-img,
 #products .card-img{
     height: 300px;
     padding: 10px;
 }
 
+#search-res .card-img img,
 #products .card-img img{
     width: 100%;
     height: 100%;
@@ -527,6 +529,7 @@ ul{
     transition: .2s;
 }
 
+#search-res .h5.card-product-category-item-title,
 #products .h5.card-product-category-item-title{
     --max-lines: 3;
 
@@ -537,6 +540,7 @@ ul{
     -webkit-line-clamp: var(--max-lines);
 }
 
+#search-res .h6.card-product-category-item-title,
 #products .h6.card-product-category-item-title{
     font-size: 0.8rem;
 }

@@ -155,58 +155,58 @@ const getProductsContainer = () => {
 
 const getSearchPage = (page=1) => {
     $.ajax({
-            url: `{% url 'product_search' %}`,
-            type: 'GET',
-            data: {q: $("#string-search").val(), page: page},
-            dataType: 'json',
-            success: function(response) {
-                console.log('success', response)
-                products = getProductsContainer()
-                if (response.results.length == 0) {
-                    products.text('По вашему запросу ничего не найдено')
-                }
-                for (let i = 0; i < response.results.length; i++) {
-                    product = response.results[i]
-                    console.log('appending ', product.title)
-                    console.log('response');
-                    products.append(`{% include 'catalog/search-result.html' with title="${product.title}"  category_slug="${product.category.slug}" manufacturer="${product.manufacturer.name}" manufacturer_countries="${product.manufacturer_countries}" price="${product.price}" stock="${product.stock}" sale_price="${product.sale_price}" currency="${product.currency.currency_sign}" availability="${product.availability}" sku="${product.sku}" image="${product.gallery_images[0].image}" alt="${product.gallery_images[0].alt}" slug="${product.slug}" id="${product.id}" in_cart="${product.in_cart}" %}`)
-                }
-                search_loading = false
-
-                $('.product-add-to-cart').click(function(e){
-                    e.preventDefault()
-                    let cartCount = +($('.count-cart').text()) + 1
-                    let p_id = $(this).attr('data-product-id')
-                    let buttonAddToCart = $(this)
-                    console.log(p_id)
-                    $.ajax({
-                      url: `{% url 'add_to_cart' 0 %}`.replace(0, p_id),
-                      method: 'POST',
-                      data: JSON.stringify({
-                        product_id: p_id,
-                      }),
-                      dataType: "json",
-                      contentType: "application/json",
-                      success: function(response2) {
-                        $('.count-cart').text(cartCount)
-                        buttonAddToCart.siblings('.in-cart').removeClass('d-none').addClass('d-flex');
-                        buttonAddToCart.hide();
-                        console.log("success" ,response2)
-                      },
-                      error: function(error2) {
-                        console.log("error", error2)
-                      }
-                    });
-                    $('.in-cart .btn').click(function(e){
-                        e.preventDefault()
-                        window.location.href = '/cart/';
-                    });
-                })
-            },
-            error: function(response) {
-                console.log('err', response)
+        url: `{% url 'product_search' %}`,
+        type: 'GET',
+        data: {q: $("#string-search").val(), page: page},
+        dataType: 'json',
+        success: function(response) {
+            console.log('success', response)
+            products = getProductsContainer()
+            if (response.results.length == 0) {
+                products.text('По вашему запросу ничего не найдено')
             }
-        })
+            for (let i = 0; i < response.results.length; i++) {
+                product = response.results[i]
+                console.log('appending ', product.title)
+                console.log('response');
+                products.append(`{% include 'catalog/search-result.html' with title="${product.title}"  category_slug="${product.category.slug}" manufacturer="${product.manufacturer.name}" manufacturer_countries="${product.manufacturer_countries}" price="${product.price}" stock="${product.stock}" sale_price="${product.sale_price}" currency="${product.currency.currency_sign}" availability="${product.availability}" sku="${product.sku}" image="${product.gallery_images[0].image}" alt="${product.gallery_images[0].alt}" slug="${product.slug}" id="${product.id}" in_cart="${product.in_cart}" %}`)
+            }
+            search_loading = false
+
+            $('.product-add-to-cart').click(function(e){
+                e.preventDefault()
+                let cartCount = +($('.count-cart').text()) + 1
+                let p_id = $(this).attr('data-product-id')
+                let buttonAddToCart = $(this)
+                console.log(p_id)
+                $.ajax({
+                  url: `{% url 'add_to_cart' 0 %}`.replace(0, p_id),
+                  method: 'POST',
+                  data: JSON.stringify({
+                    product_id: p_id,
+                  }),
+                  dataType: "json",
+                  contentType: "application/json",
+                  success: function(response2) {
+                    $('.count-cart').text(cartCount)
+                    buttonAddToCart.siblings('.in-cart').removeClass('d-none').addClass('d-flex');
+                    buttonAddToCart.hide();
+                    console.log("success" ,response2)
+                  },
+                  error: function(error2) {
+                    console.log("error", error2)
+                  }
+                });
+                $('.in-cart .btn').click(function(e){
+                    e.preventDefault()
+                    window.location.href = '/cart/';
+                });
+            })
+        },
+        error: function(response) {
+            console.log('err', response)
+        }
+    })
 }
 
 const search = () => {
@@ -229,7 +229,7 @@ $( document ).ready(function() {
             search();
         }
     });
-    $('.overlay').click(function(){
+    $('.search-res.popup').click(function(){
         $('.search-res.popup').hide();
         $('body').css('overflow', 'auto');
     })
@@ -259,8 +259,7 @@ $( document ).ready(function() {
                 getSearchPage(search_page);
                 }
             }
-        })
-
+    })
 })
 </script>
 </body>

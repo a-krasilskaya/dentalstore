@@ -1,4 +1,4 @@
-from catalog.models import Product, Manufacturer, Gallery, Currency
+from catalog.models import Product, Manufacturer, Gallery, Currency, ProductCategory
 
 from rest_framework import serializers
 from rest_framework.serializers import SerializerMethodField
@@ -28,6 +28,14 @@ class ManufacturerSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class CategorySerializer(serializers.ModelSerializer):
+    """Сериализатор для подгрузки Категории."""
+
+    class Meta:
+        model = ProductCategory
+        fields = "__all__"
+
+
 class ManufacturerValueSerializer(serializers.Serializer):
     name = serializers.CharField()
 
@@ -46,6 +54,7 @@ class ProductSerializer(serializers.ModelSerializer):
     currency = CurrencySerializer(read_only=True)
     gallery_images = GallerySerializer(read_only=True, many=True)
     manufacturer = ManufacturerSerializer(read_only=True)
+    category = CategorySerializer(read_only=True)
 
     class Meta:
         model = Product
@@ -56,3 +65,4 @@ class ProductSerializer(serializers.ModelSerializer):
         if 'in_cart' in request.session:
             return obj.id in request.session['in_cart']
         return False
+

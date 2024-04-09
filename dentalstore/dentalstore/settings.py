@@ -243,7 +243,7 @@ else:
 TAGGIT_CASE_INSENSITIVE = True
 
 REST_FRAMEWORK = {
-     'PAGE_SIZE': 6,
+     'PAGE_SIZE': 12,
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',

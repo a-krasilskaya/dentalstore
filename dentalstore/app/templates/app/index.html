@@ -138,18 +138,18 @@
 let search_page = 1
 let search_loading = false
 const getProductsContainer = () => {
-    let container = document.getElementById('products')
+    let container = document.getElementById('search-products')
     if (container !== null) {
-        return $("#products")
+        return $("#search-products")
     }
     container = document.createElement('ul')
     container.classList.add('row', 'px-0', 'products-catalog-category-list');
-    container.id = 'products';
+    container.id = 'search-products';
     parentContainer = document.getElementById("search-res")
     if (parentContainer) {
         parentContainer.innerHTML = ''
         parentContainer.appendChild(container)
-        return $("#products")
+        return $("#search-products")
     }
 }
 

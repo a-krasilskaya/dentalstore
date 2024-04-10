@@ -90,6 +90,7 @@ li{
     z-index: -1;
     top: 0;
     cursor: pointer;
+    height: 100%;
 }
 
 .carousel-caption.carousel-caption-our-style{

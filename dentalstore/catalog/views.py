@@ -150,6 +150,7 @@ class ProductSearchAPIView(generics.ListAPIView):
             product_qs = product_qs.filter(
                 Q(title__icontains=substring1) |
                 Q(description__icontains=substring1) |
+                Q(sku__icontains=substring1) |
                 Q(manufacturer_countries__icontains=substring1) |
                 Q(title__icontains=substring2) |
                 Q(description__icontains=substring2) |

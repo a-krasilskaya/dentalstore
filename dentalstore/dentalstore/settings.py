@@ -20,6 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 CART_SESSION_ID = 'cart'
+FAVORITES_SESSION_ID = 'favorites'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
     'orders.apps.OrdersConfig',
     'feedback.apps.FeedbackConfig',
     'app.apps.AppConfig',
+    'favorites.apps.FavoritesConfig',
     'django_bootstrap5',
     'django_static_jquery',
     'mptt',
@@ -82,6 +84,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'cart.context_processors.cart',
+                'favorites.context_processors.favorites',
             ],
         },
     },

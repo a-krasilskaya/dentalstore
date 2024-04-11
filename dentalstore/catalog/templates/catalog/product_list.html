@@ -185,8 +185,8 @@
                         let slug = response.results[i].slug
                         let id = response.results[i].id
                         let in_cart = response.results[i].in_cart
-                        let in_favorites = response.results[i].in_favorites
-                        products.append(`{% include 'catalog/products.html' with title="${product_title}" manufacturer="${manufacturer}" manufacturer_countries="${countries}" price="${price}" price="${price}" stock="${stock}" sale_price="${sale_price}" currency="${currency}" availability="${availability}" sku="${sku}" image="${image}" alt="${alt}" slug="${slug}" id="${id}" in_cart="${in_cart}" in_favorites: "${in_favorites}" %}`)
+                        let in_favorites = response.results[i].in_favorites ? ' checked ' : ''
+                        products.append(`{% include 'catalog/products.html' with title="${product_title}" manufacturer="${manufacturer}" manufacturer_countries="${countries}" price="${price}" price="${price}" stock="${stock}" sale_price="${sale_price}" currency="${currency}" availability="${availability}" sku="${sku}" image="${image}" alt="${alt}" slug="${slug}" id="${id}" in_cart="${in_cart}" in_favorites="${in_favorites}" %}`)
                         manufacturer_set.add(manufacturer)
                         countries_set.add(countries)
                     }
@@ -219,6 +219,19 @@
                             window.location.href = '/cart/';
                         });
                     })
+
+                    $('.product-add-to-favorites').click(function(e){
+                      const p_id = $(this).attr('data-product-id')
+                      const url = `{% url 'favorites:favorites_toggle' 0 %}`.replace(0, p_id)
+                      $.ajax({
+                          url: url,
+                          method: 'GET',
+                          success: function(response) {
+                              $('.count-favorites').text()
+                          }
+                      })
+                    })
+
                 },
                 error: function (response) {
                     console.log(9, response);

@@ -932,5 +932,31 @@ select{
     width: 48%;
 }
 
+/*favorites*/
 
+.product-add-to-favorites .favorites{
+    visibility: hidden;
+}
 
+.product-add-to-favorites{
+    position: relative;
+}
+
+.product-add-to-favorites .heart{
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.heart.active{
+    display: none;
+}
+
+.favorites-label{
+    cursor: pointer;
+}
+
+.favorites-label input:checked + .heart-wrap .heart.active{
+    display: block;
+}

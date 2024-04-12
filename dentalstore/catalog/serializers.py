@@ -50,6 +50,7 @@ class ManufacturerCountriesSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     """Сериализатор для подгрузки товара."""
     in_cart = SerializerMethodField()
+    in_favorites = SerializerMethodField()
 
     currency = CurrencySerializer(read_only=True)
     gallery_images = GallerySerializer(read_only=True, many=True)
@@ -64,5 +65,11 @@ class ProductSerializer(serializers.ModelSerializer):
         request = self.context['request']
         if 'in_cart' in request.session:
             return obj.id in request.session['in_cart']
+        return False
+
+    def get_in_favorites(self, obj):
+        request = self.context['request']
+        if 'favorites' in request.session:
+            return obj.id in request.session['favorites']
         return False
 

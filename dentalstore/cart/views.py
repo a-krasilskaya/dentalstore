@@ -11,6 +11,7 @@ from .forms import CartAddProductForm
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
+
 @require_POST
 def cart_add(request, product_id):
     cart = Cart(request)
@@ -45,9 +46,3 @@ def cart_detail(request):
         return JsonResponse(data={'success': 'cart/detail.html'}, status=201)
     else:
         return render(request, 'cart/detail.html', {'cart': cart, 'images': Gallery.objects.all()})
-
-
-
-
-
-

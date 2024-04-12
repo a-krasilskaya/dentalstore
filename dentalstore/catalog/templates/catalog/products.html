@@ -27,6 +27,9 @@
                         <button type="button" class="btn btn-cold-lilac" data-bs-toggle="tooltip" data-bs-placement="top" title="Перейти в корзину">В корзине</button>
                     </div>
                 </div>
+                <div class="product-add-to-favorites" data-product-id="{{ id }}" >
+                    <input type="checkbox" style="display:block;" data-product-id="{{ id }}" {{ in_favorites }}/>Избранное(1 {{ in_favorites }})
+                </div>
             </div>
         </div>
     </a>

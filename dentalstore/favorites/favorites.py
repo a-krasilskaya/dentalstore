@@ -39,6 +39,7 @@ class Favorites(object):
         # update the session favorites
         self.session[settings.FAVORITES_SESSION_ID] = self.products
         self.session.modified = True
+        print(f'Favorites.py {self.products}')
 
     def remove(self, product):
         """

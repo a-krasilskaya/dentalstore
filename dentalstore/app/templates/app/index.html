@@ -207,6 +207,7 @@ const getSearchPage = (page=1) => {
             $('.product-add-to-favorites').click(function(e){
                 const p_id = $(this).attr('data-product-id')
                 const url = `{% url 'favorites:favorites_toggle' 0 %}`.replace(0, p_id)
+                console.log(`index.html fav ${url}`)
                 $.ajax({
                     url: url,
                     method: 'GET',

@@ -123,7 +123,7 @@ class ProductListAPIView(generics.ListAPIView):
         if tag_slug:
             try:
                 tag = TagProduct.objects.get(slug=tag_slug)
-                queryset = Product.objects.filter(tags__slug=tag.slug, publish=True)
+                queryset = queryset.filter(tags__slug=tag.slug, publish=True)
             except TagProduct.DoesNotExist:
                 raise ValidationError("Такой подкатегории не существует")
 

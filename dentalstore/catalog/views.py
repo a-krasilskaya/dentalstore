@@ -15,6 +15,8 @@ from rest_framework.exceptions import ValidationError
 
 from cart.forms import CartAddProductForm
 from catalog.models import ProductCategory, Product, Gallery, TagProduct, Manufacturer, Currency
+from dentalstore import settings
+from favorites.favorites import Favorites
 from .utils import ProductListMixins, transliterate
 from django.db.models import Q
 
@@ -226,4 +228,6 @@ class ShowProduct(DetailView):
         context = super().get_context_data(**kwargs)
         context['images'] = Gallery.objects.filter(product_id=self.object.id)
         context['cart_product_form'] = CartAddProductForm()
+        favorites = self.request.session.get(settings.FAVORITES_SESSION_ID)
+        context['in_favorites'] = 'checked' if self.object.id in favorites else ''
         return context

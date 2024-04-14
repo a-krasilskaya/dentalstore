@@ -9,6 +9,7 @@ from feedback.forms import OrderCallBackForm, FeedBackForm
 
 logger = logging.getLogger(__name__)
 
+
 def home(request):
     context = {
         'title': 'TemplateProject',
@@ -31,8 +32,6 @@ def home(request):
     #     messages.add_message(request, settings.MY_INFO,
     #                          "не отправлено")
     #     context['form'] = ContactForm()
-
-
 
     return render(request, 'app/main.html', context)
 

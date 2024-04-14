@@ -221,14 +221,20 @@
                         });
                     })
 
-                    $('.product-add-to-favorites').click(function(e){
+                    $('.heart-wrap').one('click', function(e){
                       const p_id = $(this).attr('data-product-id')
-                      const url = `{% url 'favorites:favorites_toggle' 0 %}`.replace(0, p_id)
+                      let url = null
+                      if (document.getElementById(`favorites-${p_id}`).checked) {
+                        url = `{% url 'favorites:favorites_remove' 0 %}`.replace(0, p_id)
+                      } else {
+                        url = `{% url 'favorites:favorites_add' 0 %}`.replace(0, p_id)
+                      }
+                      console.log(`fav: ${url}`)
                       $.ajax({
                           url: url,
                           method: 'GET',
                           success: function(response) {
-                              $('.count-favorites').text()
+                              $('.count-favorites').text(response.count)
                           }
                       })
                     })

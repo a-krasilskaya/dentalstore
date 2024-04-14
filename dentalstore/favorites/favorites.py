@@ -31,14 +31,13 @@ class Favorites(object):
         """
         if product.id not in self.products:
             self.products.append(product.id)
-        else:
-            self.remove(product)
         self.save()
 
     def save(self):
         # update the session favorites
         self.session[settings.FAVORITES_SESSION_ID] = self.products
         self.session.modified = True
+        print(f'Favorites.py {self.products}')
 
     def remove(self, product):
         """

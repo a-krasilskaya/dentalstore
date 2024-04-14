@@ -221,7 +221,7 @@
                         });
                     })
 
-                    $('.heart-wrap').one('click', function(e){
+                    $('.product-add-to-favorites').click(function(e){
                       const p_id = $(this).attr('data-product-id')
                       let url = null
                       if (document.getElementById(`favorites-${p_id}`).checked) {

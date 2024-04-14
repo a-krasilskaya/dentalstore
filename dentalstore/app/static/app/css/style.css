@@ -934,9 +934,9 @@ select{
 
 /*favorites*/
 
-/* .product-add-to-favorites .favorites{
+.product-add-to-favorites .favorites{
     visibility: hidden;
-} */
+}
 
 .product-add-to-favorites{
     position: relative;

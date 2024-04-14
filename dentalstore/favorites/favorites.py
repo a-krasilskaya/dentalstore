@@ -31,8 +31,6 @@ class Favorites(object):
         """
         if product.id not in self.products:
             self.products.append(product.id)
-        else:
-            self.remove(product)
         self.save()
 
     def save(self):

@@ -26,9 +26,40 @@ def favorites_toggle(request, product_id):
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
+def favorites_add(request, product_id):
+    favorites = Favorites(request)
+    product = get_object_or_404(Product, id=product_id)
+    favorites.add(product=product)
+    title = 'В избранном'
+    if is_ajax(request=request):
+        return JsonResponse(data={'success': title, 'count': len(favorites.products)}, status=201)
+    else:
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+def favorites_remove(request, product_id):
+    favorites = Favorites(request)
+    product = get_object_or_404(Product, id=product_id)
+    favorites.remove(product=product)
+    title = 'Не в избранном'
+    if is_ajax(request=request):
+        return JsonResponse(data={'success': title, 'count': len(favorites.products)}, status=201)
+    else:
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
 def favorites_detail(request):
     favorites = Favorites(request)
+    products = Product.objects.filter(id__in=favorites.products)
     if is_ajax(request=request):
-        return JsonResponse(data={'success': 'favorites/detail.html'}, status=201)
+        return JsonResponse(data={'success': 'favorites.html'}, status=201)
     else:
-        return render(request, 'favorites/detail.html', {'favorites': favorites, 'images': Gallery.objects.all()})
+        return render(
+            request,
+            template_name='favorites.html',
+            context={
+                'favorites': favorites,
+                'products': products,
+                'images': Gallery.objects.all()
+            }
+        )

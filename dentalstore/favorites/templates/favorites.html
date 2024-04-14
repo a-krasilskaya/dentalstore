@@ -1,9 +1,67 @@
 {% extends 'app/index.html' %}
-{% load static  %}
+{% load static %}
 {% load mptt_tags %}
-{% block title %}Корзина{% endblock %}
+{% block title %}Избоанное{% endblock %}
+
+
+
 
 {% block content %}
+<div class="container card-product-category-item mt-xl-5 mt-4">
+    <div class="row d-lg-flex mt-xl-4">
+    <div class="col-lg-8 col-xl-9 col-md-12">
+    <ul class="row px-0">
+        {% if object_list %}
+        {% for product in object_list %}
+        <li class="col-xl-4 col-sm-6 col-12 mb-4">
+            <a href="{% if tag.slug in request.path %}../{% endif %}products/{{ product.slug }}">
+                <div class="card">
+                    <div class="card-img img-wrapper overflow-hidden">
+                        {% for img in images %}
+                        {% if img.product_id == product.id and img.main_image %}
+                        <img src="/media/{{ img.image }}" alt="{{ img.alt }}">
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="card-body fs-5 p-2 lh-sm d-flex flex-column bd-highlight border-top">
+                        <h5 class="h5 card-product-category-item-title">{{ product.title }}</h5>
+                        <h6 class="h6 card-product-category-item-title">{{product.manufacturer.name}}, {{ product.manufacturer_countries }}</h6>
+                        {% if product.sale_price %}
+                        <p class="card-product-category-item-sale-price fw-bolder">{{ product.sale_price}}<span class="product-currency"> {{ product.currency.currency_sign }}</span></p>
+                        <p class="card-product-category-item-price text-decoration-line-throug">{{ product.price }}<span class="product-currency"> {{ product.currency.currency_sign }}</span></p>
+                        {% else %}
+                        <p class="card-product-category-item-price fw-bolder">{{ product.price }}<span class="product-currency"> {{ product.currency.currency_sign }}</span></p>
+                        {% endif %}
+                        {% if product.quantity > 0 %}
+<!--                        <p class="availability">В наличии</p>-->
+                        {% else %}
+<!--                        <p class="availability">Под заказ</p>-->
+                        {% endif %}
+                        <p class="card-product-category-item-sku mb-0">Артикул: {{ product.sku }}</p>
+                        <div class="add-to-cart product-list-off">
+                            <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                                <div class="form-wrapper d-flex align-items-center mt-2">
+                                {{ cart_product_form }}
+                                {% csrf_token %}
+                                <div class=btn-wrapper">
+                                    <button class="btn btn-purple-dark" type="submit">В корзину</button>
+                                </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </li>
+        {% endfor %}
+        {% else %}
+            <p class="">По вашему запросу товаров не найдено</p>
+        {% endif %}
+    </ul>
+            </div>
+        </div>
+</div>
+
 <div class="container cart-detail">
     <div class="row">
         <div class="col-12">

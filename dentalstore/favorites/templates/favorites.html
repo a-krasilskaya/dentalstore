@@ -11,8 +11,8 @@
     <div class="row d-lg-flex mt-xl-4">
     <div class="col-lg-8 col-xl-9 col-md-12">
     <ul class="row px-0">
-        {% if object_list %}
-        {% for product in object_list %}
+        {% if products %}
+        {% for product in products %}
         <li class="col-xl-4 col-sm-6 col-12 mb-4">
             <a href="{% if tag.slug in request.path %}../{% endif %}products/{{ product.slug }}">
                 <div class="card">
@@ -49,6 +49,12 @@
                                 </div>
                             </form>
                         </div>
+                    <div class="remove-product py-2 text-md-center">
+                        <a href="{% url 'favorites:favorites_remove' product.id %}">
+                            <img src="{% static '/app/images/delete-symbol.png' %}" alt="Удалить">
+                        </a>
+                    </div>
+
                     </div>
                 </div>
             </a>
@@ -60,61 +66,6 @@
     </ul>
             </div>
         </div>
-</div>
-
-<div class="container cart-detail">
-    <div class="row">
-        <div class="col-12">
-            <h1 class="h1 h1-title py-5">Избранное</h1>
-            <div class="cart-detail-wrapper">
-            <div class="cart-detail-title row fw-bold d-none d-md-flex">
-                <div class="col-3 border p-2 text-center">
-                    <h6 class="h6 m-0 py-2">Изображение</h6>
-                </div>
-                <div class="col-4 border p-2 text-center">
-                    <h6 class="h6 m-0 py-2">Наименование товара</h6>
-                </div>
-                <div class="col-4 border p-2 text-center">
-                    <h6 class="h6 m-0 py-2">Цена за единицу товара</h6>
-                </div>
-                <div class="col-1 border p-2 text-center">
-                    <h6 class="h6 m-0 py-2">Удалить</h6>
-                </div>
-            </div>
-            <div class="cart-detail-products row">
-            {% for product in products %}
-                <div class="col-md-2 col-6 border">
-                    {% for img in images %}
-                        {% if img.product_id == product.id and img.main_image %}
-                        <div class="wrapper-cart-img p-1">
-                            <img src="/media/{{ img.image }}" alt="{{ img.alt }}" class="img-fluid">
-                        </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-                <div class="col-md-3 col-6 border">
-                    <p class="py-2">{{ product.title }}</p>
-                </div>
-                <div class="col-md-2 col-6 border">
-                    <p class="py-2">{{ product.price }} {{ product.currency.currency_sign }}</p>
-                </div>
-                <div class="col-md-1 col-6 border">
-                    <div class="remove-product py-2 text-md-center">
-                        <a href="{% url 'favorites:favorites_remove' product.id %}">
-                            <img src="{% static '/app/images/delete-symbol.png' %}" alt="Удалить">
-                        </a>
-                    </div>
-                </div>
-            {% endfor %}
-            </div>
-        </div>
-    </div>
-    <div class="d-flex flex-column py-5">
-        <div class="col-md-5 col-lg-3 mr-md-2">
-            <a href="javascript:history.back()" class="button btn return-store d-block">Назад</a>
-        </div>
-    </div>
-</div>
 </div>
 
 {% endblock %}

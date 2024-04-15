@@ -42,10 +42,10 @@ def favorites_remove(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     favorites.remove(product=product)
     title = 'Не в избранном'
-    if is_ajax(request=request):
-        return JsonResponse(data={'success': title, 'count': len(favorites.products)}, status=201)
-    else:
-        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    # if is_ajax(request=request):
+    return JsonResponse(data={'success': title, 'count': len(favorites.products)}, status=201)
+    # else:
+    #     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
 def favorites_detail(request):

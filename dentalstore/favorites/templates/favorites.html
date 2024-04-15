@@ -43,16 +43,15 @@
                                 <div class="form-wrapper d-flex align-items-center mt-2">
                                 {{ cart_product_form }}
                                 {% csrf_token %}
-                                <div class=btn-wrapper">
+                                <div class="btn-wrapper">
                                     <button class="btn btn-purple-dark" type="submit">В корзину</button>
                                 </div>
                                 </div>
                             </form>
                         </div>
-                    <div class="remove-product py-2 text-md-center">
-                        <a href="{% url 'favorites:favorites_remove' product.id %}">
-                            <img src="{% static '/app/images/delete-symbol.png' %}" alt="Удалить">
-                        </a>
+                    <div class="remove-product py-2 text-md-center" data-product-id="{{ product.id }}">
+                        <!-- a href="{% url 'favorites:favorites_remove' product.id %}" -->
+                        <img src="{% static '/app/images/delete-symbol.png' %}" alt="Удалить">
                     </div>
 
                     </div>
@@ -67,5 +66,40 @@
             </div>
         </div>
 </div>
-
+<script>
+    const remove_favs = document.querySelectorAll('.remove-product');
+    remove_favs.forEach((remove_fav) => {
+        remove_fav.addEventListener('click', function (e) {
+            p_id = this.getAttribute('data-product-id')
+            e.preventDefault()
+            console.log(`remove ${p_id}`, e.target);
+            fetch(
+                `/favorites/remove/${p_id}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            )
+            .then(response => {
+                if (!response.ok) {
+                    console.log('Ошибка при удалении из избранного');
+                } else {
+                    return response.json()
+                }
+            })
+            .then(data => {
+                const liElement = this.closest('li');
+                if (liElement) {
+                    liElement.remove();
+                    document.querySelector('.count-favorites').textContent = data['count']
+                } else {
+                    console.log('Ошибка: Не удалось найти элемент li');
+                }
+            })
+            .catch(error => console.error('Ошибка:', error));
+        });
+    })
+</script>
 {% endblock %}

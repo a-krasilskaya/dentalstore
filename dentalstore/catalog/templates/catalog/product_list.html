@@ -12,6 +12,7 @@
 </script>
 {% csrf_token %}
 <script>
+  add_fav = Date.now()
     $( document ).ready(function() {
 
         function getCookie(с_name) {
@@ -222,6 +223,8 @@
                     })
 
                     $('.product-add-to-favorites').click(function(e){
+                      if (Date.now() - add_fav < 1000) return
+                      add_fav = Date.now()
                       const p_id = $(this).attr('data-product-id')
                       let url = null
                       if (document.getElementById(`favorites-${p_id}`).checked) {

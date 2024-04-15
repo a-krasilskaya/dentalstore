@@ -141,6 +141,7 @@
 <script>
 let search_page = 1
 let search_loading = false
+let add_fav = Date.now()
 const getProductsContainer = () => {
     let container = document.getElementById('search-products')
     if (container !== null) {
@@ -206,6 +207,27 @@ const getSearchPage = (page=1) => {
                     window.location.href = '/cart/';
                 });
             })
+
+            $('.heart-wrap').click(function(e){
+                if (Date.now() - add_fav < 1000) return
+                add_fav = Date.now()
+                const p_id = $(this).attr('data-product-id')
+                let url = null
+                if (document.getElementById(`favorites-${p_id}`).checked) {
+                url = `{% url 'favorites:favorites_remove' 0 %}`.replace(0, p_id)
+                } else {
+                url = `{% url 'favorites:favorites_add' 0 %}`.replace(0, p_id)
+                }
+                console.log(`fav: ${url}`)
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function(response) {
+                        $('.count-favorites').text(response.count)
+                    }
+                })
+            })
+
         },
         error: function(response) {
             console.log('err', response)
@@ -266,7 +288,9 @@ $( document ).ready(function() {
             }
     })
 
-    $('.product-add-to-favorites').one('click', function(e){
+    $('.product-add-to-favorites').click(function(e){
+        if (Date.now() - add_fav < 1000) return
+        add_fav = Date.now()
         const p_id = $(this).attr('data-product-id')
         let url = null
         if (document.getElementById(`favorites-${p_id}`).checked) {

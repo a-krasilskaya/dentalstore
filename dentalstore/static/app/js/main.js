@@ -154,6 +154,23 @@ $( document ).ready(function() {
         })
     });
 
+    $(".add-to-cart-ajax").submit(function(e) {
+        e.preventDefault()
+        $.ajax({
+            url: this.action,
+            type: this.method,
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function(response) {
+                let cartCount = +($('.count-cart').text()) + Number($('#id_quantity').val())
+                $('.count-cart').text(cartCount)
+            },
+            error: function(response) {
+                console.log('err', response)
+            },
+        })
+    });
+
     $('.btn-update').submit(function(e) {
         e.preventDefault()
         $.ajax({

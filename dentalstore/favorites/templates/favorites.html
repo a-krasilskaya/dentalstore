@@ -47,17 +47,11 @@
                                 </div>
                                 </div>
                             </form>
-                            <div class="remove-product  text-md-center">
-                                <a href="{% url 'favorites:favorites_remove' product.id %}">
-                                    <img src="{% static '/app/images/delete-symbol.png' %}" alt="Удалить">
-                                </a>
+                            <div class="remove-product text-md-center" data-product-id="{{ product.id }}">
+                        <!-- a href="{% url 'favorites:favorites_remove' product.id %}" -->
+                                <img src="{% static '/app/images/delete-symbol.png' %}" alt="Удалить">
                             </div>
                         </div>
-   
-                    <div class="remove-product py-2 text-md-center" data-product-id="{{ product.id }}">
-                        <!-- a href="{% url 'favorites:favorites_remove' product.id %}" -->
-                        <img src="{% static '/app/images/delete-symbol.png' %}" alt="Удалить">
-                    </div>
                     </div>
                 </div>
             </a>

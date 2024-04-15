@@ -4,17 +4,16 @@
 {% block title %}Избоанное{% endblock %}
 
 
-
-
 {% block content %}
-<div class="container card-product-category-item mt-xl-5 mt-4">
+<div class="container card-product-category-item mt-xl-5 mt-4 favorites-wrap">
+    <h1 class="h1 h1-title">Избранное</h1>
     <div class="row d-lg-flex mt-xl-4">
-    <div class="col-lg-8 col-xl-9 col-md-12">
-    <ul class="row px-0">
+    <div class="col-12">
+    <ul class="row px-0 ">
         {% if products %}
         {% for product in products %}
-        <li class="col-xl-4 col-sm-6 col-12 mb-4">
-            <a href="{% if tag.slug in request.path %}../{% endif %}products/{{ product.slug }}">
+        <li class="col-xl-3 col-sm-6 col-md-4 col-12 mb-4">
+            <a href="/catalog/{{product.category.slug}}/products/{{ product.slug }}">
                 <div class="card">
                     <div class="card-img img-wrapper overflow-hidden">
                         {% for img in images %}
@@ -38,7 +37,7 @@
 <!--                        <p class="availability">Под заказ</p>-->
                         {% endif %}
                         <p class="card-product-category-item-sku mb-0">Артикул: {{ product.sku }}</p>
-                        <div class="add-to-cart product-list-off">
+                        <div class="add-to-cart product-list-off d-flex justify-content-between align-items-end">
                             <form action="{% url 'cart:cart_add' product.id %}" method="post">
                                 <div class="form-wrapper d-flex align-items-center mt-2">
                                 {{ cart_product_form }}
@@ -48,12 +47,17 @@
                                 </div>
                                 </div>
                             </form>
+                            <div class="remove-product  text-md-center">
+                                <a href="{% url 'favorites:favorites_remove' product.id %}">
+                                    <img src="{% static '/app/images/delete-symbol.png' %}" alt="Удалить">
+                                </a>
+                            </div>
                         </div>
+   
                     <div class="remove-product py-2 text-md-center" data-product-id="{{ product.id }}">
                         <!-- a href="{% url 'favorites:favorites_remove' product.id %}" -->
                         <img src="{% static '/app/images/delete-symbol.png' %}" alt="Удалить">
                     </div>
-
                     </div>
                 </div>
             </a>

@@ -229,5 +229,5 @@ class ShowProduct(DetailView):
         context['images'] = Gallery.objects.filter(product_id=self.object.id)
         context['cart_product_form'] = CartAddProductForm()
         favorites = self.request.session.get(settings.FAVORITES_SESSION_ID)
-        context['in_favorites'] = 'checked' if self.object.id in favorites else ''
+        context['in_favorites'] = 'checked' if favorites and self.object.id in favorites else ''
         return context

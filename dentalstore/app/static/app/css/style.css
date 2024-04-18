@@ -60,6 +60,31 @@ li{
    background: #4b5196;
 }
 
+.back-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.back-to-top:hover {
+  text-decoration: none;
+}
+
+.link-header-img{
+    position: relative;
+}
+
+.header-counter-item{
+    position: absolute;
+    top: -18px;
+    right: 10px;
+    z-index: 999;
+    font-size: 14px;
+    padding: 1px 6px;
+}
+
 /* search popup */
 
 .search-res.popup{

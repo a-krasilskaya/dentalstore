@@ -20,7 +20,7 @@
 
 
 <!--header-->
-<header class="p-2 border-bottom header">
+<header class="p-2 border-bottom header" id="header">
     <div class="container">
     <nav class="navbar navbar-expand-lg navbar-light align-items-start">
 <!--      <div class="container">-->
@@ -32,7 +32,6 @@
         </button>
         <div class="header-wrap col-lg-10 col-12">
         <div class="collapse navbar-collapse align-items-start" id="navbarNavAltMarkup">
-
           <div class="navbar-nav col-12 col-xl-9 col-lg-8 justify-content-lg-evenly mb-2 mb-lg-0 align-items-center">
             <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Главная</a>
             <a class="nav-link" href="{% url 'catalog' %}">Каталог</a>
@@ -40,22 +39,22 @@
             <a class="nav-link" href="{% url 'contacts' %}">Контакты</a>
            </div>
            <div class="navbar-nav col-12 col-xl-1 col-lg-2 justify-content-xl-center justify-content-lg-center justify-content-xl-end">
-            <div class="cart col-12 col-lg-2 d-flex justify-content-center">
+            <div class="cart col-12 col-lg-2 d-flex justify-content-center header-counter">
               {% with total_items=cart|length %}
-              <a class="ps-lg-3 px-2" href="{% url 'cart:cart_detail' %}">
-                  <div class="text-center count-cart">{% if cart|length > 0 %}{{ total_items }}{% endif %}</div>
+              <a class="ps-lg-3 px-2 link-header-img" href="{% url 'cart:cart_detail' %}">
+
+                    <div class="text-center header-counter-item count-cart">{% if cart|length > 0 %}{{ total_items }}{% endif %}</div>
+
                   <img class="pb-2" src="{% static '/app/images/shopping-cart.png' %}" alt='Корзина'>
               </a>
               {% endwith %}
-
-              <a class="favorites-link ps-lg-3 px-1" href="{% url 'favorites:favorites_detail' %}">
-                  <div class="text-center count-favorites">{% if favorites|length > 0 %}{{ favorites|length }}{% endif %}</div>
+              <a class="favorites-link ps-lg-3 px-1 link-header-img" href="{% url 'favorites:favorites_detail' %}">
+                    <div class="text-center header-counter-item count-favorites">{% if favorites|length > 0 %}{{ favorites|length }}{% endif %}</div>
                   <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 15 15"><path fill="#0d6efd" d="M4.036 1a4.036 4.036 0 0 0-2.854 6.89l5.964 5.964a.5.5 0 0 0 .708 0l5.964-5.965a4.036 4.036 0 0 0-5.707-5.707l-.611.61l-.61-.61A4.036 4.036 0 0 0 4.035 1"/></svg></a>
             </div>
                </div>
                <div class="navbar-nav col-12 col-xl-2 col-lg-2 justify-content-lg-center justify-content-xl-end">
             <div class="header-contacts text-center">
-
                 <div class="link-messangers d-flex justify-content-center">
                     <a  href="https://t.me/+79999683506" class="telegram-link"><img class="link-messangers-item px-2" src="{% static '/app/images/telegram.png' %}" alt="Написать в Telegram"></a>
                     <a href="https://wa.me/+79999683506" class="whatsapp-link"><img class="link-messangers-item px-2" src="{% static '/app/images/whatsapp.png' %}" alt="Написать в Whatsapp"></a>
@@ -74,11 +73,8 @@
             </div>
         </div>
         </div>
-
     </nav>
-
     </div>
-
     </header>
 <div class="search-res popup p-0">
     <div class="container">
@@ -99,6 +95,9 @@
 
 <footer class="footer">
 <div class="container">
+    <div class="link-up"><a href="#top" id="back-to-top" class="back-to-top" title="Back to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><g fill="none" stroke-width="2"><path stroke="#4b5196" d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z" clip-rule="evenodd"/><path fill="#b3baff" stroke="#4b5196" stroke-linejoin="round" d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z"/><path stroke="#4b5196" stroke-linecap="round" stroke-linejoin="round" d="M33 27L24 18L15 27"/></g></svg>
+    </a></div>
 <div class="row justify-content-center">
 <div class="col-md-12 text-center">
 <h2 class="footer-heading my-5 "><a href="/" class="d-flex align-items-center justify-content-center mb-lg-0 link-body-emphasis text-decoration-none">
@@ -288,6 +287,8 @@ $( document ).ready(function() {
             }
     })
 
+
+
     $('.product-add-to-favorites').click(function(e){
         if (Date.now() - add_fav < 1000) return
         add_fav = Date.now()
@@ -303,7 +304,7 @@ $( document ).ready(function() {
             url: url,
             method: 'GET',
             success: function(response) {
-                $('.count-favorites').text(response.count)
+                $('.count-favorites').text(response.count);
             }
         })
     })

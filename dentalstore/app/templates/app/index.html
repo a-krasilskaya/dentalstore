@@ -247,6 +247,7 @@ const search = () => {
 $( document ).ready(function() {
     $('.search-res.popup').hide();
     $('#btn-search').click(function(){
+        search_page = 1
         search()
     })
     $('#string-search').keypress(function(e) {

@@ -58,8 +58,7 @@
         filter_countries_ajax();
 
         $(window).scroll(function() {
-        if ($(window).scrollTop() + $(window).height() >= $(document).height() - footer) {
-            console.log($(window).height(), $(document).height());
+        if ($(window).scrollTop() + $(window).height() > $(document).height() - footer) {
             if (!loading) {
                 loading = true;
                 page += 1;
@@ -78,9 +77,11 @@
 
         $(document).on('click', '.tags', function (e) {
             send_ajax(page);
-            console.log()
+            consle.log()
             filter_manufacturers_ajax(url=`{% url 'manufacturers' %}?tags={{tag.slug}}`)
         })
+
+
 
         function filter_manufacturers_ajax(url=`{% url 'manufacturers' %}?category={{title.slug}}`){
             $.ajax({

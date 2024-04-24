@@ -193,6 +193,8 @@
                         countries_set.add(countries)
                     }
 
+                    loading = false;
+
                     $('.product-add-to-cart').click(function(e){
                         e.preventDefault()
                         let cartCount = +($('.count-cart').text()) + 1

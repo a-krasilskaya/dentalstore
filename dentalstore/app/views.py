@@ -46,3 +46,11 @@ def contacts(request):
 
 def privacy_policy(request):
     return render(request, 'app/privacy_policy.html')
+
+
+def about(request):
+    return render(request, 'app/about.html')
+
+
+def sertificate(request):
+    return render(request, 'app/sertificate.html')

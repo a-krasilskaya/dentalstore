@@ -1,3 +1,4 @@
+from django.contrib.postgres.search import SearchVector
 from django.views.generic import ListView, DetailView
 
 from cart.views import cart_add
@@ -149,21 +150,10 @@ class ProductSearchAPIView(generics.ListAPIView):
             if counter >= QUERY_STRING_MAX_WORDS:
                 break
             substring1, substring2 = transliterate(substring)
-            product_qs = product_qs.filter(
-                Q(title__icontains=substring1) |
-                Q(description__icontains=substring1) |
-                Q(sku__icontains=substring1) |
-                Q(manufacturer_countries__icontains=substring1) |
-                Q(title__icontains=substring2) |
-                Q(description__icontains=substring2) |
-                Q(manufacturer_countries__icontains=substring2) |
-                Q(category__title__icontains=substring1) |
-                Q(category__title__icontains=substring2) |
-                Q(manufacturer__name__icontains=substring1) |
-                Q(manufacturer__name__icontains=substring2) |
-                Q(tags__tag__icontains=substring1) |
-                Q(tags__tag__icontains=substring2)
-            )
+            product_qs =  Product.objects.annotate(
+                search=SearchVector('title', 'description', 'sku', 'manufacturer_countries', 'manufacturer__name', config='russian'),
+                search_translit=SearchVector('title', 'description', 'sku', 'manufacturer_countries', 'manufacturer__name', config='russian'),
+            ).filter(Q(search=substring1) | Q(search_translit=substring2))
             counter += 1
 
         product_qs = product_qs.distinct()

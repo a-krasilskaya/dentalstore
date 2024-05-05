@@ -6,6 +6,8 @@ import logging
 from app.models import Banner
 from catalog.models import Manufacturer, Product, ProductCategory, Gallery
 from feedback.forms import OrderCallBackForm, FeedBackForm
+from django.http import FileResponse
+import os
 
 logger = logging.getLogger(__name__)
 

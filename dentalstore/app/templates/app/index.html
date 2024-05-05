@@ -31,45 +31,73 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="header-wrap col-lg-10 col-12">
-        <div class="collapse navbar-collapse align-items-start" id="navbarNavAltMarkup">
-          <div class="navbar-nav col-12 col-xl-9 col-lg-8 justify-content-lg-evenly mb-2 mb-lg-0 align-items-center">
-            <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Главная</a>
-            <a class="nav-link" href="{% url 'catalog' %}">Каталог</a>
-            <a class="nav-link" href="{% url 'delivery' %}">Доставка и оплата</a>
-            <a class="nav-link" href="{% url 'contacts' %}">Контакты</a>
-           </div>
-           <div class="navbar-nav col-12 col-xl-1 col-lg-2 justify-content-xl-center justify-content-lg-center justify-content-xl-end">
-            <div class="cart col-12 col-lg-2 d-flex justify-content-center header-counter">
-              {% with total_items=cart|length %}
-              <a class="ps-lg-3 px-2 link-header-img" href="{% url 'cart:cart_detail' %}">
-
-                    <div class="text-center header-counter-item count-cart">{% if cart|length > 0 %}{{ total_items }}{% endif %}</div>
-
-                  <img class="pb-2" src="{% static '/app/images/shopping-cart.png' %}" alt='Корзина'>
-              </a>
-              {% endwith %}
-              <a class="favorites-link ps-lg-3 px-1 link-header-img" href="{% url 'favorites:favorites_detail' %}">
-                    <div class="text-center header-counter-item count-favorites">{% if favorites|length > 0 %}{{ favorites|length }}{% endif %}</div>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 15 15"><path fill="#0d6efd" d="M4.036 1a4.036 4.036 0 0 0-2.854 6.89l5.964 5.964a.5.5 0 0 0 .708 0l5.964-5.965a4.036 4.036 0 0 0-5.707-5.707l-.611.61l-.61-.61A4.036 4.036 0 0 0 4.035 1"/></svg></a>
+        <div class="collapse navbar-collapse " id="navbarNavAltMarkup">
+          <div class="navbar-nav col-12 col-lg-9 justify-content-lg-end mb-2 mb-lg-0 align-items-center">
+              <div class="header-link d-flex col-xl-11 col-lg-11 justify-content-lg-between">
+            <a class="my-2 active" aria-current="page" href="{% url 'home' %}">Главная</a>
+            <a class="my-2 " href="{% url 'catalog' %}">Каталог</a>
+            <a class="my-2 " href="{% url 'delivery' %}">Доставка и оплата</a>
+            <div class="my-2 about-company"><div class="about-company-text">О компании</div>
+                <div class="about-company-submenu p-3">
+                    <a class="my-2 " href="{% url 'about' %}">О нас</a>
+                    <a class="my-2 " href="{% url 'privacy_policy' %}">Политика конфиденциальности</a>
+                    <a class="my-2 " href="{% url 'sertificate' %}">Сертификаты</a>
+                </div>
             </div>
-               </div>
-               <div class="navbar-nav col-12 col-xl-2 col-lg-2 justify-content-lg-center justify-content-xl-end">
+            <a class="my-2 " href="{% url 'contacts' %}">Контакты</a>
+                  </div>
+           </div>
+<!--           <div class="navbar-nav col-12 col-xl-1 col-lg-2 justify-content-xl-center justify-content-lg-center justify-content-xl-end">-->
+<!--            <div class="cart col-12 col-lg-2 d-flex justify-content-center header-counter">-->
+<!--              {% with total_items=cart|length %}-->
+<!--              <a class="ps-lg-3 px-2 link-header-img" href="{% url 'cart:cart_detail' %}">-->
+
+<!--                    <div class="text-center header-counter-item count-cart">{% if cart|length > 0 %}{{ total_items }}{% endif %}</div>-->
+
+<!--                   <img class="pb-2" src="{% static '/app/images/shopping-cart.svg' %}" alt='Корзина'>-->
+<!--              </a>-->
+<!--              {% endwith %}-->
+<!--              <a class="favorites-link ps-lg-3 px-1 link-header-img" href="{% url 'favorites:favorites_detail' %}">-->
+<!--                    <div class="text-center header-counter-item count-favorites">{% if favorites|length > 0 %}{{ favorites|length }}{% endif %}</div>-->
+<!--                  <img class="pb-2" src="{% static '/app/images/heart.svg' %}" alt='Избранное'></a>-->
+<!--            </div>-->
+<!--               </div>-->
+               <div class="navbar-nav col-12 col-xl-3 col-lg-3 justify-content-md-center justify-content-xl-end">
             <div class="header-contacts text-center">
                 <div class="link-messangers d-flex justify-content-center">
-                    <a  href="https://t.me/+79999683506" class="telegram-link"><img class="link-messangers-item px-2" src="{% static '/app/images/telegram.png' %}" alt="Написать в Telegram"></a>
-                    <a href="https://wa.me/+79999683506" class="whatsapp-link"><img class="link-messangers-item px-2" src="{% static '/app/images/whatsapp.png' %}" alt="Написать в Whatsapp"></a>
+                    {% with total_items=cart|length %}
+                      <a class="link-header-img" href="{% url 'cart:cart_detail' %}">
+
+                            <div class="text-center header-counter-item count-cart">{% if cart|length > 0 %}{{ total_items }}{% endif %}</div>
+
+                           <img class="px-xl-2 px-1" src="{% static '/app/images/shopping-cart.svg' %}" alt='Корзина'>
+                      </a>
+                      {% endwith %}
+                    <a class="favorites-link link-header-img" href="{% url 'favorites:favorites_detail' %}">
+                    <div class="text-center header-counter-item count-favorites">{% if favorites|length > 0 %}{{ favorites|length }}{% endif %}</div>
+                    <img class="px-xl-2 px-1" src="{% static '/app/images/heart.svg' %}" alt='Избранное'></a>
+                    <a href="tel:+79999683506"><img class="link-messangers-item px-1 px-xl-2" src="{% static '/app/images/phone.svg' %}" alt="Позвонить"></a>
+                    <a  href="https://t.me/+79999683506" class="telegram-link"><img class="link-messangers-item px-1 px-xl-2" src="{% static '/app/images/telegram.svg' %}" alt="Написать в Telegram"></a>
+                    <a href="https://wa.me/+79999683506" class="whatsapp-link"><img class="link-messangers-item px-1 px-xl-2" src="{% static '/app/images/whatsapp.svg' %}" alt="Написать в Whatsapp"></a>
+
+
+                </div>
+                <div class="link-social social-mobile d-lg-none d-flex justify-content-center align-items-center text-lg-center text-xl-end text-start pt-3 pt-md-1">
+                    <span>Мы в соцсетях:</span> <a href="https://t.me/dentalstore_online"><img class="link-messangers-item px-2" src="{% static '/app/images/telegram.svg' %}" alt="Написать в Telegram"></a>
+                    <a href="https://t.me/dentalstore_online"><img class="link-messangers-item px-2" src="{% static '/app/images/instagram.svg' %}" alt="Перейти в инстаграм"></a>
                 </div>
             </div>
           </div>
         </div>
 <!--      </div>-->
         <div class="d-flex justify-content-lg-end col-12 mt-lg-1 mt-3 pl-5 flex-column flex-md-row">
-            <div class="d-flex col-md-9 col-lg-8 col-12">
+            <div class="d-flex col-lg-8 col-12">
                 <input type="text" id="string-search" placeholder="Что хотите найти?" class="form-control me-2"/>
                 <input type="button" id="btn-search" value="Поиск" class="btn"/>
             </div>
-            <div class="link-phone col-md-3 col-12 text-md-end text-lg-center text-xl-end text-start pt-3 pt-md-1">
-                <a href="tel:+79999683506">+7 (999) 968-35-06</a>
+            <div class="link-social social-desktop col-md-3 col-12 text-md-end text-lg-center text-xl-end text-start pt-3 pt-md-1">
+                <span>Мы в соцсетях:</span> <a href="https://t.me/dentalstore_online"><img class="link-messangers-item px-2" src="{% static '/app/images/telegram.svg' %}" alt="Написать в Telegram"></a>
+                <a href="https://t.me/dentalstore_online"><img class="link-messangers-item px-2" src="{% static '/app/images/instagram.svg' %}" alt="Перейти в инстаграм"></a>
             </div>
         </div>
         </div>
@@ -273,7 +301,7 @@ $( document ).ready(function() {
             search_loading,
         )
         let search_res = $("#search-res");
-        let offset = search_res.offset().top;
+        let offset = search_res
         let height = search_res.height();
         let scroll = $(window).scrollTop();
         let windowHeight = $(window).height();

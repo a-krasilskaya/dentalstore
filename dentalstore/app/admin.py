@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Banner
+from .models import Banner, Sertificate
 from django.utils.safestring import mark_safe
 
 
@@ -17,4 +17,5 @@ class BannerAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Banner, BannerAdmin)
+admin.site.register(Sertificate)
 

@@ -16,3 +16,15 @@ class Banner(models.Model):
 
     def __str__(self):
         return f'{self.title}'
+
+
+class Sertificate(models.Model):
+    name = models.CharField(max_length=255, verbose_name='Заголовок', null=True,  blank=True)
+    image_name = models.ImageField(upload_to='static/uploads/images')
+
+    class Meta:
+        verbose_name = 'Сертификат'
+        verbose_name_plural = 'Сертификаты'
+
+    def __str__(self):
+        return f'{self.name}'

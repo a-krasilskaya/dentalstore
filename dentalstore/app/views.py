@@ -1,12 +1,16 @@
 from django.conf import settings
 from django.contrib import messages
+from django.core.files import images
 from django.shortcuts import render, redirect
 import logging
 
-from app.models import Banner
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+
+from app.models import Banner, Sertificate
 from catalog.models import Manufacturer, Product, ProductCategory, Gallery
 from feedback.forms import OrderCallBackForm, FeedBackForm
-from django.http import FileResponse
+from django.http import FileResponse, HttpResponse
 import os
 
 logger = logging.getLogger(__name__)
@@ -55,4 +59,35 @@ def about(request):
 
 
 def sertificate(request):
-    return render(request, 'app/sertificate.html')
+    sertificates = Sertificate.objects.all()
+    return render(request, 'app/sertificate.html', {'sertificates': sertificates})
+
+
+def image_to_pdf(request, image_name):
+    # Полный путь к изображению
+    image_path = os.path.join(settings.MEDIA_ROOT, image_name)
+
+    # Создание HTTP ответа с типом содержимого PDF
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="image.pdf"'
+
+    # Создание объекта PDF
+    c = canvas.Canvas(response, pagesize=letter)
+
+    # Добавление изображения в PDF. Размеры и положение можно настроить
+    c.drawImage(image_path, 0, 0, width=595, height=842, preserveAspectRatio=True)
+
+    # Сохранение PDF
+    c.showPage()
+    c.save()
+
+    return response
+
+
+def list_images(request):
+    # Получение списка имен файлов изображений
+    images_dir = 'static/uploads/images'
+    image_files = [f for f in os.listdir(images_dir) if os.path.isfile(os.path.join(images_dir, f))]
+
+    # Передача списка в шаблон
+    return render(request, 'list_images.html', {'images': image_files})

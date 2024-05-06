@@ -7,13 +7,14 @@
 <div class="container p-3">
     <h2 class="h2-title mb-5 pt-3">Сертификаты</h2>
     <div class="row">
-        <div class="col-xl-3 col-lg-4 col-md-6 mb-4"><img class="mw-100" src="/media/pdf/sertif-img-0001.jpg"></div>
-        <div class="col-xl-3 col-lg-4 col-md-6 mb-4"><img class="mw-100" src="/media/pdf/sertif-img-0002.jpg"></div>
-        <div class="col-xl-3 col-lg-4 col-md-6 mb-4"><img class="mw-100" src="/media/pdf/sertif-img-0003.jpg"></div>
-        <div class="col-xl-3 col-lg-4 col-md-6 mb-4"><img class="mw-100" src="/media/pdf/sertif-img-0004.jpg"></div>
-        <div class="col-xl-3 col-lg-4 col-md-6 mb-4"><img class="mw-100" src="/media/pdf/sertif-img-0005.jpg"></div>
-        <div class="col-xl-3 col-lg-4 col-md-6 mb-4"><img class="mw-100" src="/media/pdf/sertif-img-0006.jpg"></div>
-        <div class="col-xl-3 col-lg-4 col-md-6 mb-4"><img class="mw-100" src="/media/pdf/sertif-img-0007.jpg"></div>
+        <ul class="d-flex flex-wrap">
+        {% for image in sertificates %}
+            <li class="col-xl-3 col-lg-4 col-md-6 mb-4 mw-100">
+            <a href="{% url 'image_to_pdf' image.image_name %}" target="_blank"><img src="/media/{{ image.image_name }}" class="mw-100">
+            </a>
+            </li>
+        {% endfor %}
+    </ul>
     </div>
     <div class="col-3 my-4 col-md-2">
         <a href="javascript:history.back()" class="button btn return-store d-block">Назад</a>

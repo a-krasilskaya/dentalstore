@@ -109,6 +109,7 @@ li{
     max-width: 320px;
     background: rgba(255, 255, 255, 0.400);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     top: 20px;
     left: -15px;
     flex-direction: column;

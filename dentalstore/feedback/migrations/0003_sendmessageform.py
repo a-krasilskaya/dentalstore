@@ -15,8 +15,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=200, verbose_name='Имя пользователя')),
-                ('phone', models.CharField(verbose_name='Телефон')),
-                ('email', models.CharField(verbose_name='Email')),
+                ('phone', models.CharField(verbose_name='Телефон', max_length=200)),
+                ('email', models.CharField(verbose_name='Email', max_length=200)),
                 ('text_message', models.TextField(verbose_name='Сообщение')),
                 ('consent', models.BooleanField(default=True, verbose_name='Согласие с политикой конфиденциальности')),
             ],

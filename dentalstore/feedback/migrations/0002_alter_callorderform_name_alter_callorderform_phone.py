@@ -18,6 +18,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='callorderform',
             name='phone',
-            field=models.CharField(verbose_name='Телефон'),
+            field=models.CharField(verbose_name='Телефон', max_length=200),
         ),
     ]

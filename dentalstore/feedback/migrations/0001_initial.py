@@ -15,8 +15,8 @@ class Migration(migrations.Migration):
             name='CallOrderForm',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(verbose_name='Имя пользователя')),
-                ('phone', models.IntegerField(verbose_name='Телефон')),
+                ('name', models.CharField(verbose_name='Имя пользователя', max_length=200)),
+                ('phone', models.IntegerField(verbose_name='Телефон', max_length=200)),
                 ('consent', models.BooleanField(default=True, verbose_name='Согласие с политикой конфиденциальности')),
             ],
             options={
